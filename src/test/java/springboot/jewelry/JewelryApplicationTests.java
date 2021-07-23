@@ -1,4 +1,4 @@
-package tai.huy.springboot.jewelry;
+package springboot.jewelry;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
