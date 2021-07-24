@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configuration STATUS, this is used to set the information output inside the log4j2 itself, can be not set, when set to Trace, you will see various detailed outputs in the log4j2 -->
+<!-- MonitorInterval: log4j can automatically detect the modification profile and reconfigure itself, set the number of intervals -->
+<configuration monitorInterval="5">
+    <!-- Log Level and Priority Sort: Off> Fatal> Error> Warn> Info> Debug> TRACE> All -->
+
+
+    <!-- Variable Configuration -->
+    <Properties>
+        <!-- Format Output:% Date Representation Date,% Thread Represents Thread Name,% - 5LEVEL: Level 5 Character Width% MSG: Log Message,% N is a Retail -->
+        <!-- % logger {36} Represents Logger name up to 36 characters -->
+        <property name="LOG_PATTERN"
+                  value="%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{%5p} %clr{${sys:PID}}{magenta} %clr{---}{faint} %clr{[%15.15t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n%xwEx" />
+        <!-- Define the path to log storage, do not configure relative paths -->
+        <property name="FILE_PATH" value="./logs" />
+        <property name="FILE_NAME" value="SbTest" />
+    </Properties>
+
+
+    <appenders>
+
+
+        <console name="Console" target="SYSTEM_OUT">
+            <!-- Output log format -->
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <!-- Console only outputs Level and its above level information (onmatch), other direct rejection (onmismatch) -->
+            <ThresholdFilter level="DEBUG" onMatch="ACCEPT"
+                             onMismatch="DENY" />
+        </console>
+
+
+        <!-- The file will print out all the information, this log is automatically emptied each run, determined by the append attribute, suitable for temporary testing -->
+        <File name="Filelog" fileName="${FILE_PATH}/test.log"
+              append="false">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+        </File>
+
+
+        <!-- This will print out all the information of all INFO and the following levels, each size exceeds size, then this size size log will automatically deposit below the folder established by year-month and compressed, as an archive -->
+        <RollingFile name="RollingFileInfo"
+                     fileName="${FILE_PATH}/info.log"
+                     filePattern="${FILE_PATH}/${FILE_NAME}-INFO-%d{yyyy-MM-dd}_%i.log.gz">
+            <!-- Console only outputs Level and the above level information (onmatch), other direct rejection (onmismatch) -->
+            <ThresholdFilter level="info" onMatch="ACCEPT"
+                             onMismatch="DENY" />
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <!-- The interval property is used to specify how long it is scrolling once, the default is 1 Hour -->
+                <TimeBasedTriggeringPolicy interval="1" />
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <!-- DefaultrolOverStrategy property is not set, then the default is the up to 7 files under the same folder start overwritten -->
+            <DefaultRolloverStrategy max="15" />
+        </RollingFile>
+
+
+        <!-- This will print out all the information of all WARN and the following level, each size exceeds size, then this size size log will automatically deposit below the folder established by year-month, and compressed as an archive -->
+        <RollingFile name="RollingFileWarn"
+                     fileName="${FILE_PATH}/warn.log"
+                     filePattern="${FILE_PATH}/${FILE_NAME}-WARN-%d{yyyy-MM-dd}_%i.log.gz">
+            <!-- Console only outputs Level and the above level information (onmatch), other direct rejection (onmismatch) -->
+            <ThresholdFilter level="warn" onMatch="ACCEPT"
+                             onMismatch="DENY" />
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <!-- The interval property is used to specify how long it is scrolling once, the default is 1 Hour -->
+                <TimeBasedTriggeringPolicy interval="1" />
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <!-- DefaultrolOverStrategy property is not set, then the default is the up to 7 files under the same folder start overwritten -->
+            <DefaultRolloverStrategy max="15" />
+        </RollingFile>
+
+
+        <!-- This will print out all the ERROR and the following level of information, each size exceeds size, then this size size log will automatically deposit below the folder established by year-month and compressed, as an archive -->
+        <RollingFile name="RollingFileError"
+                     fileName="${FILE_PATH}/error.log"
+                     filePattern="${FILE_PATH}/${FILE_NAME}-ERROR-%d{yyyy-MM-dd}_%i.log.gz">
+            <!-- Console only outputs Level and the above level information (onmatch), other direct rejection (onmismatch) -->
+            <ThresholdFilter level="error" onMatch="ACCEPT"
+                             onMismatch="DENY" />
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <!-- The interval property is used to specify how long it is scrolling once, the default is 1 Hour -->
+                <TimeBasedTriggeringPolicy interval="1" />
+                <SizeBasedTriggeringPolicy size="10MB" />
+            </Policies>
+            <!-- DefaultrolOverStrategy property is not set, then the default is the up to 7 files under the same folder start overwritten -->
+            <DefaultRolloverStrategy max="15" />
+        </RollingFile>
+
+
+    </appenders>
+
+
+    The <!-- logger node is used to specify the form of the log separately, such as specifying different log levels, for example, specify different log levels. -->
+    <!-- then define Loggers, only defining the Logger and the Appender introduced, appender will take effect -->
+    <loggers>
+
+
+
+        <!-- Monitor System Information -->
+        <!-- If additive is set to False, the child logger will only output in its own apnder, and will not output in the parent Logger's appender. -->
+        <Logger name="org.springframework" level="debug"
+                additivity="false">
+            <AppenderRef ref="Console" />
+        </Logger>
+
+
+        <root level="info">
+            <appender-ref ref="Console" />
+            <appender-ref ref="Filelog" />
+            <appender-ref ref="RollingFileInfo" />
+            <appender-ref ref="RollingFileWarn" />
+            <appender-ref ref="RollingFileError" />
+        </root>
+    </loggers>
+
+
+</configuration>
