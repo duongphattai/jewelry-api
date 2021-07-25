@@ -1,5 +1,6 @@
 package springboot.jewelry.api.customer.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import springboot.jewelry.api.commondata.model.AbstractEntity;
@@ -26,14 +27,15 @@ public class Customer extends AbstractEntity {
     @NotBlank
     private String password;
 
-    private String fullName;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    private CustomerStatus status;
+//    private String fullName;
+//
+//    @NotNull
+//    @Enumerated(EnumType.STRING)
+//    private CustomerStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
+    @JsonIgnore
     private Role role;
 
 }
