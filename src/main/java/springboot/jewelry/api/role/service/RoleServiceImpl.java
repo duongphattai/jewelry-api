@@ -47,6 +47,7 @@ public class RoleServiceImpl extends GenericServiceImpl<Role, Long> implements R
         if (customer.isPresent()) {
             role.getCustomers().add(customer.get());
             customer.get().setRole(role);
+            customer.get().setRoleName(role.getRoleName());
         }
         return roleRepository.save(role);
     }

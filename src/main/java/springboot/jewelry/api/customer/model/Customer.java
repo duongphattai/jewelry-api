@@ -27,6 +27,10 @@ public class Customer extends AbstractEntity {
     @NotBlank
     private String password;
 
+    private String roleName;
+
+
+
 //    private String fullName;
 //
 //    @NotNull
