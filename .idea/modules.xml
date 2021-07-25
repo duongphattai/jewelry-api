@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/jewelry.iml" filepath="$PROJECT_DIR$/jewelry.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jewelry-api.iml" filepath="$PROJECT_DIR$/jewelry-api.iml" />
     </modules>
   </component>
 </project>
