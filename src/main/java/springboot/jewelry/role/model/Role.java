@@ -6,10 +6,9 @@ import lombok.Setter;
 import springboot.jewelry.commondata.model.AbstractEntity;
 import springboot.jewelry.customer.model.Customer;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,8 +18,12 @@ import java.util.Set;
 @Table(name = "jewelry_role")
 public class Role extends AbstractEntity {
 
+    @NotBlank(message = "{role.name.not-blank}")
+    @Size(min = 4, max = 50, message = "{role.name.size}")
+    @Column(unique = true, name = "role_name")
     private String roleName;
 
+    @NotBlank(message = "{role.description.not-blank}")
     private String description;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
