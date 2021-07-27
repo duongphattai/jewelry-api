@@ -16,5 +16,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Optional<Customer> findByUsername(String username);
 
     @Query("SELECT c.username AS username, c.password AS password, c.role.roleName AS roleRoleName FROM Customer c")
-    List<CustomerProjection> findCustomerWithAllRolName();
+    List<CustomerProjection> findCustomerWithAllRoleName();
 }

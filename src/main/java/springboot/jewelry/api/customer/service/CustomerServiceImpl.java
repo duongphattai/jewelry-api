@@ -29,7 +29,7 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
 
     @Override
     public List<CustomerProjection> findCustomerWithAllRoleName() {
-        return repository.findCustomerWithAllRolName();
+        return repository.findCustomerWithAllRoleName();
     }
 
     @Override
@@ -38,6 +38,5 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
         customer = mapper.map(dto, customer);
         return repository.save(customer);
     }
-
 
 }
