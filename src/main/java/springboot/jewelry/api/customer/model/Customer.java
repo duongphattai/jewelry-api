@@ -1,6 +1,8 @@
 package springboot.jewelry.api.customer.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import springboot.jewelry.api.commondata.model.AbstractEntity;
@@ -26,9 +28,6 @@ public class Customer extends AbstractEntity {
 
     @NotBlank
     private String password;
-
-    private String roleName;
-
 
 
 //    private String fullName;

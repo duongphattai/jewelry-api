@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
 import springboot.jewelry.api.customer.dto.CustomerCreateDto;
 import springboot.jewelry.api.customer.model.Customer;
+import springboot.jewelry.api.customer.projection.CustomerProjection;
 import springboot.jewelry.api.customer.service.CustomerService;
 
 import javax.validation.Valid;
@@ -23,6 +24,16 @@ public class CustomerController {
     @GetMapping("")
     public ResponseEntity<Object> findAll(){
         List<Customer> customers = service.findAll();
+        if(customers.isEmpty()){
+            return ResponseHandler.getResponse("Danh sách trống!", HttpStatus.OK);
+        }
+
+        return ResponseHandler.getResponse(customers, HttpStatus.OK);
+    }
+
+    @GetMapping("/all-role-name")
+    public ResponseEntity<Object> findWithAllRoleName(){
+        List<CustomerProjection> customers = service.findCustomerWithAllRoleName();
         if(customers.isEmpty()){
             return ResponseHandler.getResponse("Danh sách trống!", HttpStatus.OK);
         }

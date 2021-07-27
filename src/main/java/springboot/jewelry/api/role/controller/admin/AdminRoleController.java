@@ -59,7 +59,7 @@ public class AdminRoleController {
     @PutMapping("/{role-id}/{username}")
     public ResponseEntity<Object> addCustomerToRole(@PathVariable("role-id") Long roleId ,
                                                     @PathVariable("username") String username){
-        Role role = service.addCustomer(username, roleId);
+        Role role = service.addCustomerToRole(username, roleId);
 
         return ResponseHandler.getResponse(role, HttpStatus.OK);
 

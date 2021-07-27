@@ -12,5 +12,5 @@ public interface RoleService extends GenericService<Role, Long> {
 
     Role updateRole(RoleCreateDto dto, Long id);
 
-    Role addCustomer(String username, Long roleId);
+    Role addCustomerToRole(String username, Long roleId);
 }

@@ -3,10 +3,13 @@ package springboot.jewelry.api.customer.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import springboot.jewelry.api.customer.dto.CustomerCreateDto;
+import springboot.jewelry.api.customer.projection.CustomerProjection;
 import springboot.jewelry.api.customer.repository.CustomerRepository;
 import springboot.jewelry.api.commondata.GenericServiceImpl;
 import springboot.jewelry.api.customer.model.Customer;
 import springboot.jewelry.api.util.MapDtoToModel;
+
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -25,9 +28,16 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
     }
 
     @Override
+    public List<CustomerProjection> findCustomerWithAllRoleName() {
+        return repository.findCustomerWithAllRolName();
+    }
+
+    @Override
     public Customer updateCustomer(CustomerCreateDto dto, Long id) {
         Customer customer = repository.getOne(id);
         customer = mapper.map(dto, customer);
         return repository.save(customer);
     }
+
+
 }

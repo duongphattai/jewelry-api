@@ -40,14 +40,13 @@ public class RoleServiceImpl extends GenericServiceImpl<Role, Long> implements R
     }
 
     @Override
-    public Role addCustomer(String username, Long roleId) {
+    public Role addCustomerToRole(String username, Long roleId) {
         Role role = roleRepository.getOne(roleId);
         Optional<Customer> customer = customerRepository.findByUsername(username);
 
         if (customer.isPresent()) {
             role.getCustomers().add(customer.get());
             customer.get().setRole(role);
-            customer.get().setRoleName(role.getRoleName());
         }
         return roleRepository.save(role);
     }
