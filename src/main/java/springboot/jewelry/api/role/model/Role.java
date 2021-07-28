@@ -29,6 +29,6 @@ public class Role extends AbstractEntity {
     private String description;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
-    //@JsonIgnore
+    @JsonIgnore
     private Set<Customer> customers = new HashSet<>();
 }

@@ -1,13 +1,67 @@
 package springboot.jewelry.api.customer.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+import springboot.jewelry.api.customer.util.CustomerGender;
+import springboot.jewelry.api.customer.validation.anotation.ConfirmPassword;
+import springboot.jewelry.api.customer.validation.anotation.UniqueEmail;
+import springboot.jewelry.api.customer.validation.anotation.UniqueMobileNo;
+import springboot.jewelry.api.util.DateUtils;
+import springboot.jewelry.api.util.FormatUtils;
+
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@ConfirmPassword
 public class CustomerCreateDto {
 
+    @NotBlank(message = "{customer.username.not-blank}")
+    @Size(min = 3, max = 50, message = "{customer.username.size}")
     private String username;
+
+    @NotBlank(message = "{customer.password.not-blank}")
+    @Size(min = 8, max = 30, message = "{customer.password.size}")
     private String password;
+
+    @NotBlank
+    private String confirmPassword;
+
+    @NotBlank(message = "{customer.full-name.not-blank}")
+    @Size(min = 3, max = 50, message = "{customer.full-name.size}")
+    private String fullName;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private CustomerGender gender;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateUtils.DATE_FORMAT)
+    @DateTimeFormat(pattern = DateUtils.DATE_FORMAT)
+    private LocalDateTime birthday;
+
+    @NotBlank(message = "{customer.mobile-no.not-blank}")
+    @Pattern(regexp = FormatUtils.MOBILE_NO_FORMAT, message = "{customer.mobile-no.format}")
+    @UniqueMobileNo
+    private String mobileNo;
+
+    @NotBlank(message = "{customer.email.not-blank}")
+    @Email(message = "{customer.email.format}")
+    @UniqueEmail
+    private String email;
+
+    @NotBlank(message = "customer.address.not-blank")
+    @Size(min = 20, max = 100, message = "customer.address.size")
+    private String address;
+
+    @JsonIgnore
+    private Long roleId = 1L;
+
+
 
 }

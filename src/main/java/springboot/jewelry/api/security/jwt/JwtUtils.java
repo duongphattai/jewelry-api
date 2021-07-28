@@ -56,7 +56,7 @@ public class JwtUtils {
         String header = request.getHeader("Authorization");
 
         if(header != null && header.startsWith("Bearer "))
-            return header.substring("Bearer ".length(), header.length());
+            return header.substring("Bearer ".length());
 
         return null;
     }

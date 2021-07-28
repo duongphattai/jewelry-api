@@ -17,4 +17,10 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     @Query("SELECT c.username AS username, c.password AS password, c.role.roleName AS roleRoleName FROM Customer c")
     List<CustomerProjection> findCustomerWithAllRoleName();
+
+    int countByUsername(String username);
+
+    int countByMobileNo(String mobileNo);
+
+    int countByEmail(String email);
 }

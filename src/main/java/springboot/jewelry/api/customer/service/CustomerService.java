@@ -13,4 +13,10 @@ public interface CustomerService extends GenericService<Customer, Long> {
     Customer updateCustomer(CustomerCreateDto dto, Long id);
 
     List<CustomerProjection> findCustomerWithAllRoleName();
+
+    boolean isTakenUsername(String username);
+
+    boolean isTakenMobileNo(String mobileNo);
+
+    boolean isTakenEmail(String email);
 }
