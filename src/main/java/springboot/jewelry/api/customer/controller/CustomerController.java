@@ -7,12 +7,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
 import springboot.jewelry.api.customer.dto.CustomerCreateDto;
+import springboot.jewelry.api.customer.dto.CustomerUpdateDto;
 import springboot.jewelry.api.customer.model.Customer;
 import springboot.jewelry.api.customer.projection.CustomerProjection;
 import springboot.jewelry.api.customer.service.CustomerService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
@@ -22,9 +24,9 @@ public class CustomerController {
     private CustomerService service;
 
     @GetMapping("")
-    public ResponseEntity<Object> findAll(){
+    public ResponseEntity<Object> findAll() {
         List<Customer> customers = service.findAll();
-        if(customers.isEmpty()){
+        if (customers.isEmpty()) {
             return ResponseHandler.getResponse("Danh sách trống!", HttpStatus.OK);
         }
 
@@ -32,9 +34,9 @@ public class CustomerController {
     }
 
     @GetMapping("/all-role-name")
-    public ResponseEntity<Object> findWithAllRoleName(){
+    public ResponseEntity<Object> findWithAllRoleName() {
         List<CustomerProjection> customers = service.findCustomerWithAllRoleName();
-        if(customers.isEmpty()){
+        if (customers.isEmpty()) {
             return ResponseHandler.getResponse("Danh sách trống!", HttpStatus.OK);
         }
 
@@ -43,8 +45,8 @@ public class CustomerController {
 
     @PostMapping("")
     public ResponseEntity<Object> addCustomer(@Valid @RequestBody CustomerCreateDto dto,
-                                          BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
+                                              BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
             return ResponseHandler.getResponse(bindingResult, HttpStatus.BAD_REQUEST);
         }
 
@@ -54,16 +56,29 @@ public class CustomerController {
     }
 
     @PutMapping("/{customer-id}")
-    public ResponseEntity<Object> updateRole(@PathVariable("customer-id") Long id ,
-                                             @Valid @RequestBody CustomerCreateDto dto ,
-                                             BindingResult bindingResult){
+    public ResponseEntity<Object> updateCustomer(@PathVariable("customer-id") Long id,
+                                                 @Valid @RequestBody CustomerUpdateDto dto,
+                                                 BindingResult bindingResult) {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return ResponseHandler.getResponse(HttpStatus.BAD_REQUEST);
         }
 
         Customer customer = service.updateCustomer(dto, id);
 
         return ResponseHandler.getResponse(customer, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{customer-id}")
+    public ResponseEntity<Object> deleteCustomer(@PathVariable("customer-id") Long id) {
+
+        Optional<Customer> customer = service.findById(id);
+        if (!customer.isPresent()) {
+            return ResponseHandler.getResponse("Không tìm thấy ID: " + id, HttpStatus.OK);
+        }
+
+        service.deleteById(id);
+
+        return ResponseHandler.getResponse(HttpStatus.OK);
     }
 }

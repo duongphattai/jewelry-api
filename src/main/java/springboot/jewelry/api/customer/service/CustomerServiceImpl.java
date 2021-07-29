@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import springboot.jewelry.api.customer.dto.CustomerCreateDto;
+import springboot.jewelry.api.customer.dto.CustomerUpdateDto;
 import springboot.jewelry.api.customer.projection.CustomerProjection;
 import springboot.jewelry.api.customer.repository.CustomerRepository;
 import springboot.jewelry.api.commondata.GenericServiceImpl;
@@ -59,11 +60,10 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
     }
 
     @Override
-    public Customer updateCustomer(CustomerCreateDto dto, Long id) {
+    public Customer updateCustomer(CustomerUpdateDto dto, Long id) {
         Customer customer = customerRepository.getOne(id);
         customer = mapper.map(dto, customer);
         return customerRepository.save(customer);
 
     }
-
 }

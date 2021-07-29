@@ -15,7 +15,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Optional<Customer> findByUsername(String username);
 
-    @Query("SELECT c.username AS username, c.password AS password, c.role.roleName AS roleRoleName FROM Customer c")
+    @Query("SELECT c.username AS username, c.role.roleName AS roleName FROM Customer c")
     List<CustomerProjection> findCustomerWithAllRoleName();
 
     int countByUsername(String username);
@@ -23,4 +23,5 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     int countByMobileNo(String mobileNo);
 
     int countByEmail(String email);
+
 }
