@@ -43,9 +43,9 @@ public class CustomerCreateDto {
     private LocalDate birthday;
 
     @NotBlank(message = "{customer.mobile-no.not-blank}")
-    @Pattern(regexp = FormatUtils.MOBILE_NO_FORMAT, message = "{customer.mobile-no.format}")
-    @UniqueMobileNo
-    private String mobileNo;
+    @Pattern(regexp = FormatUtils.PHONE_NUMBER_FORMAT, message = "{customer.mobile-no.format}")
+    @UniquePhoneNumber
+    private String phoneNumber;
 
     @Email(message = "{customer.email.format}")
     @UniqueEmail
@@ -54,10 +54,5 @@ public class CustomerCreateDto {
     @NotBlank(message = "{customer.address.not-blank}")
     @Size(min = 20, max = 100, message = "{customer.address.size}")
     private String address;
-
-    @JsonIgnore
-    private Long roleId = 1L;
-
-
 
 }

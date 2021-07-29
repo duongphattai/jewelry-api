@@ -1,7 +1,6 @@
 package springboot.jewelry.api.customer.service;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import springboot.jewelry.api.customer.dto.CustomerCreateDto;
@@ -34,7 +33,8 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
         customer = mapper.map(dto, customer);
         customer.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-        Optional<Role> role = roleRepository.findById(dto.getRoleId());
+        // Set value = 1L để lấy Role mặc định là "USER"
+        Optional<Role> role = roleRepository.findById(1L);
         customer.setRole(role.get());
         return customerRepository.save(customer);
     }
@@ -50,8 +50,8 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
     }
 
     @Override
-    public boolean isTakenMobileNo(String mobileNo) {
-        return customerRepository.countByMobileNo(mobileNo) >= 1;
+    public boolean isTakenPhoneNumber(String phoneNumber) {
+        return customerRepository.countByPhoneNumber(phoneNumber) >= 1;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
     }
 
     @Override
-    public Customer updateCustomer(CustomerUpdateDto dto, Long id) {
+    public Customer updateCustomerInfo(CustomerUpdateDto dto, Long id) {
         Customer customer = customerRepository.getOne(id);
         customer = mapper.map(dto, customer);
         return customerRepository.save(customer);

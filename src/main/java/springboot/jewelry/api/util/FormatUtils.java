@@ -1,5 +1,5 @@
 package springboot.jewelry.api.util;
 
 public class FormatUtils {
-    public static final String MOBILE_NO_FORMAT = "(^$|[0-9]{10})";
+    public static final String PHONE_NUMBER_FORMAT = "(^$|[0-9]{10})";
 }

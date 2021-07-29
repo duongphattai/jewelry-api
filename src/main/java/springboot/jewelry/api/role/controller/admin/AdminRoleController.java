@@ -18,11 +18,11 @@ import java.util.List;
 public class AdminRoleController {
 
     @Autowired
-    private RoleService service;
+    private RoleService roleService;
 
     @GetMapping("")
     public ResponseEntity<Object> findAll(){
-        List<Role> roles = service.findAll();
+        List<Role> roles = roleService.findAll();
         if(roles.isEmpty()){
             return ResponseHandler.getResponse("Danh sách trống!", HttpStatus.OK);
         }
@@ -37,7 +37,7 @@ public class AdminRoleController {
             return ResponseHandler.getResponse(bindingResult, HttpStatus.BAD_REQUEST);
         }
 
-        Role role = service.save(dto);
+        Role role = roleService.save(dto);
 
         return ResponseHandler.getResponse(role, HttpStatus.OK);
     }
@@ -51,15 +51,15 @@ public class AdminRoleController {
             return ResponseHandler.getResponse(HttpStatus.BAD_REQUEST);
         }
 
-        Role role = service.updateRole(dto, id);
+        Role role = roleService.updateRoleInfo(dto, id);
 
         return ResponseHandler.getResponse(role, HttpStatus.OK);
     }
 
     @PutMapping("/{role-id}/{username}")
-    public ResponseEntity<Object> addCustomerToRole(@PathVariable("role-id") Long roleId ,
+    public ResponseEntity<Object> changeRoleForCustomer(@PathVariable("role-id") Long roleId ,
                                                     @PathVariable("username") String username){
-        Role role = service.addCustomerToRole(username, roleId);
+        Role role = roleService.changeRoleForCustomer(username, roleId);
 
         return ResponseHandler.getResponse(role, HttpStatus.OK);
 
@@ -68,7 +68,7 @@ public class AdminRoleController {
     @DeleteMapping("/{role-id}")
     public ResponseEntity<Object> deleteRole(@PathVariable("role-id") Long id){
 
-        service.deleteById(id);
+        roleService.deleteById(id);
 
         return ResponseHandler.getResponse(HttpStatus.OK);
     }

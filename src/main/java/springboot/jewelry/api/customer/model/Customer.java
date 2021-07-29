@@ -43,9 +43,9 @@ public class Customer extends AbstractEntity {
     private LocalDate birthday;
 
     @NotBlank(message = "{customer.mobile-no.not-blank}")
-    @Pattern(regexp = FormatUtils.MOBILE_NO_FORMAT, message = "{customer.mobile-no.format}")
+    @Pattern(regexp = FormatUtils.PHONE_NUMBER_FORMAT, message = "{customer.mobile-no.format}")
     @Column(unique = true)
-    private String mobileNo;
+    private String phoneNumber;
 
     @Email(message = "{customer.email.format}")
     @Column(unique = true, nullable = false)

@@ -21,11 +21,11 @@ import java.util.Optional;
 @RequestMapping("/api/customer")
 public class CustomerController {
 
-    private CustomerService service;
+    private CustomerService customerService;
 
     @GetMapping("")
     public ResponseEntity<Object> findAll() {
-        List<Customer> customers = service.findAll();
+        List<Customer> customers = customerService.findAll();
         if (customers.isEmpty()) {
             return ResponseHandler.getResponse("Danh sách trống!", HttpStatus.OK);
         }
@@ -35,7 +35,7 @@ public class CustomerController {
 
     @GetMapping("/all-role-name")
     public ResponseEntity<Object> findWithAllRoleName() {
-        List<CustomerProjection> customers = service.findCustomerWithAllRoleName();
+        List<CustomerProjection> customers = customerService.findCustomerWithAllRoleName();
         if (customers.isEmpty()) {
             return ResponseHandler.getResponse("Danh sách trống!", HttpStatus.OK);
         }
@@ -50,7 +50,7 @@ public class CustomerController {
             return ResponseHandler.getResponse(bindingResult, HttpStatus.BAD_REQUEST);
         }
 
-        Customer customer = service.save(dto);
+        Customer customer = customerService.save(dto);
 
         return ResponseHandler.getResponse(customer, HttpStatus.OK);
     }
@@ -64,7 +64,7 @@ public class CustomerController {
             return ResponseHandler.getResponse(HttpStatus.BAD_REQUEST);
         }
 
-        Customer customer = service.updateCustomer(dto, id);
+        Customer customer = customerService.updateCustomerInfo(dto, id);
 
         return ResponseHandler.getResponse(customer, HttpStatus.OK);
     }
@@ -72,12 +72,12 @@ public class CustomerController {
     @DeleteMapping("/{customer-id}")
     public ResponseEntity<Object> deleteCustomer(@PathVariable("customer-id") Long id) {
 
-        Optional<Customer> customer = service.findById(id);
+        Optional<Customer> customer = customerService.findById(id);
         if (!customer.isPresent()) {
             return ResponseHandler.getResponse("Không tìm thấy ID: " + id, HttpStatus.OK);
         }
 
-        service.deleteById(id);
+        customerService.deleteById(id);
 
         return ResponseHandler.getResponse(HttpStatus.OK);
     }

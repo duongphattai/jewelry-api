@@ -7,7 +7,5 @@ import springboot.jewelry.api.role.model.Role;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
 
-
-
     int countByRoleName(String roleName);
 }

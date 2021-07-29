@@ -20,7 +20,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     int countByUsername(String username);
 
-    int countByMobileNo(String mobileNo);
+    int countByPhoneNumber(String phoneNumber);
 
     int countByEmail(String email);
 

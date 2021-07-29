@@ -36,9 +36,9 @@ public class CustomerUpdateDto {
     private LocalDate birthday;
 
     @NotBlank(message = "{customer.mobile-no.not-blank}")
-    @Pattern(regexp = FormatUtils.MOBILE_NO_FORMAT, message = "{customer.mobile-no.format}")
+    @Pattern(regexp = FormatUtils.PHONE_NUMBER_FORMAT, message = "{customer.mobile-no.format}")
     //@UniqueMobileNo
-    private String mobileNo;
+    private String phoneNumber;
 
     @Email(message = "{customer.email.format}")
     //@UniqueEmail
