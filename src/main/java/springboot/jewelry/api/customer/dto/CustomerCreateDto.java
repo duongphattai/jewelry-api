@@ -4,18 +4,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 import springboot.jewelry.api.customer.util.CustomerGender;
-import springboot.jewelry.api.customer.validation.anotation.ConfirmPassword;
-import springboot.jewelry.api.customer.validation.anotation.UniqueEmail;
-import springboot.jewelry.api.customer.validation.anotation.UniqueMobileNo;
+import springboot.jewelry.api.customer.validation.anotation.*;
 import springboot.jewelry.api.util.DateUtils;
 import springboot.jewelry.api.util.FormatUtils;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -24,6 +21,7 @@ public class CustomerCreateDto {
 
     @NotBlank(message = "{customer.username.not-blank}")
     @Size(min = 3, max = 50, message = "{customer.username.size}")
+    @UniqueUsername
     private String username;
 
     @NotBlank(message = "{customer.password.not-blank}")
@@ -41,22 +39,20 @@ public class CustomerCreateDto {
     @Enumerated(EnumType.STRING)
     private CustomerGender gender;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateUtils.DATE_FORMAT)
-    @DateTimeFormat(pattern = DateUtils.DATE_FORMAT)
-    private LocalDateTime birthday;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateUtils.BIRTHDAY_FORMAT)
+    private LocalDate birthday;
 
     @NotBlank(message = "{customer.mobile-no.not-blank}")
     @Pattern(regexp = FormatUtils.MOBILE_NO_FORMAT, message = "{customer.mobile-no.format}")
     @UniqueMobileNo
     private String mobileNo;
 
-    @NotBlank(message = "{customer.email.not-blank}")
     @Email(message = "{customer.email.format}")
     @UniqueEmail
     private String email;
 
-    @NotBlank(message = "customer.address.not-blank")
-    @Size(min = 20, max = 100, message = "customer.address.size")
+    @NotBlank(message = "{customer.address.not-blank}")
+    @Size(min = 20, max = 100, message = "{customer.address.size}")
     private String address;
 
     @JsonIgnore

@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class DateUtils {
-    public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
-    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+    public static final String BIRTHDAY_FORMAT = "dd-MM-yyyy";
+
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
 
     public static String toString(LocalDateTime date) {
         return date.format(formatter);

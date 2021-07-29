@@ -41,12 +41,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors();
         http.csrf().disable();
         http.antMatcher("/api/**").authorizeRequests()
-                .antMatchers("/swagger-ui.html").authenticated()
-                .antMatchers("/api/admin/**").hasAuthority("ADMIN")
+                .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/api/**").permitAll()
+                .antMatchers("/api/admin/**").permitAll()
                 .antMatchers("/login").permitAll()
                 .anyRequest().authenticated();
-
-
 
         // make server stateless
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
