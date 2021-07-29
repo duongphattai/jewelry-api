@@ -36,47 +36,16 @@ public class AbstractEntity implements Serializable {
     @LastModifiedBy
     protected String updatedBy;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateUtils.DATE_FORMAT)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateUtils.DATE_TIME_FORMAT)
     @CreatedDate
-    @DateTimeFormat(pattern = DateUtils.DATE_FORMAT)
+    @DateTimeFormat(pattern = DateUtils.DATE_TIME_FORMAT)
     @Column(name = "created_at",nullable = false ,updatable = false)
     protected LocalDateTime createdAt;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateUtils.DATE_FORMAT)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateUtils.DATE_TIME_FORMAT)
     @LastModifiedDate
-    @DateTimeFormat(pattern = DateUtils.DATE_FORMAT)
+    @DateTimeFormat(pattern = DateUtils.DATE_TIME_FORMAT)
     @Column(name = "updated_at", nullable = false)
     protected LocalDateTime updatedAt;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public int getVersion() {
-        return version;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+    
 }

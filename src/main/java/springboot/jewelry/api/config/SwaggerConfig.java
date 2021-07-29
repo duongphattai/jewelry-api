@@ -22,7 +22,7 @@ public class SwaggerConfig {
                 .securityContexts(Arrays.asList(securityContext()))
                 .securitySchemes(Arrays.asList(apiKey()))
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("springboot.jewelry"))
+                .apis(RequestHandlerSelectors.basePackage("springboot.jewelry.api"))
                 .build()
                 .apiInfo(getApiInfo());
     }
