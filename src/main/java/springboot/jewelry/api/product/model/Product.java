@@ -32,11 +32,11 @@ public class Product extends AbstractEntity {
     private Supplier supplier;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productType_id")
+    @JoinColumn(name = "product_type_id")
     private ProductType productType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "goldType_id")
+    @JoinColumn(name = "gold_type_id")
     private GoldType goldType;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
