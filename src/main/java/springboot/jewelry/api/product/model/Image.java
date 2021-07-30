@@ -12,10 +12,10 @@ import javax.persistence.*;
 @Table(name = "jewelry_image")
 public class Image extends AbstractEntity {
 
-    @Column(unique = true)
-    private String name;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Product product;
+//    @Column(unique = true)
+//    private String name;
+//
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "product_id")
+//    private Product product;
 }

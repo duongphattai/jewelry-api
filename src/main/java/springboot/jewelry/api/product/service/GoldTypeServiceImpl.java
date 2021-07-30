@@ -14,8 +14,8 @@ import springboot.jewelry.api.util.MapDtoToModel;
 @Service
 public class GoldTypeServiceImpl extends GenericServiceImpl<GoldType, Long> implements GoldTypeService {
 
-    private GoldTypeRepository goldTypeRepository;
-    private MapDtoToModel<Object, GoldType> mapper;
+    private final GoldTypeRepository goldTypeRepository;
+    private final MapDtoToModel<Object, GoldType> mapper;
 
     @Override
     public GoldType save(GoldTypeCreateDto dto) {

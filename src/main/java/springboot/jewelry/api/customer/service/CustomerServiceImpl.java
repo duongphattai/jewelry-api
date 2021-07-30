@@ -13,6 +13,7 @@ import springboot.jewelry.api.role.model.Role;
 import springboot.jewelry.api.role.repository.RoleRepository;
 import springboot.jewelry.api.util.MapDtoToModel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 

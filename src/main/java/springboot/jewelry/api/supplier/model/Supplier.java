@@ -1,5 +1,6 @@
 package springboot.jewelry.api.supplier.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import springboot.jewelry.api.commondata.model.AbstractEntity;
