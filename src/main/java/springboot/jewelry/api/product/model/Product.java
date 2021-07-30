@@ -47,7 +47,7 @@ public class Product extends AbstractEntity {
     @JsonIgnore
     private GoldType goldType;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<Image> images = new HashSet<>();
+//    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+//    private Set<Image> images = new HashSet<>();
 
 }
