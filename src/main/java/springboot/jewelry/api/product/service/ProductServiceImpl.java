@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 import springboot.jewelry.api.commondata.GenericServiceImpl;
 import springboot.jewelry.api.product.dto.ProductCreateDto;
 import springboot.jewelry.api.product.model.GoldType;
-import springboot.jewelry.api.product.model.Image;
 import springboot.jewelry.api.product.model.Product;
 import springboot.jewelry.api.product.model.ProductType;
+import springboot.jewelry.api.product.projection.ProductProjection;
 import springboot.jewelry.api.product.repository.GoldTypeRepository;
 import springboot.jewelry.api.product.repository.ProductRepository;
 import springboot.jewelry.api.product.repository.ProductTypeRepository;
@@ -19,7 +19,6 @@ import springboot.jewelry.api.supplier.model.Supplier;
 import springboot.jewelry.api.supplier.repository.SupplierRepository;
 import springboot.jewelry.api.util.MapDtoToModel;
 
-import javax.swing.text.html.Option;
 import java.util.*;
 
 @AllArgsConstructor
@@ -68,4 +67,12 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
         Pageable pageable = PageRequest.of(pageIndex,9, Sort.by(Sort.Direction.ASC, sortBy));
         return productRepository.findAllProductWithPage(pageable);
     }
+
+    @Override
+    public List<ProductProjection> findListProduct(int pageIndex, String sortBy) {
+        Pageable pageable = PageRequest.of(pageIndex,9, Sort.by(Sort.Direction.ASC, sortBy));
+        return productRepository.findListProduct(pageable);
+    }
+
+
 }
