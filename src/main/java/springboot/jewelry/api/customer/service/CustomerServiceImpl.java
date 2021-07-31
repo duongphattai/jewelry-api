@@ -30,14 +30,14 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
 
     @Override
     public Customer save(CustomerCreateDto dto) {
-        Customer customer = new Customer();
-        customer = mapper.map(dto, customer);
-        customer.setPassword(passwordEncoder.encode(dto.getPassword()));
+        Customer newCustomer = new Customer();
+        newCustomer = mapper.map(dto, newCustomer);
+        newCustomer.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         // Set value = 1L để lấy Role mặc định là "USER"
         Optional<Role> role = roleRepository.findById(1L);
-        customer.setRole(role.get());
-        return customerRepository.save(customer);
+        newCustomer.setRole(role.get());
+        return customerRepository.save(newCustomer);
     }
 
     @Override
@@ -62,9 +62,30 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
 
     @Override
     public Customer updateCustomerInfo(CustomerUpdateDto dto, Long id) {
-        Customer customer = customerRepository.getOne(id);
-        customer = mapper.map(dto, customer);
-        return customerRepository.save(customer);
+        Customer customerUpdate = customerRepository.getOne(id);
+        customerUpdate = mapper.map(dto, customerUpdate);
+        customerUpdate.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+        // check email already used
+        if(!dto.getEmail().equals(customerUpdate.getEmail())){
+            customerUpdate.setEmail(dto.getEmail());
+        }else{
+            if(!isTakenEmail(dto.getEmail())){
+                customerUpdate.setEmail(dto.getEmail());
+            }
+
+        }
+
+        // check phone already used
+        if(!dto.getPhoneNumber().equals(customerUpdate.getPhoneNumber())){
+            customerUpdate.setPhoneNumber(dto.getPhoneNumber());
+        }else{
+            if(!isTakenPhoneNumber(dto.getPhoneNumber())){
+                customerUpdate.setPhoneNumber(dto.getPhoneNumber());
+            }
+        }
+
+        return customerRepository.save(customerUpdate);
 
     }
 }

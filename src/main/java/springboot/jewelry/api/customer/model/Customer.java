@@ -57,6 +57,7 @@ public class Customer extends AbstractEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
+    @NotNull
     private Role role;
 
 }

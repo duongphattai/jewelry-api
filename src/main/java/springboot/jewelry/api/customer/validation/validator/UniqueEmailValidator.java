@@ -21,9 +21,9 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, St
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
-        boolean isTakenMobileNo = service.isTakenEmail(email);
+        boolean isTakenEmail = service.isTakenEmail(email);
 
-        if (!isTakenMobileNo) {
+        if (!isTakenEmail) {
             return true;
         }
         context.buildConstraintViolationWithTemplate(message)

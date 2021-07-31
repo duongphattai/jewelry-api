@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import springboot.jewelry.api.customer.util.CustomerGender;
 import springboot.jewelry.api.customer.validation.anotation.ConfirmPassword;
+import springboot.jewelry.api.customer.validation.anotation.UniquePhoneNumber;
 import springboot.jewelry.api.util.DateUtils;
 import springboot.jewelry.api.util.FormatUtils;
 
@@ -37,11 +38,9 @@ public class CustomerUpdateDto {
 
     @NotBlank(message = "{customer.mobile-no.not-blank}")
     @Pattern(regexp = FormatUtils.PHONE_NUMBER_FORMAT, message = "{customer.mobile-no.format}")
-    //@UniqueMobileNo
     private String phoneNumber;
 
     @Email(message = "{customer.email.format}")
-    //@UniqueEmail
     private String email;
 
     @NotBlank(message = "{customer.address.not-blank}")
