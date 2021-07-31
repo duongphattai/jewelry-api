@@ -1,6 +1,9 @@
 package springboot.jewelry.api.product.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import springboot.jewelry.api.commondata.GenericServiceImpl;
 import springboot.jewelry.api.product.dto.ProductCreateDto;
@@ -17,10 +20,7 @@ import springboot.jewelry.api.supplier.repository.SupplierRepository;
 import springboot.jewelry.api.util.MapDtoToModel;
 
 import javax.swing.text.html.Option;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @AllArgsConstructor
 @Service
@@ -61,5 +61,11 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
         Product productUpdate = productRepository.getOne(id);
         productUpdate = mapper.map(dto, productUpdate);
         return productRepository.save(productUpdate);
+    }
+
+    @Override
+    public List<Product> findAllProductWithPage(int pageIndex, String sortBy) {
+        Pageable pageable = PageRequest.of(pageIndex,9, Sort.by(Sort.Direction.ASC, sortBy));
+        return productRepository.findAllProductWithPage(pageable);
     }
 }
