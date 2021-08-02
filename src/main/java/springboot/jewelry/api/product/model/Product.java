@@ -7,9 +7,9 @@ import springboot.jewelry.api.commondata.model.AbstractEntity;
 import springboot.jewelry.api.supplier.model.Supplier;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.HashSet;
-import java.util.Set;
+import javax.validation.constraints.Size;
 
 
 @Getter
@@ -18,8 +18,16 @@ import java.util.Set;
 @Table(name = "jewelry_product")
 public class Product extends AbstractEntity {
 
+    @NotBlank(message = "{Product.sku.NotBlank}")
+    @Size(min = 5, max = 5, message = "{Product.sku.Size}")
+    @Column(unique = true)
     private String sku;
+
+    @NotBlank(message = "{Product.name.NotBlank}")
+    @Size(min = 5, max = 100, message = "{Product.name.Size}")
     private String name;
+
+    @Size(max = 500, message = "{Product.description.Size}")
     private String description;
 
     private Double goldWeight;

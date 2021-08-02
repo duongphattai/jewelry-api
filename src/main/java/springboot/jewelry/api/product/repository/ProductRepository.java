@@ -9,7 +9,6 @@ import springboot.jewelry.api.product.model.Product;
 import springboot.jewelry.api.product.projection.ProductProjection;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
@@ -20,4 +19,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query(value = "SELECT p.name AS name, p.description AS description, p.price AS price, p.supplier.name AS supplierName FROM Product p")
     List<ProductProjection> findListProduct(Pageable pageable);
 
+    int countBySku(String sku);
 }

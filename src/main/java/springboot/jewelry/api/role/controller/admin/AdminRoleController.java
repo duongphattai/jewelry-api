@@ -42,35 +42,12 @@ public class AdminRoleController {
         return ResponseHandler.getResponse(role, HttpStatus.OK);
     }
 
-    @PutMapping("/{role-id}")
-    public ResponseEntity<Object> updateRole(@PathVariable("role-id") Long id ,
-                                             @Valid @RequestBody RoleCreateDto dto ,
-                                             BindingResult bindingResult){
-
-        if(bindingResult.hasErrors()){
-            return ResponseHandler.getResponse(HttpStatus.BAD_REQUEST);
-        }
-
-        Role role = roleService.updateRoleInfo(dto, id);
-
-        return ResponseHandler.getResponse(role, HttpStatus.OK);
-    }
-
     @PutMapping("/{role-id}/{username}")
-    public ResponseEntity<Object> changeRoleForCustomer(@PathVariable("role-id") Long roleId ,
+    public ResponseEntity<Object> changeRoleWithCustomer(@PathVariable("role-id") Long roleId ,
                                                     @PathVariable("username") String username){
         Role role = roleService.changeRoleForCustomer(username, roleId);
 
         return ResponseHandler.getResponse(role, HttpStatus.OK);
 
     }
-
-    @DeleteMapping("/{role-id}")
-    public ResponseEntity<Object> deleteRole(@PathVariable("role-id") Long id){
-
-        roleService.deleteById(id);
-
-        return ResponseHandler.getResponse(HttpStatus.OK);
-    }
-
 }

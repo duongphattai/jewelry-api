@@ -1,6 +1,6 @@
 package springboot.jewelry.api.customer.validation.validator;
 
-import springboot.jewelry.api.customer.validation.anotation.ConfirmPassword;
+import springboot.jewelry.api.customer.validation.annotation.ConfirmPassword;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

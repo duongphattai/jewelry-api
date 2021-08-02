@@ -1,8 +1,8 @@
 package springboot.jewelry.api.customer.validation.validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import springboot.jewelry.api.customer.service.CustomerService;
-import springboot.jewelry.api.customer.validation.anotation.UniquePhoneNumber;
+import springboot.jewelry.api.customer.repository.CustomerRepository;
+import springboot.jewelry.api.customer.validation.annotation.UniquePhoneNumber;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -10,7 +10,7 @@ import javax.validation.ConstraintValidatorContext;
 public class UniquePhoneNumberValidator implements ConstraintValidator<UniquePhoneNumber, String> {
 
     @Autowired
-    private CustomerService service;
+    private CustomerRepository customerRepository;
 
     private String message;
 
@@ -21,8 +21,7 @@ public class UniquePhoneNumberValidator implements ConstraintValidator<UniquePho
 
     @Override
     public boolean isValid(String phoneNumber, ConstraintValidatorContext context) {
-        boolean isTakenPhoneNumber = service.isTakenPhoneNumber(phoneNumber);
-
+        boolean isTakenPhoneNumber = customerRepository.countByPhoneNumber(phoneNumber) >= 1;
         if (!isTakenPhoneNumber) {
             return true;
         }

@@ -2,8 +2,8 @@ package springboot.jewelry.api.customer.validation.validator;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import springboot.jewelry.api.customer.service.CustomerService;
-import springboot.jewelry.api.customer.validation.anotation.UniqueUsername;
+import springboot.jewelry.api.customer.repository.CustomerRepository;
+import springboot.jewelry.api.customer.validation.annotation.UniqueUsername;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -11,7 +11,7 @@ import javax.validation.ConstraintValidatorContext;
 public class UniqueUsernameValidator implements ConstraintValidator<UniqueUsername, String> {
 
     @Autowired
-    private CustomerService service;
+    private CustomerRepository customerRepository;
 
     private String message;
 
@@ -22,8 +22,7 @@ public class UniqueUsernameValidator implements ConstraintValidator<UniqueUserna
 
     @Override
     public boolean isValid(String username, ConstraintValidatorContext context) {
-        boolean isTakenUsername = service.isTakenUsername(username);
-
+        boolean isTakenUsername = customerRepository.countByUsername(username) >= 1;
         if (!isTakenUsername) {
             return true;
         }

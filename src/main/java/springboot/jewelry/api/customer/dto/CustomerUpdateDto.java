@@ -4,10 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import springboot.jewelry.api.customer.util.CustomerGender;
-import springboot.jewelry.api.customer.validation.anotation.ConfirmPassword;
-import springboot.jewelry.api.customer.validation.anotation.UniquePhoneNumber;
+import springboot.jewelry.api.customer.validation.annotation.ConfirmPassword;
 import springboot.jewelry.api.util.DateUtils;
-import springboot.jewelry.api.util.FormatUtils;
+
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -18,15 +17,15 @@ import java.time.LocalDate;
 @Setter
 @ConfirmPassword
 public class CustomerUpdateDto {
-    @NotBlank(message = "{customer.password.not-blank}")
-    @Size(min = 8, max = 30, message = "{customer.password.size}")
+    @NotBlank(message = "{Customer.username.NotBlank}")
+    @Size(min = 8, max = 30, message = "{Customer.username.Size}")
     private String password;
 
     @NotBlank
     private String confirmPassword;
 
-    @NotBlank(message = "{customer.full-name.not-blank}")
-    @Size(min = 3, max = 50, message = "{customer.full-name.size}")
+    @NotBlank(message = "{Customer.fullName.NotBlank}")
+    @Size(min = 3, max = 50, message = "{Customer.fullName.Size}")
     private String fullName;
 
     @NotNull
@@ -36,14 +35,7 @@ public class CustomerUpdateDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateUtils.BIRTHDAY_FORMAT)
     private LocalDate birthday;
 
-    @NotBlank(message = "{customer.mobile-no.not-blank}")
-    @Pattern(regexp = FormatUtils.PHONE_NUMBER_FORMAT, message = "{customer.mobile-no.format}")
-    private String phoneNumber;
-
-    @Email(message = "{customer.email.format}")
-    private String email;
-
-    @NotBlank(message = "{customer.address.not-blank}")
-    @Size(min = 20, max = 100, message = "{customer.address.size}")
+    @NotBlank(message = "{Customer.address.NotBlank}")
+    @Size(min = 20, max = 100, message = "{Customer.address.Size}")
     private String address;
 }

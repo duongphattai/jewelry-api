@@ -1,4 +1,4 @@
-package springboot.jewelry.api.customer.validation.anotation;
+package springboot.jewelry.api.customer.validation.annotation;
 
 import springboot.jewelry.api.customer.validation.validator.UniquePhoneNumberValidator;
 
@@ -13,7 +13,8 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniquePhoneNumber {
-    String message() default "Số điện thoại đã được sử dụng";
+
+    String message() default "{customer.validation.annotation.UniquePhoneNumber.message}";
 
     Class<?>[] groups() default {};
 

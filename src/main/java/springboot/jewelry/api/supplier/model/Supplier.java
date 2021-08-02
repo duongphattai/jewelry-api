@@ -7,6 +7,9 @@ import springboot.jewelry.api.commondata.model.AbstractEntity;
 import springboot.jewelry.api.product.model.Product;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,13 +22,18 @@ public class Supplier extends AbstractEntity {
     @Column(unique = true)
     private String code;
 
-    @Column(unique = true)
+    @NotBlank(message = "{Supplier.name.NotBlank}")
     private String name;
 
+    @Column(nullable = false)
+    @Pattern(regexp = "(^$|[0-9]{10})", message = "{Supplier.phoneNumber.Pattern}")
     private String phoneNumber;
 
+    @Column(nullable = false)
+    @Email(message = "{Supplier.email.Email}")
     private String email;
 
+    @Column(nullable = false)
     private String address;
 
     private String logo;

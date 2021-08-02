@@ -13,7 +13,6 @@ import springboot.jewelry.api.role.model.Role;
 import springboot.jewelry.api.role.repository.RoleRepository;
 import springboot.jewelry.api.util.MapDtoToModel;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +25,6 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
     private MapDtoToModel<Object, Customer> mapper;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
-
 
     @Override
     public Customer save(CustomerCreateDto dto) {
@@ -46,44 +44,10 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
     }
 
     @Override
-    public boolean isTakenUsername(String username) {
-        return customerRepository.countByUsername(username) >= 1;
-    }
-
-    @Override
-    public boolean isTakenPhoneNumber(String phoneNumber) {
-        return customerRepository.countByPhoneNumber(phoneNumber) >= 1;
-    }
-
-    @Override
-    public boolean isTakenEmail(String email) {
-        return customerRepository.countByEmail(email) >= 1;
-    }
-
-    @Override
     public Customer updateCustomerInfo(CustomerUpdateDto dto, Long id) {
         Customer customerUpdate = customerRepository.getOne(id);
         customerUpdate = mapper.map(dto, customerUpdate);
         customerUpdate.setPassword(passwordEncoder.encode(dto.getPassword()));
-
-        // check email already used
-        if(!dto.getEmail().equals(customerUpdate.getEmail())){
-            customerUpdate.setEmail(dto.getEmail());
-        }else{
-            if(!isTakenEmail(dto.getEmail())){
-                customerUpdate.setEmail(dto.getEmail());
-            }
-
-        }
-
-        // check phone already used
-        if(!dto.getPhoneNumber().equals(customerUpdate.getPhoneNumber())){
-            customerUpdate.setPhoneNumber(dto.getPhoneNumber());
-        }else{
-            if(!isTakenPhoneNumber(dto.getPhoneNumber())){
-                customerUpdate.setPhoneNumber(dto.getPhoneNumber());
-            }
-        }
 
         return customerRepository.save(customerUpdate);
 

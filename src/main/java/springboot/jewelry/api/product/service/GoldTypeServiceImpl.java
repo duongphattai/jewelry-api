@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import springboot.jewelry.api.commondata.GenericServiceImpl;
 import springboot.jewelry.api.product.dto.GoldTypeCreateDto;
-import springboot.jewelry.api.product.dto.GoldTypeUpdateDto;
 import springboot.jewelry.api.product.model.GoldType;
 import springboot.jewelry.api.product.repository.GoldTypeRepository;
 import springboot.jewelry.api.product.service.itf.GoldTypeService;
@@ -24,10 +23,4 @@ public class GoldTypeServiceImpl extends GenericServiceImpl<GoldType, Long> impl
         return goldTypeRepository.save(newGoldType);
     }
 
-    @Override
-    public GoldType updateGoldType(GoldTypeUpdateDto dto, Long id) {
-        GoldType goldTypeUpdate = goldTypeRepository.getOne(id);
-        goldTypeUpdate = mapper.map(dto, goldTypeUpdate);
-        return goldTypeRepository.save(goldTypeUpdate);
-    }
 }

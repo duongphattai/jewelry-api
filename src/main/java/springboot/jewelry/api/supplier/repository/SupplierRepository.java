@@ -9,5 +9,7 @@ import java.util.Optional;
 @Repository
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
 
-    Optional<Supplier> findByCode(String codeSupplier);
+    Optional<Supplier> findByCode(String supplierCode);
+
+    int countByCode(String supplierCode);
 }

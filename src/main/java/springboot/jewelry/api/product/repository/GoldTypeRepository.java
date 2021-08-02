@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface GoldTypeRepository extends JpaRepository<GoldType, Long> {
 
     Optional<GoldType> findByPercentage(Double goldType);
+
+    int countByPercentage(Double percentage);
 }

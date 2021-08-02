@@ -37,12 +37,12 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
         newProduct = mapper.map(dto, newProduct);
         newProduct.setTotalCostPrice(dto.getCostPrice() * dto.getQuantity());
 
-        Optional<Supplier> supplierOpt = supplierRepository.findByCode(dto.getCodeSupplier());
+        Optional<Supplier> supplierOpt = supplierRepository.findByCode(dto.getSupplierCode());
         if(supplierOpt.isPresent()){
             newProduct.setSupplier(supplierOpt.get());
         }
 
-        Optional<ProductType> productTypeOpt = productTypeRepository.findByCode(dto.getCodeProductType());
+        Optional<ProductType> productTypeOpt = productTypeRepository.findByCode(dto.getProductTypeCode());
         if(productTypeOpt.isPresent()){
             newProduct.setProductType(productTypeOpt.get());
         }

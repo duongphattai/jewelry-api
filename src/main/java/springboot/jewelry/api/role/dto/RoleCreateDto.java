@@ -1,7 +1,7 @@
 package springboot.jewelry.api.role.dto;
 
 import lombok.Getter;
-import springboot.jewelry.api.role.validation.anotation.UniqueRoleName;
+import springboot.jewelry.api.role.validation.annotation.UniqueRoleName;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;

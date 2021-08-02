@@ -7,7 +7,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
 import springboot.jewelry.api.product.dto.GoldTypeCreateDto;
-import springboot.jewelry.api.product.dto.GoldTypeUpdateDto;
 import springboot.jewelry.api.product.model.GoldType;
 import springboot.jewelry.api.product.service.itf.GoldTypeService;
 
@@ -42,20 +41,6 @@ public class AdminGoldTypeController {
         GoldType newGoldType = goldTypeService.save(dto);
 
         return ResponseHandler.getResponse(newGoldType, HttpStatus.OK);
-    }
-
-    @PutMapping("/{gold-type-id}")
-    public ResponseEntity<Object> updateGoldType(@PathVariable("gold-type-id") Long id,
-                                                 @Valid @RequestBody GoldTypeUpdateDto dto,
-                                                 BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            return ResponseHandler.getResponse(HttpStatus.BAD_REQUEST);
-        }
-
-        GoldType goldTypeUpdate = goldTypeService.updateGoldType(dto, id);
-
-        return ResponseHandler.getResponse(goldTypeUpdate, HttpStatus.OK);
     }
 
     @DeleteMapping("/{gold-type-id}")

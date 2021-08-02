@@ -5,6 +5,8 @@ import lombok.Setter;
 import springboot.jewelry.api.commondata.model.AbstractEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +17,7 @@ import java.util.Set;
 public class GoldType extends AbstractEntity {
 
     @Column(unique = true)
+    @NotNull
     private Double percentage;
 
     @OneToMany(mappedBy = "goldType", cascade = CascadeType.ALL)

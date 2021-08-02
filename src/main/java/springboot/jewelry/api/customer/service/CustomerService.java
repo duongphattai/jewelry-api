@@ -15,11 +15,4 @@ public interface CustomerService extends GenericService<Customer, Long> {
     Customer updateCustomerInfo(CustomerUpdateDto dto, Long id);
 
     List<CustomerProjection> findCustomerWithAllRoleName();
-
-    boolean isTakenUsername(String username);
-
-    boolean isTakenPhoneNumber(String phoneNumber);
-
-    boolean isTakenEmail(String email);
-
 }

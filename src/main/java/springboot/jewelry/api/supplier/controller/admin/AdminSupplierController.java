@@ -39,23 +39,27 @@ public class AdminSupplierController {
             return ResponseHandler.getResponse(bindingResult, HttpStatus.BAD_REQUEST);
         }
 
-        Supplier supplier = supplierService.save(dto);
+        Supplier newSupplier = supplierService.save(dto);
 
-        return ResponseHandler.getResponse(supplier, HttpStatus.OK);
+        return ResponseHandler.getResponse(newSupplier, HttpStatus.OK);
     }
 
     @PutMapping("/{supplier-id}")
     public ResponseEntity<Object> updateSupplier(@PathVariable("supplier-id") Long id,
                                                  @Valid @RequestBody SupplierUpdateDto dto,
                                                  BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            return ResponseHandler.getResponse(HttpStatus.BAD_REQUEST);
+        Optional<Supplier> supplier = supplierService.findById(id);
+        if(!supplier.isPresent()){
+            return ResponseHandler.getResponse("Không tìm thấy ID: " + id, HttpStatus.BAD_REQUEST);
         }
 
-        Supplier supplier = supplierService.updateSupplierInfo(dto, id);
+        if (bindingResult.hasErrors()) {
+            return ResponseHandler.getResponse("Vui lòng kiểm tra lại các thông tin!", HttpStatus.BAD_REQUEST);
+        }
 
-        return ResponseHandler.getResponse(supplier, HttpStatus.OK);
+        Supplier supplierUpdate = supplierService.updateSupplierInfo(dto, id);
+
+        return ResponseHandler.getResponse(supplierUpdate, HttpStatus.OK);
     }
 
     @DeleteMapping("/{supplier-id}")
@@ -63,7 +67,7 @@ public class AdminSupplierController {
 
         Optional<Supplier> supplier = supplierService.findById(id);
         if (!supplier.isPresent()) {
-            return ResponseHandler.getResponse("Không tìm thấy ID: " + id, HttpStatus.OK);
+            return ResponseHandler.getResponse("Không tìm thấy ID: " + id, HttpStatus.BAD_REQUEST);
         }
 
         supplierService.deleteById(id);
