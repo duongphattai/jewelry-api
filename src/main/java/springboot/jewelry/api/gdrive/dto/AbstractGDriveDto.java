@@ -1,4 +1,4 @@
-package springboot.jewelry.api.google_drive.dto;
+package springboot.jewelry.api.gdrive.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-public abstract class AbstractGoogleDriveDto implements Serializable {
+public abstract class AbstractGDriveDto implements Serializable {
     private String id;
     private String name;
     private String link;

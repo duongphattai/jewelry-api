@@ -1,11 +1,11 @@
-package springboot.jewelry.api.google_drive.dto;
+package springboot.jewelry.api.gdrive.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class GoogleDriveFileDto extends AbstractGoogleDriveDto {
+public class GDriveFileDto extends AbstractGDriveDto {
 
     private String size;
     private String thumbnailLink;
