@@ -1,6 +1,6 @@
-package springboot.jewelry.api.customer.validation.anotation;
+package springboot.jewelry.api.product.validation.annotation;
 
-import springboot.jewelry.api.customer.validation.validator.UniqueMobileNoValidator;
+import springboot.jewelry.api.product.validation.validator.UniqueGoldTypeValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -9,13 +9,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = UniqueMobileNoValidator.class)
+@Constraint(validatedBy = UniqueGoldTypeValidator.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UniqueMobileNo {
-    String message() default "Số điện thoại đã được sử dụng";
+public @interface UniqueGoldType {
+
+    String message() default "{product.validation.annotation.UniqueGoldType.message}";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
+
 }

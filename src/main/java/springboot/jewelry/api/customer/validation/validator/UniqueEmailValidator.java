@@ -1,8 +1,9 @@
 package springboot.jewelry.api.customer.validation.validator;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
-import springboot.jewelry.api.customer.service.CustomerService;
-import springboot.jewelry.api.customer.validation.anotation.UniqueEmail;
+import springboot.jewelry.api.customer.repository.CustomerRepository;
+import springboot.jewelry.api.customer.validation.annotation.UniqueEmail;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -10,7 +11,7 @@ import javax.validation.ConstraintValidatorContext;
 public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, String> {
 
     @Autowired
-    private CustomerService service;
+    private CustomerRepository customerRepository;
 
     private String message;
 
@@ -21,11 +22,12 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, St
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
-        boolean isTakenMobileNo = service.isTakenEmail(email);
 
-        if (!isTakenMobileNo) {
+        boolean isTakenEmail = customerRepository.countByEmail(email) >= 1;
+        if (!isTakenEmail) {
             return true;
         }
+
         context.buildConstraintViolationWithTemplate(message)
                 .addConstraintViolation()
                 .disableDefaultConstraintViolation();

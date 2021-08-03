@@ -8,7 +8,6 @@ import springboot.jewelry.api.commondata.model.AbstractEntity;
 import springboot.jewelry.api.customer.util.CustomerGender;
 import springboot.jewelry.api.role.model.Role;
 import springboot.jewelry.api.util.DateUtils;
-import springboot.jewelry.api.util.FormatUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -22,17 +21,17 @@ import java.time.LocalDate;
 @Table(name = "jewelry_customer")
 public class Customer extends AbstractEntity {
 
-    @NotBlank(message = "{customer.username.not-blank}")
-    @Size(min = 3, max = 50, message = "{customer.username.size}")
+    @NotBlank(message = "{Customer.username.NotBlank}")
+    @Size(min = 3, max = 50, message = "{Customer.username.Size}")
     @Column(unique = true, name = "username")
     private String username;
 
-    @NotBlank(message = "{customer.password.not-blank}")
+    @NotBlank(message = "{Customer.password.NotBlank}")
     @JsonIgnore
     private String password;
 
-    @NotBlank(message = "{customer.full-name.not-blank}")
-    @Size(min = 3, max = 50, message = "{customer.full-name.size}")
+    @NotBlank(message = "{Customer.fullName.NotBlank}")
+    @Size(min = 3, max = 50, message = "{Customer.fullName.Size}")
     private String fullName;
 
     @NotNull
@@ -42,21 +41,22 @@ public class Customer extends AbstractEntity {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateUtils.BIRTHDAY_FORMAT)
     private LocalDate birthday;
 
-    @NotBlank(message = "{customer.mobile-no.not-blank}")
-    @Pattern(regexp = FormatUtils.MOBILE_NO_FORMAT, message = "{customer.mobile-no.format}")
+    @NotBlank(message = "{Customer.phoneNumber.NotBlank}")
+    @Pattern(regexp = "(^$|[0-9]{10})", message = "{Customer.phoneNumber.Pattern}")
     @Column(unique = true)
-    private String mobileNo;
+    private String phoneNumber;
 
-    @Email(message = "{customer.email.format}")
+    @Email(message = "{Customer.email.Email}")
     @Column(unique = true, nullable = false)
     private String email;
 
-    @NotBlank(message = "{customer.address.not-blank}")
-    @Size(min = 20, max = 100, message = "{customer.address.size}")
+    @NotBlank(message = "{Customer.address.NotBlank}")
+    @Size(min = 20, max = 100, message = "{Customer.address.Size}")
     private String address;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
+    @NotNull
     private Role role;
 
 }

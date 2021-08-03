@@ -1,4 +1,4 @@
-package springboot.jewelry.api.customer.validation.anotation;
+package springboot.jewelry.api.customer.validation.annotation;
 
 import springboot.jewelry.api.customer.validation.validator.ConfirmPasswordValidator;
 
@@ -13,13 +13,14 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ConfirmPassword {
-    public String getPassword() default "getPassword";
 
-    public String getConfirmPassword() default "getConfirmPassword";
+    String getPassword() default "getPassword";
 
-    public String message() default "Mật khẩu nhập lại không chính xác!";
+    String getConfirmPassword() default "getConfirmPassword";
 
-    public Class<?>[] groups() default {};
+    String message() default "{customer.validation.annotation.ConfirmPassword.message}";
 
-    public Class<? extends Payload>[] payload() default {};
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 }

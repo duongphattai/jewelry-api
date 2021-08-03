@@ -1,6 +1,6 @@
-package springboot.jewelry.api.customer.validation.anotation;
+package springboot.jewelry.api.product.validation.annotation;
 
-import springboot.jewelry.api.customer.validation.validator.UniqueEmailValidator;
+import springboot.jewelry.api.product.validation.validator.FormatPercentageGoldValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -8,12 +8,13 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-@Constraint(validatedBy = UniqueEmailValidator.class)
+
+@Constraint(validatedBy = FormatPercentageGoldValidator.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface UniqueEmail {
+public @interface FormatPercentageGold {
 
-    String message() default "Email đã được sử dụng!";
+    String message() default "{product.validation.annotation.FormatPercentageGold.message}";
 
     Class<?>[] groups() default {};
 

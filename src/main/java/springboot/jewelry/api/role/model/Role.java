@@ -19,12 +19,13 @@ import java.util.Set;
 @Table(name = "jewelry_role")
 public class Role extends AbstractEntity {
 
-    @NotBlank(message = "{role.name.not-blank}")
-    @Size(min = 4, max = 50, message = "{role.name.size}")
+    @NotBlank(message = "{Role.name.NotBlank}")
+    @Size(min = 4, max = 50, message = "{Role.name.Size}")
     @Column(unique = true, name = "role_name")
     private String roleName;
 
-    @NotBlank(message = "{role.description.not-blank}")
+    @NotBlank(message = "{Role.description.NotBlank}")
+    @Size(min = 1, max = 200, message = "{Role.description.Size}")
     private String description;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)

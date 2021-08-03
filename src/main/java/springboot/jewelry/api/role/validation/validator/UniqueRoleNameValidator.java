@@ -2,7 +2,7 @@ package springboot.jewelry.api.role.validation.validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import springboot.jewelry.api.role.service.RoleService;
-import springboot.jewelry.api.role.validation.anotation.UniqueRoleName;
+import springboot.jewelry.api.role.validation.annotation.UniqueRoleName;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

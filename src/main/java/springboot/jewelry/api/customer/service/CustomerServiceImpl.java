@@ -1,7 +1,6 @@
 package springboot.jewelry.api.customer.service;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import springboot.jewelry.api.customer.dto.CustomerCreateDto;
@@ -27,16 +26,16 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
 
-
     @Override
     public Customer save(CustomerCreateDto dto) {
-        Customer customer = new Customer();
-        customer = mapper.map(dto, customer);
-        customer.setPassword(passwordEncoder.encode(dto.getPassword()));
+        Customer newCustomer = new Customer();
+        newCustomer = mapper.map(dto, newCustomer);
+        newCustomer.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-        Optional<Role> role = roleRepository.findById(dto.getRoleId());
-        customer.setRole(role.get());
-        return customerRepository.save(customer);
+        // Set value = 1L để lấy Role mặc định là "USER"
+        Optional<Role> role = roleRepository.findById(1L);
+        newCustomer.setRole(role.get());
+        return customerRepository.save(newCustomer);
     }
 
     @Override
@@ -45,25 +44,12 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
     }
 
     @Override
-    public boolean isTakenUsername(String username) {
-        return customerRepository.countByUsername(username) >= 1;
-    }
+    public Customer updateCustomerInfo(CustomerUpdateDto dto, Long id) {
+        Customer customerUpdate = customerRepository.getOne(id);
+        customerUpdate = mapper.map(dto, customerUpdate);
+        customerUpdate.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-    @Override
-    public boolean isTakenMobileNo(String mobileNo) {
-        return customerRepository.countByMobileNo(mobileNo) >= 1;
-    }
-
-    @Override
-    public boolean isTakenEmail(String email) {
-        return customerRepository.countByEmail(email) >= 1;
-    }
-
-    @Override
-    public Customer updateCustomer(CustomerUpdateDto dto, Long id) {
-        Customer customer = customerRepository.getOne(id);
-        customer = mapper.map(dto, customer);
-        return customerRepository.save(customer);
+        return customerRepository.save(customerUpdate);
 
     }
 }
