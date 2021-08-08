@@ -1,11 +1,10 @@
 package springboot.jewelry.api.product.service;
 
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import springboot.jewelry.api.commondata.GenericServiceImpl;
+import springboot.jewelry.api.commondata.model.PagedResult;
 import springboot.jewelry.api.product.dto.ProductCreateDto;
 import springboot.jewelry.api.product.model.GoldType;
 import springboot.jewelry.api.product.model.Product;
@@ -63,16 +62,20 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
     }
 
     @Override
-    public List<Product> findAllProductWithPage(int pageIndex, String sortBy) {
-        Pageable pageable = PageRequest.of(pageIndex,9, Sort.by(Sort.Direction.ASC, sortBy));
-        return productRepository.findAllProductWithPage(pageable);
-    }
-
-    @Override
     public List<ProductProjection> findListProduct(int pageIndex, String sortBy) {
         Pageable pageable = PageRequest.of(pageIndex,9, Sort.by(Sort.Direction.ASC, sortBy));
         return productRepository.findListProduct(pageable);
     }
 
+    @Override
+    public PagedResult<ProductProjection> findProducts(Pageable pageable) {
+        Page<ProductProjection> result = productRepository.findProducts(pageable);
+        return new PagedResult<>(
+                result.getContent(),
+                result.getTotalElements(),
+                result.getTotalPages(),
+                result.getNumber() + 1
+        );
+    }
 
 }

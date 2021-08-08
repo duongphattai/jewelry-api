@@ -1,9 +1,14 @@
 package springboot.jewelry.api.product.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springboot.jewelry.api.commondata.model.PagedResult;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
 import springboot.jewelry.api.product.model.Product;
 import springboot.jewelry.api.product.projection.ProductProjection;
@@ -14,20 +19,19 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("api/product")
+@RequestMapping("/api/product")
 public class ProductController {
 
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/find-all")
-    public ResponseEntity<Object> findAll(@RequestParam(name = "page", required = false,
-                                                        defaultValue = "0") int pageIndex,
-                                          @RequestParam(name = "sort-by", required = false,
-                                                        defaultValue = "id") String sortBy) {
+    @GetMapping("")
+    public ResponseEntity<Object> findProducts(
+            @PageableDefault(size = 9, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        List<Product> products = productService.findAllProductWithPage(pageIndex, sortBy);
-        if (products.isEmpty()) {
+        PagedResult<ProductProjection> products = productService.findProducts(pageable);
+
+        if (products.getElements().isEmpty()) {
             return ResponseHandler.getResponse("Không có dữ liệu!", HttpStatus.OK);
         }
         return ResponseHandler.getResponse(products, HttpStatus.OK);
