@@ -24,13 +24,28 @@ public class AdminProductController {
     private ProductService productService;
 
     @GetMapping("")
-    public ResponseEntity<Object> findAll() {
-        List<Product> products = productService.findAll();
+    public ResponseEntity<Object> findAll(@RequestParam(name = "page", required = false,
+            defaultValue = "0") int pageIndex,
+                                          @RequestParam(name = "sort-by", required = false,
+                                                  defaultValue = "id") String sortBy) {
+
+        List<Product> products = productService.findAllProductWithPage(pageIndex, sortBy);
         if (products.isEmpty()) {
-            return ResponseHandler.getResponse("Danh sách trống!", HttpStatus.OK);
+            return ResponseHandler.getResponse("Không có dữ liệu!", HttpStatus.OK);
+        }
+        return ResponseHandler.getResponse(products, HttpStatus.OK);
+    }
+
+    @GetMapping("/by-id")
+    public ResponseEntity<Object> findProductById(@RequestParam Long id) {
+
+        Optional<Product> product = productService.findById(id);
+
+        if (!product.isPresent()) {
+            return ResponseHandler.getResponse("Không tìm thấy sản phầm có ID: " + id, HttpStatus.OK);
         }
 
-        return ResponseHandler.getResponse(products, HttpStatus.OK);
+        return ResponseHandler.getResponse(product, HttpStatus.OK);
     }
 
     @PostMapping("")
