@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/admin/product")
+@RequestMapping("/api/admin/product")
 public class AdminProductController {
 
     @Autowired

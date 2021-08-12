@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/admin/gold-type")
+@RequestMapping("/api/admin/product/gold-type")
 public class AdminGoldTypeController {
 
     @Autowired
