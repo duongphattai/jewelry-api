@@ -15,6 +15,7 @@ import springboot.jewelry.api.product.converter.ProductConverter;
 import springboot.jewelry.api.product.dto.ProductCreateDto;
 import springboot.jewelry.api.product.dto.ProductFilterDto;
 import springboot.jewelry.api.product.model.*;
+import springboot.jewelry.api.product.projection.ProductProjection;
 import springboot.jewelry.api.product.repository.GoldTypeRepository;
 import springboot.jewelry.api.product.repository.ProductRepository;
 import springboot.jewelry.api.product.repository.ProductTypeRepository;
@@ -74,8 +75,6 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
     }
 
     @Override
-
-    @Override
     public PagedResult<ProductProjection> findProducts(Pageable pageable) {
         Page<ProductProjection> result = productRepository.findProducts(pageable);
         return new PagedResult<>(
@@ -84,6 +83,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
                 result.getTotalPages(),
                 result.getNumber() + 1
         );
+    }
 
     @Override
     public List<ProductFilterDto> findProductsByFilter(String name, String productType,

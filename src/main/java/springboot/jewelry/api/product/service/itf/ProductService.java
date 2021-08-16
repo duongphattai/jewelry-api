@@ -7,6 +7,7 @@ import springboot.jewelry.api.commondata.model.PagedResult;
 import springboot.jewelry.api.product.dto.ProductCreateDto;
 import springboot.jewelry.api.product.dto.ProductFilterDto;
 import springboot.jewelry.api.product.model.Product;
+import springboot.jewelry.api.product.projection.ProductProjection;
 
 import java.util.List;
 

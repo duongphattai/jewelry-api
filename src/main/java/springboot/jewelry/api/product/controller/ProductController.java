@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import springboot.jewelry.api.commondata.model.PagedResult;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
 import springboot.jewelry.api.product.dto.ProductFilterDto;
+import springboot.jewelry.api.product.projection.ProductProjection;
 import springboot.jewelry.api.product.service.itf.ProductService;
 
 import java.util.List;

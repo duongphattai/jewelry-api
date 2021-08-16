@@ -29,11 +29,7 @@ public class AdminProductController {
                                           @RequestParam(name = "sort-by", required = false,
                                                   defaultValue = "id") String sortBy) {
 
-        List<Product> products = productService.findAllProductWithPage(pageIndex, sortBy);
-        if (products.isEmpty()) {
-            return ResponseHandler.getResponse("Không có dữ liệu!", HttpStatus.OK);
-        }
-        return ResponseHandler.getResponse(products, HttpStatus.OK);
+        return ResponseHandler.getResponse("123", HttpStatus.OK);
     }
 
     @GetMapping("/by-id")

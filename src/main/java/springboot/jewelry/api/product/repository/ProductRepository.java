@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import springboot.jewelry.api.commondata.model.PagedResult;
 import springboot.jewelry.api.product.model.Product;
+import springboot.jewelry.api.product.projection.ProductProjection;
 
 import java.util.List;
 
