@@ -9,7 +9,7 @@ spring:
     show-sql: true
     generate-ddl: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
   jackson:
     serialization:
       fail-on-empty-beans: false
@@ -28,3 +28,6 @@ jewelry:
   app:
     jwt-secret: khongcochuoibimat
     jwt-duration: 123456789
+  gdrive:
+    folder:
+      product: 1fkgIXvbjQ4n20FArIiA5Nxb_3oukKcmk

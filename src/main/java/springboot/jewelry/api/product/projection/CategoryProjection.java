@@ -1,9 +1,8 @@
 package springboot.jewelry.api.product.projection;
 
+public interface CategoryProjection {
 
-public interface ProductProjection {
-
+    String getCode();
     String getName();
-    Double getPrice();
 
 }

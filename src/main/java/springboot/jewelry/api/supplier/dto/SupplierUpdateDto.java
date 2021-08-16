@@ -11,14 +11,13 @@ import javax.validation.constraints.Pattern;
 @Setter
 public class SupplierUpdateDto {
 
-    @NotBlank(message = "{Supplier.name.NotBlank}")
+    @NotBlank(message = "{supplier.name.not-blank}")
     private String name;
 
-    @Pattern(regexp = "(^$|[0-9]{10})", message = "{Supplier.phoneNumber.Pattern}")
+    @Pattern(regexp = "(^$|[0-9]{10})", message = "{supplier.phone-number.pattern}")
     private String phoneNumber;
 
-   // @Email(message = "{Supplier.email.Email}")
-    @Email
+    @Email(message = "{supplier.email.email}")
     private String email;
 
     private String address;

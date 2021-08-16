@@ -12,4 +12,5 @@ public interface GenericService <T extends AbstractEntity, ID>{
     T save(T entity);
     T update(T entity);
     void deleteById(ID id);
+    <C> List<C> findAllBy(Class<C> type);
 }

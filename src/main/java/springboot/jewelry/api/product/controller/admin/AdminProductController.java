@@ -2,17 +2,18 @@ package springboot.jewelry.api.product.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
 import springboot.jewelry.api.product.dto.ProductCreateDto;
 import springboot.jewelry.api.product.model.Product;
 import springboot.jewelry.api.product.service.itf.ProductService;
 
-
-
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,12 +34,18 @@ public class AdminProductController {
         return ResponseHandler.getResponse(products, HttpStatus.OK);
     }
 
-    @PostMapping("")
-    public ResponseEntity<Object> addProduct(@Valid @RequestBody ProductCreateDto dto,
-                                              BindingResult bindingResult) {
+    @PostMapping(value = "",
+            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Object> addProduct(@RequestPart("dto") @Valid ProductCreateDto dto,
+                                             @RequestPart(value = "images[]", required = false) List<MultipartFile> images,
+                                             @RequestPart(value = "avatar", required = false) MultipartFile avatar,
+                                             BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseHandler.getResponse(bindingResult, HttpStatus.BAD_REQUEST);
         }
+
+        if(images != null) dto.setImages(images);
+        if(avatar != null) dto.setAvatar(avatar);
 
         Product newProduct = productService.save(dto);
 

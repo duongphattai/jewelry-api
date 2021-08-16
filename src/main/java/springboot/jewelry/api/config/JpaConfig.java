@@ -17,8 +17,8 @@ public class JpaConfig {
         return new AuditorAwareImpl();
     }
 
-    @Component
-    public interface GenericRepository<T, ID> extends JpaRepository<T, ID> {
-
-    }
+//    @Component
+//    public interface GenericRepository<T, ID> extends JpaRepository<T, ID> {
+//
+//    }
 }
