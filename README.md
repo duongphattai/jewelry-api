@@ -1,2 +1,2 @@
 # jewelry
- Administration and Sales Jewelry
+Jewelry Sales Management
