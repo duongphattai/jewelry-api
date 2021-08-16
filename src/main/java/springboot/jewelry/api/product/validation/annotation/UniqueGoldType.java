@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueGoldType {
 
-    String message() default "{product.validation.annotation.UniqueGoldType.message}";
+    String message() default "{product.validation.annotation.unique-gold-type.message}";
 
     Class<?>[] groups() default {};
 

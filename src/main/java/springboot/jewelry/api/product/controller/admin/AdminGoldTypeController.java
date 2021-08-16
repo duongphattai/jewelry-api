@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
 import springboot.jewelry.api.product.dto.GoldTypeCreateDto;
 import springboot.jewelry.api.product.model.GoldType;
+import springboot.jewelry.api.product.projection.GoldTypeProjection;
 import springboot.jewelry.api.product.service.itf.GoldTypeService;
 
 import javax.validation.Valid;
@@ -23,12 +24,13 @@ public class AdminGoldTypeController {
 
     @GetMapping("")
     public ResponseEntity<Object> findAll() {
-        List<GoldType> goldTypes = goldTypeService.findAll();
-        if (goldTypes.isEmpty()) {
+
+        List<GoldTypeProjection> goldTypeProjections = goldTypeService.findAllBy(GoldTypeProjection.class);
+        if (goldTypeProjections.isEmpty()) {
             return ResponseHandler.getResponse("Danh sách trống!", HttpStatus.OK);
         }
 
-        return ResponseHandler.getResponse(goldTypes, HttpStatus.OK);
+        return ResponseHandler.getResponse(goldTypeProjections, HttpStatus.OK);
     }
 
     @PostMapping("")

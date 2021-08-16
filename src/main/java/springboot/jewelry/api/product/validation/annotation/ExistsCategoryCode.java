@@ -1,6 +1,6 @@
 package springboot.jewelry.api.product.validation.annotation;
 
-import springboot.jewelry.api.product.validation.validator.ExistsProductTypeCodeValidator;
+import springboot.jewelry.api.product.validation.validator.ExistsCategoryCodeValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -9,12 +9,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = ExistsProductTypeCodeValidator.class)
+@Constraint(validatedBy = ExistsCategoryCodeValidator.class)
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ExistsProductTypeCode {
+public @interface ExistsCategoryCode {
 
-    String message() default "{product.validation.annotation.ExistsProductTypeCode.message}";
+    String message() default "{product.validation.annotation.exists-category-code.message}";
 
     Class<?>[] groups() default {};
 

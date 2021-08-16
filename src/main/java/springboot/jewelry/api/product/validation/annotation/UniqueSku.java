@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueSku {
 
-    String message() default "{product.validation.annotation.UniqueSku.message}";
+    String message() default "{product.validation.annotation.unique-sku.message}";
 
     Class<?>[] groups() default {};
 

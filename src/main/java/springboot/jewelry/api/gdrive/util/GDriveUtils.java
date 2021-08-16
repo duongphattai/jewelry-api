@@ -1,6 +1,5 @@
-package springboot.jewelry.api.gdrive.config;
+package springboot.jewelry.api.gdrive.util;
 
-import com.fasterxml.jackson.core.JsonFactory;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -23,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-public class GDriveConfig {
+public class GDriveUtils {
 
     private static final String APPLICATION_NAME = "Google Drive-HTH Non"; // Application name
     private static final JacksonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
@@ -53,7 +52,7 @@ public class GDriveConfig {
      */
     private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
         // Load client secrets.
-        InputStream in = GDriveConfig.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+        InputStream in = GDriveUtils.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
         if (in == null) {
             throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
         }

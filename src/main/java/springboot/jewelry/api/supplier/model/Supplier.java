@@ -22,15 +22,15 @@ public class Supplier extends AbstractEntity {
     @Column(unique = true)
     private String code;
 
-    @NotBlank(message = "{Supplier.name.NotBlank}")
+    @NotBlank(message = "{supplier.name.not-blank}")
     private String name;
 
     @Column(nullable = false)
-    @Pattern(regexp = "(^$|[0-9]{10})", message = "{Supplier.phoneNumber.Pattern}")
+    @Pattern(regexp = "(^$|[0-9]{10})", message = "{supplier.phone-number.pattern}")
     private String phoneNumber;
 
     @Column(nullable = false)
-    @Email(message = "{Supplier.email.Email}")
+    @Email(message = "{supplier.email.email}")
     private String email;
 
     @Column(nullable = false)

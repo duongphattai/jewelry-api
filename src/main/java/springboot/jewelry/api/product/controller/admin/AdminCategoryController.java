@@ -6,10 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
-import springboot.jewelry.api.product.dto.ProductTypeCreateDto;
-import springboot.jewelry.api.product.dto.ProductTypeUpdateDto;
-import springboot.jewelry.api.product.model.ProductType;
-import springboot.jewelry.api.product.service.itf.ProductTypeService;
+import springboot.jewelry.api.product.dto.CategoryCreateDto;
+import springboot.jewelry.api.product.dto.CategoryUpdateDto;
+import springboot.jewelry.api.product.model.Category;
+import springboot.jewelry.api.product.projection.CategoryProjection;
+import springboot.jewelry.api.product.service.itf.CategoryService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -17,43 +18,44 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/admin/product/category")
-public class AdminProductTypeController {
+public class AdminCategoryController {
 
     @Autowired
-    private ProductTypeService productTypeService;
+    private CategoryService categoryService;
 
     @GetMapping("")
     public ResponseEntity<Object> findAll() {
-        List<ProductType> productTypes = productTypeService.findAll();
-        if (productTypes.isEmpty()) {
+
+        List<CategoryProjection> categoryProjections = categoryService.findAllBy(CategoryProjection.class);
+        if (categoryProjections.isEmpty()) {
             return ResponseHandler.getResponse("Danh sách trống!", HttpStatus.OK);
         }
 
-        return ResponseHandler.getResponse(productTypes, HttpStatus.OK);
+        return ResponseHandler.getResponse(categoryProjections, HttpStatus.OK);
     }
 
     @PostMapping("")
-    public ResponseEntity<Object> addProductType(@Valid @RequestBody ProductTypeCreateDto dto,
+    public ResponseEntity<Object> addProductType(@Valid @RequestBody CategoryCreateDto dto,
                                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseHandler.getResponse(bindingResult, HttpStatus.BAD_REQUEST);
         }
 
-        ProductType newProductType = productTypeService.save(dto);
+        Category newProductType = categoryService.save(dto);
 
         return ResponseHandler.getResponse(newProductType, HttpStatus.OK);
     }
 
     @PutMapping("/{product-type-id}")
     public ResponseEntity<Object> updateProductType(@PathVariable("product-type-id") Long id,
-                                                @Valid @RequestBody ProductTypeUpdateDto dto,
+                                                @Valid @RequestBody CategoryUpdateDto dto,
                                                 BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return ResponseHandler.getResponse(HttpStatus.BAD_REQUEST);
         }
 
-        ProductType productTypeUpdate = productTypeService.updateProductTypeInfo(dto, id);
+        Category productTypeUpdate = categoryService.updateProductTypeInfo(dto, id);
 
         return ResponseHandler.getResponse(productTypeUpdate, HttpStatus.OK);
     }
@@ -61,11 +63,11 @@ public class AdminProductTypeController {
     @DeleteMapping("/{product-type-id}")
     public ResponseEntity<Object> deleteProductType(@PathVariable("product-type-id") Long id) {
 
-        Optional<ProductType> productType = productTypeService.findById(id);
+        Optional<Category> productType = categoryService.findById(id);
         if (!productType.isPresent()) {
             return ResponseHandler.getResponse("Không tìm thấy ID: " + id, HttpStatus.OK);
         }
-        productTypeService.deleteById(id);
+        categoryService.deleteById(id);
 
         return ResponseHandler.getResponse(HttpStatus.OK);
     }

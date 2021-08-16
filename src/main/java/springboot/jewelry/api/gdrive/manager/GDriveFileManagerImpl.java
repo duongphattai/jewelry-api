@@ -1,12 +1,12 @@
-package springboot.jewelry.api.gdrive.service.impl;
+package springboot.jewelry.api.gdrive.manager;
 
 import com.google.api.client.http.InputStreamContent;
 import com.google.api.services.drive.model.File;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import springboot.jewelry.api.gdrive.config.GDriveConfig;
-import springboot.jewelry.api.gdrive.service.GDriveFileService;
+import springboot.jewelry.api.gdrive.manager.itf.GDriveFileManager;
+import springboot.jewelry.api.gdrive.util.GDriveUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -17,12 +17,12 @@ import java.util.List;
 
 @AllArgsConstructor
 @Service
-public class GDriveFileServiceImpl implements GDriveFileService {
+public class GDriveFileManagerImpl implements GDriveFileManager {
 
-    private GDriveConfig gDriveConfig;
+    private GDriveUtils gDriveConfig;
 
     @Override
-    public List<String> uploadFile(List<MultipartFile> fileDatas, String folderName) {
+    public List<String> uploadFile(String folderName, List<MultipartFile> fileDatas) {
         List<String> idList = new LinkedList<>();
         try {
             for(MultipartFile fileData : fileDatas) {
@@ -33,7 +33,8 @@ public class GDriveFileServiceImpl implements GDriveFileService {
                     File uploadFile = gDriveConfig.getInstance()
                             .files()
                             .create(fileMetadata,
-                                    new InputStreamContent(fileData.getContentType(), new ByteArrayInputStream(fileData.getBytes()))
+                                    new InputStreamContent(fileData.getContentType(),
+                                    new ByteArrayInputStream(fileData.getBytes()))
                             )
                             .setFields("id")
                             .execute();

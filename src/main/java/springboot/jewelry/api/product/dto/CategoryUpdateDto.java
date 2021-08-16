@@ -8,9 +8,9 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Setter
-public class ProductTypeUpdateDto {
+public class CategoryUpdateDto {
 
-    @NotBlank(message = "{ProductType.name.NotBlank}")
-    @Size(min = 1, max = 30, message = "{ProductType.name.Size}")
+    @NotBlank(message = "{product-category.code.not-blank}")
+    @Size(min = 3, max = 10, message = "{product-category.code.size}")
     private String name;
 }

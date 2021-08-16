@@ -32,3 +32,6 @@ jewelry:
   app:
     jwt-secret: khongcochuoibimat
     jwt-duration: 123456789
+  gdrive:
+    folder:
+      product: 1fkgIXvbjQ4n20FArIiA5Nxb_3oukKcmk

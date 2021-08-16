@@ -1,21 +1,24 @@
 package springboot.jewelry.api.product.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import springboot.jewelry.api.commondata.model.AbstractEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
+@RequiredArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "jewelry_image")
+@Table(name = "jewelry_product_image")
 public class Image extends AbstractEntity {
 
-//    @Column(unique = true)
-//    private String name;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "product_id")
-//    private Product product;
+    @NonNull
+    @NotBlank(message = "{product-image.g-drive-id.not-blank}")
+    private String gDriveId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
+    private Product product;
 }

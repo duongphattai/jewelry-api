@@ -9,6 +9,7 @@ import springboot.jewelry.api.commondata.model.ResponseHandler;
 import springboot.jewelry.api.supplier.dto.SupplierCreateDto;
 import springboot.jewelry.api.supplier.dto.SupplierUpdateDto;
 import springboot.jewelry.api.supplier.model.Supplier;
+import springboot.jewelry.api.supplier.projection.SupplierProjection;
 import springboot.jewelry.api.supplier.service.SupplierService;
 
 import javax.validation.Valid;
@@ -24,12 +25,13 @@ public class AdminSupplierController {
 
     @GetMapping("")
     public ResponseEntity<Object> findAll() {
-        List<Supplier> suppliers = supplierService.findAll();
-        if (suppliers.isEmpty()) {
+
+        List<SupplierProjection> supplierProjections = supplierService.findAllBy(SupplierProjection.class);
+        if (supplierProjections.isEmpty()) {
             return ResponseHandler.getResponse("Danh sách trống!", HttpStatus.OK);
         }
 
-        return ResponseHandler.getResponse(suppliers, HttpStatus.OK);
+        return ResponseHandler.getResponse(supplierProjections, HttpStatus.OK);
     }
 
     @PostMapping("")
