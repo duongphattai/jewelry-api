@@ -10,7 +10,7 @@ import javax.validation.ConstraintValidatorContext;
 public class UniqueCategoryCodeValidator implements ConstraintValidator<UniqueCategoryCode, String> {
 
     @Autowired
-    private CategoryRepository productTypeRepository;
+    private CategoryRepository categoryRepository;
 
     String message;
 
@@ -20,9 +20,9 @@ public class UniqueCategoryCodeValidator implements ConstraintValidator<UniqueCa
     }
 
     @Override
-    public boolean isValid(String productTypeCode, ConstraintValidatorContext context) {
-        boolean isTakenProductTypeCode = productTypeRepository.countByCode(productTypeCode) >= 1;
-        if (!isTakenProductTypeCode) {
+    public boolean isValid(String categoryCode, ConstraintValidatorContext context) {
+        boolean isTakenCategoryCode = categoryRepository.countByCode(categoryCode) >= 1;
+        if (!isTakenCategoryCode) {
             return true;
         }
 

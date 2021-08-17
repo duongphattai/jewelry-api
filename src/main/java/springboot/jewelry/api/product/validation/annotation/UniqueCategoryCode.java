@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueCategoryCode {
 
-    String message() default "{product.validation.annotation.unique-category.message}";
+    String message() default "{product.unique-category-code}";
 
     Class<?>[] groups() default {};
 

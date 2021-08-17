@@ -12,7 +12,7 @@ import java.util.Optional;
 public class ExistsCategoryCodeValidator implements ConstraintValidator<ExistsCategoryCode, String> {
 
     @Autowired
-    private CategoryRepository productTypeRepository;
+    private CategoryRepository categoryRepository;
 
     private String message;
 
@@ -22,10 +22,10 @@ public class ExistsCategoryCodeValidator implements ConstraintValidator<ExistsCa
     }
 
     @Override
-    public boolean isValid(String productTypeCode, ConstraintValidatorContext context) {
+    public boolean isValid(String categoryCode, ConstraintValidatorContext context) {
 
-        Optional<Category> productTypeOpt = productTypeRepository.findByCode(productTypeCode);
-        if(productTypeOpt.isPresent()){
+        Optional<Category> categoryOptional = categoryRepository.findByCode(categoryCode);
+        if(categoryOptional.isPresent()){
             return true;
         }
         context.buildConstraintViolationWithTemplate(message)

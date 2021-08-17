@@ -30,7 +30,7 @@ public class Supplier extends AbstractEntity {
     private String phoneNumber;
 
     @Column(nullable = false)
-    @Email(message = "{supplier.email.email}")
+    @Email(message = "{supplier.email.format}")
     private String email;
 
     @Column(nullable = false)

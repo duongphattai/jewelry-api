@@ -22,17 +22,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private CustomerRepository repository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Optional<Customer> customer = repository.findByUsername(username);
+        Optional<Customer> customer = repository.findByEmail(email);
         if (!customer.isPresent())
-            throw new UsernameNotFoundException("Username is invalid.");
+            throw new UsernameNotFoundException("Email không hợp lệ!.");
 
         Set<GrantedAuthority> authorities = new HashSet<>();
         String roleName = customer.get().getRole().getRoleName();
         authorities.add(new SimpleGrantedAuthority(roleName));
 
-        return new UserDetailsDto(customer.get().getUsername(), customer.get().getPassword(), authorities);
+        return new UserDetailsDto(customer.get().getEmail(), customer.get().getPassword(), authorities);
     }
 
 }

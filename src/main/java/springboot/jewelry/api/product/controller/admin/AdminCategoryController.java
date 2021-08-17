@@ -35,19 +35,19 @@ public class AdminCategoryController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Object> addProductType(@Valid @RequestBody CategoryCreateDto dto,
+    public ResponseEntity<Object> addCategory(@Valid @RequestBody CategoryCreateDto dto,
                                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseHandler.getResponse(bindingResult, HttpStatus.BAD_REQUEST);
         }
 
-        Category newProductType = categoryService.save(dto);
+        Category newCategory = categoryService.save(dto);
 
-        return ResponseHandler.getResponse(newProductType, HttpStatus.OK);
+        return ResponseHandler.getResponse(newCategory, HttpStatus.OK);
     }
 
-    @PutMapping("/{product-type-id}")
-    public ResponseEntity<Object> updateProductType(@PathVariable("product-type-id") Long id,
+    @PutMapping("/{category-id}")
+    public ResponseEntity<Object> updateCategory(@PathVariable("category-id") Long id,
                                                 @Valid @RequestBody CategoryUpdateDto dto,
                                                 BindingResult bindingResult) {
 
@@ -55,17 +55,17 @@ public class AdminCategoryController {
             return ResponseHandler.getResponse(HttpStatus.BAD_REQUEST);
         }
 
-        Category productTypeUpdate = categoryService.updateProductTypeInfo(dto, id);
+        Category categoryUpdate = categoryService.updateCategoryInfo(dto, id);
 
-        return ResponseHandler.getResponse(productTypeUpdate, HttpStatus.OK);
+        return ResponseHandler.getResponse(categoryUpdate, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{product-type-id}")
-    public ResponseEntity<Object> deleteProductType(@PathVariable("product-type-id") Long id) {
+    @DeleteMapping("/{category-id}")
+    public ResponseEntity<Object> deleteCategory(@PathVariable("category-id") Long id) {
 
-        Optional<Category> productType = categoryService.findById(id);
-        if (!productType.isPresent()) {
-            return ResponseHandler.getResponse("Không tìm thấy ID: " + id, HttpStatus.OK);
+        Optional<Category> category = categoryService.findById(id);
+        if (!category.isPresent()) {
+            return ResponseHandler.getResponse("Không tìm thấy sản phẩm có ID: " + id, HttpStatus.OK);
         }
         categoryService.deleteById(id);
 

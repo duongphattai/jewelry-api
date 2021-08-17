@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniquePhoneNumber {
 
-    String message() default "{customer.validation.annotation.UniquePhoneNumber.message}";
+    String message() default "{customer.unique-phone-number}";
 
     Class<?>[] groups() default {};
 

@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExistsSupplierCode {
 
-    String message() default "{product.validation.annotation.exists-supplier-code.message}";
+    String message() default "{product.exists-supplier-code}";
 
     Class<?>[] groups() default {};
 

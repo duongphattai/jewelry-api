@@ -9,6 +9,6 @@ public interface CategoryService extends GenericService<Category, Long> {
 
     Category save(CategoryCreateDto dto);
 
-    Category updateProductTypeInfo(CategoryUpdateDto dto, Long id);
+    Category updateCategoryInfo(CategoryUpdateDto dto, Long id);
 
 }

@@ -17,20 +17,19 @@ import java.time.LocalDate;
 @ConfirmPassword
 public class CustomerCreateDto {
 
-    @NotBlank(message = "{Customer.username.NotBlank}")
-    @Size(min = 3, max = 50, message = "{Customer.username.Size}")
-    @UniqueUsername
-    private String username;
+    @Email(message = "{customer.email.format}")
+    @UniqueEmail
+    private String email;
 
-    @NotBlank(message = "{Customer.password.NotBlank}")
-    @Size(min = 8, max = 30, message = "{Customer.password.Size}")
+    @NotBlank(message = "{customer.password.not-blank}")
+    @Size(min = 8, max = 30, message = "{customer.password.size}")
     private String password;
 
     @NotBlank
     private String confirmPassword;
 
-    @NotBlank(message = "{Customer.fullName.NotBlank}")
-    @Size(min = 3, max = 50, message = "{Customer.fullName.Size}")
+    @NotBlank(message = "{customer.full-name.not-blank}")
+    @Size(min = 3, max = 50, message = "{customer.full-name.size}")
     private String fullName;
 
     @NotNull
@@ -40,17 +39,13 @@ public class CustomerCreateDto {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateUtils.BIRTHDAY_FORMAT)
     private LocalDate birthday;
 
-    @NotBlank(message = "{Customer.phoneNumber.NotBlank}")
-    @Pattern(regexp = "(^$|[0-9]{10})", message = "{Customer.phoneNumber.Pattern}")
+    @NotBlank(message = "{customer.phone-number.not-blank}")
+    @Pattern(regexp = "(^$|[0-9]{10})", message = "{customer.phone-number.pattern}")
     @UniquePhoneNumber
     private String phoneNumber;
 
-    @Email(message = "{Customer.email.Email}")
-    @UniqueEmail
-    private String email;
-
-    @NotBlank(message = "{Customer.address.NotBlank}")
-    @Size(min = 20, max = 100, message = "{Customer.address.Size}")
+    @NotBlank(message = "{customer.address.not-blank}")
+    @Size(min = 20, max = 100, message = "{customer.address.size}")
     private String address;
 
 }

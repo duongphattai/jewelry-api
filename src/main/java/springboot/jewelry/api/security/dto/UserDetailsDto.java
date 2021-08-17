@@ -8,7 +8,7 @@ import java.util.Collection;
 
 public class UserDetailsDto extends User implements UserDetails {
 
-    public UserDetailsDto(String username, String password, Collection<? extends GrantedAuthority> authorities){
-        super(username, password, authorities);
+    public UserDetailsDto(String email, String password, Collection<? extends GrantedAuthority> authorities){
+        super(email, password, authorities);
     }
 }

@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueSupplierCode {
 
-    String message() default "{supplier.validation.annotation.unique-supplier-code.message}";
+    String message() default "{supplier.unique-supplier-code}";
 
     Class<?>[] groups() default {};
 

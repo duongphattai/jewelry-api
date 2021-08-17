@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExistsCategoryCode {
 
-    String message() default "{product.validation.annotation.exists-category-code.message}";
+    String message() default "{product.exists-category-code}";
 
     Class<?>[] groups() default {};
 

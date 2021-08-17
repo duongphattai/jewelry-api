@@ -10,7 +10,5 @@ public interface RoleService extends GenericService<Role, Long> {
 
     Role save(RoleCreateDto dto);
 
-    Role updateRoleInfo(RoleCreateDto dto, Long id);
-
-    Role changeRoleForCustomer(String username, Long roleId);
+    Role changeRoleWithEmail(String email, Long roleId);
 }

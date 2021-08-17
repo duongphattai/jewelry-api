@@ -13,7 +13,7 @@ public class ProductConverter {
                         .name(p.getName())
                         .sku(p.getSku())
                         .price(p.getPrice())
-                        .productType(p.getProductType().getCode())
+                        .category(p.getCategory().getCode())
                         .goldType(p.getGoldType().getPercentage())
                         .build()).collect(Collectors.toList());
     }

@@ -18,7 +18,7 @@ public @interface ConfirmPassword {
 
     String getConfirmPassword() default "getConfirmPassword";
 
-    String message() default "{customer.validation.annotation.ConfirmPassword.message}";
+    String message() default "{customer.confirm-password}";
 
     Class<?>[] groups() default {};
 

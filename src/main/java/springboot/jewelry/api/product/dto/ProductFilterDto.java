@@ -12,7 +12,7 @@ public class ProductFilterDto {
 
     private Double price;
 
-    private String productType;
+    private String category;
 
     private Double goldType;
 }

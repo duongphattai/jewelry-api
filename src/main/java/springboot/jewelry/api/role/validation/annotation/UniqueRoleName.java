@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueRoleName {
 
-    String message() default "{role.validation.annotation.UniqueRoleName.message}";
+    String message() default "{role.unique-role-name}";
 
     Class<?>[] groups() default {};
 

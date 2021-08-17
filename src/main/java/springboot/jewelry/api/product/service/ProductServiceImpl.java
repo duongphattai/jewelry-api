@@ -113,19 +113,19 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
     }
 
     @Override
-    public List<ProductFilterDto> findProductsByFilter(String name, String productType,
-                                                       Double goldType, Double minPrice, Double maxPrice) {
+    public List<ProductFilterDto> findProductsByFilter(String name, String category, Double goldType,
+                                                       Double minPrice, Double maxPrice) {
         try {
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery cq = cb.createQuery(Product.class);
             Root<Product> product = cq.from(Product.class);
             Predicate predicate = cb.conjunction();
 
-            if(name != null){
+            if (name != null) {
                 predicate = cb.and(predicate, cb.like(cb.lower(product.<String>get(Product_.NAME)), "%" + name.toLowerCase() + "%"));
             }
-            if (productType != null) {
-                predicate = cb.and(predicate, cb.equal(product.get(Product_.PRODUCT_TYPE).get(ProductType_.CODE), productType));
+            if (category != null) {
+                predicate = cb.and(predicate, cb.equal(product.get(Product_.CATEGORY).get(Category_.CODE), category));
             }
             if (goldType != null) {
                 predicate = cb.and(predicate, cb.equal(product.get(Product_.GOLD_TYPE).get(GoldType_.PERCENTAGE), goldType));
@@ -139,14 +139,16 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
             if (minPrice != null && maxPrice != null) {
                 predicate = cb.and(predicate, cb.between(product.get(Product_.PRICE), minPrice, maxPrice));
             }
-
             cq.where(predicate);
             TypedQuery<Product> query = entityManager.createQuery(cq);
 
-            return ProductConverter.convertToProductFilterDto(query.getResultList());
-        } finally {
+           return ProductConverter.convertToProductFilterDto(query.getResultList());
+
+        }
+        finally {
             entityManager.close();
         }
     }
+
 
 }

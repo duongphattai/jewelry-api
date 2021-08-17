@@ -22,7 +22,7 @@ public class SupplierCreateDto {
     @Pattern(regexp = "(^$|[0-9]{10})", message = "{supplier.phone-number.pattern}")
     private String phoneNumber;
 
-    @Email(message = "{supplier.email.email}")
+    @Email(message = "{supplier.email.format}")
     private String email;
 
     private String address;

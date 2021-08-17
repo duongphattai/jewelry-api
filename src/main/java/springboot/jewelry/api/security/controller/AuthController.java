@@ -35,7 +35,7 @@ public class AuthController {
         try {
             // authenticate
             authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(dto.getUsername(),dto.getPassword()));
+                    new UsernamePasswordAuthenticationToken(dto.getEmail(),dto.getPassword()));
 
             // set authentication into SecurityContext
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -45,6 +45,6 @@ public class AuthController {
             e.printStackTrace();
         }
 
-        return ResponseHandler.getResponse("Username or password is invalid.", HttpStatus.BAD_REQUEST);
+        return ResponseHandler.getResponse("Email hoặc mật khẩu không hợp lệ!.", HttpStatus.BAD_REQUEST);
     }
 }

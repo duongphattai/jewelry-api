@@ -42,10 +42,10 @@ public class AdminRoleController {
         return ResponseHandler.getResponse(role, HttpStatus.OK);
     }
 
-    @PutMapping("/{role-id}/{username}")
-    public ResponseEntity<Object> changeRoleWithCustomer(@PathVariable("role-id") Long roleId ,
-                                                    @PathVariable("username") String username){
-        Role role = roleService.changeRoleForCustomer(username, roleId);
+    @PutMapping("/{role-id}/{email}")
+    public ResponseEntity<Object> changeRoleWithEmail(@PathVariable("role-id") Long roleId ,
+                                                    @PathVariable("email") String email){
+        Role role = roleService.changeRoleWithEmail(email, roleId);
 
         return ResponseHandler.getResponse(role, HttpStatus.OK);
 

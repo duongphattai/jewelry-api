@@ -21,17 +21,16 @@ import java.time.LocalDate;
 @Table(name = "jewelry_customer")
 public class Customer extends AbstractEntity {
 
-    @NotBlank(message = "{Customer.username.NotBlank}")
-    @Size(min = 3, max = 50, message = "{Customer.username.Size}")
-    @Column(unique = true, name = "username")
-    private String username;
+    @Email(message = "{customer.email.format}")
+    @Column(unique = true, nullable = false)
+    private String email;
 
-    @NotBlank(message = "{Customer.password.NotBlank}")
+    @NotBlank(message = "{customer.password.not-blank}")
     @JsonIgnore
     private String password;
 
-    @NotBlank(message = "{Customer.fullName.NotBlank}")
-    @Size(min = 3, max = 50, message = "{Customer.fullName.Size}")
+    @NotBlank(message = "{customer.full-name.not-blank}")
+    @Size(min = 3, max = 50, message = "{customer.full-name.size}")
     private String fullName;
 
     @NotNull
@@ -41,17 +40,13 @@ public class Customer extends AbstractEntity {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DateUtils.BIRTHDAY_FORMAT)
     private LocalDate birthday;
 
-    @NotBlank(message = "{Customer.phoneNumber.NotBlank}")
-    @Pattern(regexp = "(^$|[0-9]{10})", message = "{Customer.phoneNumber.Pattern}")
+    @NotBlank(message = "{customer.phone-number.not-blank}")
+    @Pattern(regexp = "(^$|[0-9]{10})", message = "{customer.phone-number.pattern}")
     @Column(unique = true)
     private String phoneNumber;
 
-    @Email(message = "{Customer.email.Email}")
-    @Column(unique = true, nullable = false)
-    private String email;
-
-    @NotBlank(message = "{Customer.address.NotBlank}")
-    @Size(min = 20, max = 100, message = "{Customer.address.Size}")
+    @NotBlank(message = "{customer.address.not-blank}")
+    @Size(min = 20, max = 100, message = "{customer.address.size}")
     private String address;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExistsGoldType {
 
-    String message() default "{product.validation.annotation.exists-gold-type.message}";
+    String message() default "{product.exists-gold-type}";
 
     Class<?>[] groups() default {};
 

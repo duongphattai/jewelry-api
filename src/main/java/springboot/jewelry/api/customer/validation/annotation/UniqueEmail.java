@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueEmail {
 
-    String message() default "{customer.validation.annotation.UniqueEmail.message}";
+    String message() default "{customer.unique-email}";
 
     Class<?>[] groups() default {};
 

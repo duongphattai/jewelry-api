@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface FormatPercentageGold {
 
-    String message() default "{product.validation.annotation.format-percentage-gold.message}";
+    String message() default "{product.format-percentage-gold}";
 
     Class<?>[] groups() default {};
 

@@ -25,7 +25,7 @@ public class CategoryServiceImpl extends GenericServiceImpl<Category, Long> impl
     }
 
     @Override
-    public Category updateProductTypeInfo(CategoryUpdateDto dto, Long id) {
+    public Category updateCategoryInfo(CategoryUpdateDto dto, Long id) {
         Category categoryUpdated = categoryRepository.getOne(id);
         categoryUpdated = mapper.map(dto, categoryUpdated);
         return categoryRepository.save(categoryUpdated);
