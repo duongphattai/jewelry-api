@@ -6,12 +6,14 @@ import springboot.jewelry.api.commondata.model.PagedResult;
 import springboot.jewelry.api.product.dto.ProductCreateDto;
 import springboot.jewelry.api.product.dto.ProductFilterDto;
 import springboot.jewelry.api.product.model.Product;
+import springboot.jewelry.api.product.projection.ProductCreatedProjection;
 import springboot.jewelry.api.product.projection.ProductProjection;
 
 import java.util.List;
 
 public interface ProductService extends GenericService<Product, Long> {
-    Product save(ProductCreateDto dto);
+
+    ProductCreatedProjection save(ProductCreateDto dto);
 
     Product updateProductInfo(ProductCreateDto dto, Long id);
 

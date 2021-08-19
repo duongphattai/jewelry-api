@@ -9,5 +9,5 @@ import java.util.List;
 @NoRepositoryBean
 public interface GenericRepository<T extends AbstractEntity, ID> extends JpaRepository<T, ID> {
 
-    <C> List<C> findAllBy(Class<C> type);
+    <P> List<P> findAllBy(Class<P> type);
 }

@@ -9,7 +9,7 @@ import java.util.Optional;
 @Repository
 public interface CategoryRepository extends GenericRepository<Category, Long> {
 
-    Optional<Category> findByCode(String codeProductType);
+    Optional<Category> findByCode(String code);
 
     int countByCode(String productTypeCode);
 

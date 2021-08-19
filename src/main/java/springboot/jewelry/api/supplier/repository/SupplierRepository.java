@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface SupplierRepository extends GenericRepository<Supplier, Long> {
 
-    Optional<Supplier> findByCode(String supplierCode);
+    Optional<Supplier> findByCode(String code);
 
     int countByCode(String supplierCode);
 }

@@ -2,6 +2,8 @@ package springboot.jewelry.api.commondata;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import springboot.jewelry.api.commondata.model.AbstractEntity;
+import springboot.jewelry.api.product.dto.ProductCreateDto;
+import springboot.jewelry.api.util.MapDtoToModel;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +12,9 @@ public class GenericServiceImpl <T extends AbstractEntity, ID> implements Generi
 
     @Autowired(required = false)
     private GenericRepository<T, ID> genericRepository;
+
+    @Autowired
+    private MapDtoToModel<Object, T> mapper;
 
     @Override
     public List<T> findAll() {
@@ -37,7 +42,7 @@ public class GenericServiceImpl <T extends AbstractEntity, ID> implements Generi
     }
 
     @Override
-    public <C> List<C> findAllBy(Class<C> type) {
+    public <P> List<P> findAllBy(Class<P> type) {
         return genericRepository.findAllBy(type);
     }
 }

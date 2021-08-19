@@ -3,32 +3,28 @@ package springboot.jewelry.api.product.service;
 import lombok.AllArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.*;
+import org.springframework.data.projection.ProjectionFactory;
+import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import springboot.jewelry.api.commondata.GenericServiceImpl;
 import springboot.jewelry.api.commondata.model.PagedResult;
 
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-import springboot.jewelry.api.commondata.GenericServiceImpl;
 import springboot.jewelry.api.gdrive.manager.itf.GDriveFileManager;
 import springboot.jewelry.api.gdrive.manager.itf.GDriveFolderManager;
 import springboot.jewelry.api.product.dto.ProductCreateDto;
-import springboot.jewelry.api.product.model.GoldType;
 import springboot.jewelry.api.product.model.Image;
 import springboot.jewelry.api.product.model.Product;
-import springboot.jewelry.api.product.model.Category;
 import springboot.jewelry.api.product.converter.ProductConverter;
-import springboot.jewelry.api.product.dto.ProductCreateDto;
 import springboot.jewelry.api.product.dto.ProductFilterDto;
 import springboot.jewelry.api.product.model.*;
+import springboot.jewelry.api.product.projection.ProductCreatedProjection;
 import springboot.jewelry.api.product.projection.ProductProjection;
 import springboot.jewelry.api.product.repository.GoldTypeRepository;
 import springboot.jewelry.api.product.repository.ProductRepository;
 import springboot.jewelry.api.product.repository.CategoryRepository;
 import springboot.jewelry.api.product.service.itf.ProductService;
-import springboot.jewelry.api.supplier.model.Supplier;
 import springboot.jewelry.api.supplier.repository.SupplierRepository;
 import springboot.jewelry.api.util.MapDtoToModel;
 
@@ -56,25 +52,16 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
     private EntityManager entityManager;
 
     @Override
-    public Product save(ProductCreateDto dto) {
+    @Transactional
+    public ProductCreatedProjection save(ProductCreateDto dto) {
         Product newProduct = new Product();
         newProduct = mapper.map(dto, newProduct);
-        newProduct.setTotalCostPrice(dto.getCostPrice() * dto.getQuantity());
 
-        Optional<Supplier> supplierOpt = supplierRepository.findByCode(dto.getSupplierCode());
-        if (supplierOpt.isPresent()) {
-            newProduct.setSupplier(supplierOpt.get());
-        }
+        newProduct.setSupplier(supplierRepository.findByCode(dto.getSupplierCode()).get());
 
-        Optional<Category> categoryOpt = categoryRepository.findByCode(dto.getCategoryCode());
-        if(categoryOpt.isPresent()){
-            newProduct.setCategory(categoryOpt.get());
-        }
+        newProduct.setCategory(categoryRepository.findByCode(dto.getCategoryCode()).get());
 
-        Optional<GoldType> goldTypeOpt = goldTypeRepository.findByPercentage(dto.getGoldType());
-        if (goldTypeOpt.isPresent()) {
-            newProduct.setGoldType(goldTypeOpt.get());
-        }
+        newProduct.setGoldType(goldTypeRepository.findByPercentage(dto.getGoldType()).get());
 
         String folderId = gDriveFolderManager
                 .create(env.getProperty("jewelry.gdrive.folder.product"), dto.getSku());
@@ -91,8 +78,43 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
             newProduct.setAvatar(avatar);
         }
 
-        return productRepository.save(newProduct);
+        productRepository.save(newProduct);
+        ProjectionFactory pf = new SpelAwareProxyProjectionFactory();
+        return pf.createProjection(ProductCreatedProjection.class, newProduct);
     }
+
+    //    @Override
+//    @Transactional
+//    public Product save(ProductCreateDto dto) {
+//        Product newProduct = new Product();
+//        newProduct = mapper.map(dto, newProduct);
+//
+//        newProduct.setSupplier(supplierRepository.findByCode(dto.getSupplierCode()).get());
+//
+//        newProduct.setCategory(categoryRepository.findByCode(dto.getCategoryCode()).get());
+//
+//        newProduct.setGoldType(goldTypeRepository.findByPercentage(dto.getGoldType()).get());
+//
+//        String folderId = gDriveFolderManager
+//                .create(env.getProperty("jewelry.gdrive.folder.product"), dto.getSku());
+//
+//        if(dto.getImages() != null) {
+//            List<String> imageIds = gDriveFileManager.uploadFile(folderId, dto.getImages());
+//            for(String imageId : imageIds) {
+//                newProduct.addImage(new Image(imageId));
+//            }
+//        }
+//
+//        if(dto.getAvatar() != null) {
+//            String avatar = gDriveFileManager.uploadFile(folderId, Collections.singletonList(dto.getAvatar())).get(0);
+//            newProduct.setAvatar(avatar);
+//        }
+//
+//        productRepository.save(newProduct);
+//        ProjectionFactory pf = new SpelAwareProxyProjectionFactory();
+//        ProductProjection rp = pf.createProjection(ProductProjection.class, newProduct);
+//        return rp;
+//    }
 
     @Override
     public Product updateProductInfo(ProductCreateDto dto, Long id) {

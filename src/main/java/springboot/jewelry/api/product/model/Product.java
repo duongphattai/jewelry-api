@@ -32,11 +32,9 @@ public class Product extends AbstractEntity {
     private String description;
 
     private Double goldWeight;
-
     private Double costPrice;
     private Double price;
     private Integer quantity;
-    private Double totalCostPrice;
     private String avatar;
 
     @ManyToOne(fetch = FetchType.LAZY)
