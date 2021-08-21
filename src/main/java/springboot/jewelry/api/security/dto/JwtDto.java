@@ -1,24 +1,26 @@
 package springboot.jewelry.api.security.dto;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class JwtDto {
 
-    private String jwt;
+    private String accessToken;
 
     private String refreshToken;
 
-    public JwtDto jwt(String jwt) {
-        this.jwt = jwt;
-       return this;
-    }
+    private String tokenType;
 
-    public JwtDto refreshToken(String refreshToken){
+    private Long expiryDuration;
+
+    public JwtDto(String accessToken, String refreshToken, Long expiryDuration) {
+        this.accessToken = accessToken;
         this.refreshToken = refreshToken;
-        return this;
+        this.expiryDuration = expiryDuration;
+        tokenType = "Bearer ";
     }
-
 }

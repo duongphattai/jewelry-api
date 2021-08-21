@@ -50,9 +50,11 @@ public class Customer extends AbstractEntity {
     @Size(min = 20, max = 100, message = "{customer.address.size}")
     private String address;
 
+    @JsonIgnore
     @Column(nullable = false)
     private Boolean active;
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "jewelry_customer_roles",
             joinColumns = @JoinColumn(name = "customer_id"),

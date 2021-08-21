@@ -1,24 +1,19 @@
 package springboot.jewelry.api.security.model;
 
 import lombok.*;
-import springboot.jewelry.api.commondata.model.AbstractEntity;
 
 import javax.persistence.*;
 import java.time.Instant;
 
 
-@Data
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
+@Entity
 @Table(name = "jewelry_refreshtoken")
 public class RefreshToken {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "refresh_token_seq")
-    @SequenceGenerator(name = "refresh_token_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)

@@ -37,7 +37,8 @@ public class LoggedOutJwtTokenCache {
         } else {
             Date tokenExpiryDate = tokenProvider.getTokenExpiryFromJWT(token);
             long ttlForToken = getTTLForToken(tokenExpiryDate);
-            logger.info(String.format("Logout token cache set for [%s] with a TTL of [%s] seconds. Token is due expiry at [%s]", event.getCustomerEmail(), ttlForToken, tokenExpiryDate));
+            logger.info(String.format("Logout token cache set for [%s] with a TTL of [%s] seconds. Token is due expiry at [%s]",
+                                                                       event.getCustomerEmail(), ttlForToken, tokenExpiryDate));
             tokenEventMap.put(token, event, ttlForToken, TimeUnit.SECONDS);
         }
     }

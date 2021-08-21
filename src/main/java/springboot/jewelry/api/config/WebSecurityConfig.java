@@ -4,6 +4,7 @@ import org.apache.http.protocol.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -74,29 +75,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/swagger-ui.html", "/webjars/**");
     }
 
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.cors();
-//        http.csrf().disable();
-//        http.exceptionHandling().authenticationEntryPoint(jwtEntryPoint);
-//
-//
-//        http.antMatcher("/api/**").authorizeRequests()
-//                .antMatchers("/swagger-ui.html").permitAll()
-//                .antMatchers("/api/**").hasRole("USER")
-//                .antMatchers("/api/admin/**").hasRole("ADMIN")
-//                .antMatchers("/auth/login", "/auth/token/refresh").permitAll()
-//                .anyRequest().authenticated();
-//
-//        // make server stateless
-//        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-//
-//        // add jwt filter
-//        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-//    }
-
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors()
@@ -126,8 +104,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js").permitAll()
+                .antMatchers("/api/customer/register").permitAll()
+                .antMatchers("/**/auth/login", "/**/auth/token/refresh").permitAll()
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
-                .antMatchers("/**/auth/login").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -8,9 +8,9 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class DeviceInfoDto {
 
-    @NotBlank(message = "Device id cannot be blank")
+    @NotBlank(message = "{device-info-dto.device-id.not-blank}")
     private String deviceId;
 
-    @NotNull(message = "Device type cannot be null")
+    @NotNull(message = "{device-info-dto.device-type.not-null}")
     private String deviceType;
 }

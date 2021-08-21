@@ -1,8 +1,10 @@
 package springboot.jewelry.api.security.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import springboot.jewelry.api.security.exception.TokenRefreshException;
+import springboot.jewelry.api.security.jwt.JwtProvider;
 import springboot.jewelry.api.security.model.RefreshToken;
 import springboot.jewelry.api.security.repository.RefreshTokenRepository;
 import springboot.jewelry.api.security.service.itf.RefreshTokenService;
@@ -13,6 +15,9 @@ import java.util.UUID;
 
 @Service
 public class RefreshTokenServiceImpl implements RefreshTokenService {
+
+    @Value("${jewelry.app.jwt-refresh-duration}")
+    private Long jwtRefreshDuration;
 
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
@@ -30,7 +35,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public RefreshToken createRefreshToken() {
         RefreshToken refreshToken = new RefreshToken();
-        refreshToken.setExpiryDate(Instant.now().plusMillis(3600000));
+        refreshToken.setExpiryDate(Instant.now().plusMillis(jwtRefreshDuration));
         refreshToken.setToken(UUID.randomUUID().toString());
         refreshToken.setRefreshCount(0L);
         return refreshToken;
@@ -39,7 +44,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public void verifyExpiration(RefreshToken token) {
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
-            throw new TokenRefreshException(token.getToken(), "Expired token. Please issue a new request");
+            throw new TokenRefreshException(token.getToken(), "Mã làm mới thông báo đã hết hạn!");
         }
     }
 

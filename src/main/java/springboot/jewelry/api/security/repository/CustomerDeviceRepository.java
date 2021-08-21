@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface CustomerDeviceRepository extends JpaRepository<CustomerDevice, Long> {
 
-    @Override
     Optional<CustomerDevice> findById(Long id);
 
     Optional<CustomerDevice> findByRefreshToken(RefreshToken refreshToken);

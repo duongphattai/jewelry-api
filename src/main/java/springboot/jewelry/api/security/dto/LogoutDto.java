@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Getter
@@ -14,11 +13,9 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class LogoutDto {
 
-    @Valid
-    @NotNull(message = "Device info cannot be null")
+    @NotNull(message = "{logout-dto.device-info.not-null}")
     private DeviceInfoDto deviceInfo;
 
-    @Valid
-    @NotNull(message = "Existing Token needs to be passed")
+    @NotNull(message = "{logout-dto.token.not-null}")
     private String token;
 }

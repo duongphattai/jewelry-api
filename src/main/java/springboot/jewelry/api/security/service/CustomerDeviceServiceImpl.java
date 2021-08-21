@@ -40,11 +40,11 @@ public class CustomerDeviceServiceImpl implements CustomerDeviceService {
     public void verifyRefreshAvailability(RefreshToken refreshToken) {
         CustomerDevice customerDevice = findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new TokenRefreshException(refreshToken.getToken(),
-                        "No device found for the matching token. Please login again"));
+                        "Không tìm thấy thiết bị hợp lệ với mã thông báo. Vui lòng đăng nhập lại!"));
 
         if (!customerDevice.getIsRefreshActive()) {
             throw new TokenRefreshException(refreshToken.getToken(),
-                    "Refresh blocked for the device. Please login through a different device");
+                    "Mã làm mới thông báo bị chặn cho thiết bị này. Vui lòng đăng nhập bằng thiết bị khác!");
         }
     }
 }

@@ -1,4 +1,4 @@
-package springboot.jewelry.api.security.service;
+package springboot.jewelry.api.security.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class CustomerPrincipal implements UserDetails {
+public class CustomerPrincipalDto implements UserDetails {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,8 +29,8 @@ public class CustomerPrincipal implements UserDetails {
 
     private Map<String, Object> attributes;
 
-    public CustomerPrincipal(Long id, String fullName, String email, String password,
-                             Collection<? extends GrantedAuthority> authorities){
+    public CustomerPrincipalDto(Long id, String fullName, String email, String password,
+                                Collection<? extends GrantedAuthority> authorities){
         this.id = id;
         this.fullName = fullName;
         this.email = email;
@@ -38,12 +38,12 @@ public class CustomerPrincipal implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static CustomerPrincipal build(Customer customer){
+    public static CustomerPrincipalDto build(Customer customer){
         List<GrantedAuthority> authorities = customer.getRoles().stream().map(role ->
                 new SimpleGrantedAuthority(role.getRoleName().name())
         ).collect(Collectors.toList());
 
-        return new CustomerPrincipal(
+        return new CustomerPrincipalDto(
                 customer.getId(),
                 customer.getFullName(),
                 customer.getEmail(),
@@ -103,7 +103,7 @@ public class CustomerPrincipal implements UserDetails {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        CustomerPrincipal customer = (CustomerPrincipal) o;
+        CustomerPrincipalDto customer = (CustomerPrincipalDto) o;
         return Objects.equals(id, customer.id);
     }
 

@@ -31,7 +31,8 @@ logging:
 jewelry:
   app:
     jwt-secret: khongcochuoibimat
-    jwt-duration: 60000
+    jwt-duration: 100000
+    jwt-refresh-duration: 100000
   gdrive:
     folder:
       product: 1fkgIXvbjQ4n20FArIiA5Nxb_3oukKcmk

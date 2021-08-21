@@ -8,25 +8,23 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
 import springboot.jewelry.api.customer.model.Customer;
 import springboot.jewelry.api.customer.service.CustomerService;
 import springboot.jewelry.api.customer.validation.annotation.CurrentCustomer;
-import springboot.jewelry.api.role.service.RoleService;
 import springboot.jewelry.api.security.dto.LoginDto;
 import springboot.jewelry.api.security.dto.LogoutDto;
 import springboot.jewelry.api.security.dto.TokenRefreshRequestDto;
 import springboot.jewelry.api.security.event.OnCustomerLogoutSuccessEvent;
 import springboot.jewelry.api.security.exception.CustomerLogoutException;
+import springboot.jewelry.api.security.exception.ResourceNotFoundException;
 import springboot.jewelry.api.security.exception.TokenRefreshException;
 import springboot.jewelry.api.security.jwt.JwtProvider;
 import springboot.jewelry.api.security.model.CustomerDevice;
 import springboot.jewelry.api.security.model.RefreshToken;
-import springboot.jewelry.api.security.response.ApiResponse;
-import springboot.jewelry.api.security.response.JwtResponse;
-import springboot.jewelry.api.security.service.CustomerPrincipal;
+import springboot.jewelry.api.security.dto.JwtDto;
+import springboot.jewelry.api.security.dto.CustomerPrincipalDto;
 import springboot.jewelry.api.security.service.itf.CustomerDeviceService;
 import springboot.jewelry.api.security.service.itf.RefreshTokenService;
 import springboot.jewelry.api.util.MessageUtils;
@@ -46,12 +44,6 @@ public class AuthController {
     private CustomerService customerService;
 
     @Autowired
-    private RoleService roleService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private JwtProvider jwtProvider;
 
     @Autowired
@@ -64,34 +56,37 @@ public class AuthController {
     private ApplicationEventPublisher applicationEventPublisher;
 
 
+
     @PostMapping("/login")
     public ResponseEntity<Object> authenticateUser(@Valid @RequestBody LoginDto loginDto) {
-        Customer customer = customerService.findByEmail(loginDto.getEmail())
-                .orElseThrow(() -> new RuntimeException("Email không tồn tại"));
-        if(customer.getActive()) {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginDto.getEmail(),
-                            loginDto.getPassword()
-                    )
-            );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            String jwtToken = jwtProvider.generateJwtToken(authentication);
-            customerDeviceService.findByCustomerId(customer.getId())
-                    .map(CustomerDevice::getRefreshToken)
-                    .map(RefreshToken::getId)
-                    .ifPresent(refreshTokenService::deleteById);
+            Customer customer = customerService.findByEmail(loginDto.getEmail())
+                    .orElseThrow(() -> new ResourceNotFoundException("Email hoặc mật khẩu không chính xác!"));
+            if (customer.getActive()) {
+                Authentication authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                loginDto.getEmail(),
+                                loginDto.getPassword()
+                        )
+                );
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                String jwtToken = jwtProvider.generateJwtToken(authentication);
+                customerDeviceService.findByCustomerId(customer.getId())
+                        .map(CustomerDevice::getRefreshToken)
+                        .map(RefreshToken::getId)
+                        .ifPresent(refreshTokenService::deleteById);
 
 
-            CustomerDevice customerDevice = customerDeviceService.createUserDevice(loginDto.getDeviceInfoDto());
-            RefreshToken refreshToken = refreshTokenService.createRefreshToken();
-            customerDevice.setCustomer(customer);
-            customerDevice.setRefreshToken(refreshToken);
-            refreshToken.setCustomerDevice(customerDevice);
-            refreshToken = refreshTokenService.save(refreshToken);
-            return ResponseEntity.ok(new JwtResponse(jwtToken, refreshToken.getToken(), jwtProvider.getExpiryDuration()));
-        }
-        return ResponseEntity.badRequest().body(new ApiResponse(false, "Tài khoản đã bị khóa!"));
+                CustomerDevice customerDevice = customerDeviceService.createUserDevice(loginDto.getDeviceInfoDto());
+                RefreshToken refreshToken = refreshTokenService.createRefreshToken();
+                customerDevice.setCustomer(customer);
+                customerDevice.setRefreshToken(refreshToken);
+                refreshToken.setCustomerDevice(customerDevice);
+                refreshToken = refreshTokenService.save(refreshToken);
+                return ResponseHandler.getResponse(new JwtDto(jwtToken, refreshToken.getToken(),
+                        jwtProvider.getJwtRefreshDuration()), HttpStatus.OK);
+            }
+
+        return ResponseHandler.getResponse(new MessageUtils("Tài khoản đã bị khóa!"), HttpStatus.OK);
     }
 
     @PostMapping("/token/refresh")
@@ -109,13 +104,13 @@ public class AuthController {
                 .map(CustomerDevice::getCustomer)
                 .map(c -> jwtProvider.generateTokenFromCustomer(c))
                 .orElseThrow(() -> new TokenRefreshException(requestRefreshToken, "Vui lòng đăng nhập lại!")));
-        return ResponseEntity.ok().body(new JwtResponse(token.get(), dto.getRefreshToken(), jwtProvider.getExpiryDuration()));
+        return ResponseHandler.getResponse(new JwtDto(token.get(), dto.getRefreshToken(),
+                jwtProvider.getJwtRefreshDuration()), HttpStatus.OK);
     }
 
     @PutMapping("/logout")
-    public ResponseEntity<Object> logoutCustomer(@CurrentCustomer CustomerPrincipal currentCustomer,
+    public ResponseEntity<Object> logoutCustomer(@CurrentCustomer CustomerPrincipalDto currentCustomer,
                                                  @Valid @RequestBody LogoutDto logoutDto){
-        
         String deviceId = logoutDto.getDeviceInfo().getDeviceId();
         CustomerDevice customerDevice = customerDeviceService.findByCustomerId(currentCustomer.getId())
                 .filter(device -> device.getDeviceId().equals(deviceId))

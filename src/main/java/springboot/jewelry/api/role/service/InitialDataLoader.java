@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import springboot.jewelry.api.role.model.Role;
 import springboot.jewelry.api.role.model.RoleName;
 import springboot.jewelry.api.role.repository.RoleRepository;
@@ -12,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Service
 public class InitialDataLoader {
 
     @Autowired
