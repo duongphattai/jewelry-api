@@ -20,34 +20,34 @@ public class AdminRoleController {
     @Autowired
     private RoleService roleService;
 
-    @GetMapping("")
-    public ResponseEntity<Object> findAll(){
-        List<Role> roles = roleService.findAll();
-        if(roles.isEmpty()){
-            return ResponseHandler.getResponse("Danh sách trống!", HttpStatus.OK);
-        }
+//    @GetMapping("")
+//    public ResponseEntity<Object> findAll(){
+//        List<Role> roles = roleService.findAll();
+//        if(roles.isEmpty()){
+//            return ResponseHandler.getResponse("Danh sách trống!", HttpStatus.OK);
+//        }
+//
+//        return ResponseHandler.getResponse(roles, HttpStatus.OK);
+//    }
+//
+//    @PostMapping("")
+//    public ResponseEntity<Object> addRole(@Valid @RequestBody RoleCreateDto dto,
+//                                          BindingResult bindingResult){
+//        if(bindingResult.hasErrors()){
+//            return ResponseHandler.getResponse(bindingResult, HttpStatus.BAD_REQUEST);
+//        }
+//
+//        Role role = roleService.save(dto);
+//
+//        return ResponseHandler.getResponse(role, HttpStatus.OK);
+//    }
 
-        return ResponseHandler.getResponse(roles, HttpStatus.OK);
-    }
-
-    @PostMapping("")
-    public ResponseEntity<Object> addRole(@Valid @RequestBody RoleCreateDto dto,
-                                          BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            return ResponseHandler.getResponse(bindingResult, HttpStatus.BAD_REQUEST);
-        }
-
-        Role role = roleService.save(dto);
-
-        return ResponseHandler.getResponse(role, HttpStatus.OK);
-    }
-
-    @PutMapping("/{role-id}/{email}")
-    public ResponseEntity<Object> changeRoleWithEmail(@PathVariable("role-id") Long roleId ,
-                                                    @PathVariable("email") String email){
-        Role role = roleService.changeRoleWithEmail(email, roleId);
-
-        return ResponseHandler.getResponse(role, HttpStatus.OK);
-
-    }
+//    @PutMapping("/{role-id}/{email}")
+//    public ResponseEntity<Object> changeRoleWithEmail(
+//                                                    @PathVariable("email") String email){
+//        Role role = roleService.changeRoleWithEmail(email);
+//
+//        return ResponseHandler.getResponse(role, HttpStatus.OK);
+//
+//    }
 }

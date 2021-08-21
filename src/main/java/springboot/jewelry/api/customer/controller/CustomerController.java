@@ -3,6 +3,7 @@ package springboot.jewelry.api.customer.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
@@ -11,8 +12,15 @@ import springboot.jewelry.api.customer.dto.CustomerUpdateDto;
 import springboot.jewelry.api.customer.model.Customer;
 import springboot.jewelry.api.customer.projection.CustomerProjection;
 import springboot.jewelry.api.customer.service.CustomerService;
+import springboot.jewelry.api.customer.validation.annotation.CurrentCustomer;
+import springboot.jewelry.api.role.model.RoleName;
+import springboot.jewelry.api.security.dto.LogoutDto;
+import springboot.jewelry.api.security.model.CustomerDevice;
+import springboot.jewelry.api.security.service.CustomerPrincipal;
 
 import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,6 +62,7 @@ public class CustomerController {
 
         return ResponseHandler.getResponse(customer, HttpStatus.OK);
     }
+
 
     @PutMapping("/{customer-id}")
     public ResponseEntity<Object> updateCustomer(@PathVariable("customer-id") Long id,

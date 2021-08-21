@@ -12,7 +12,8 @@ import springboot.jewelry.api.util.DateUtils;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Getter
@@ -49,9 +50,21 @@ public class Customer extends AbstractEntity {
     @Size(min = 20, max = 100, message = "{customer.address.size}")
     private String address;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id")
-    @NotNull
-    private Role role;
+    @Column(nullable = false)
+    private Boolean active;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "jewelry_customer_roles",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
+    public void activate() {
+        this.active = true;
+    }
+
+    public void deactivate() {
+        this.active = false;
+    }
 
 }

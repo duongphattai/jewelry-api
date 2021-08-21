@@ -4,17 +4,18 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import springboot.jewelry.api.customer.repository.CustomerRepository;
 import springboot.jewelry.api.role.model.Role;
+import springboot.jewelry.api.role.model.RoleName;
 import springboot.jewelry.api.role.repository.RoleRepository;
 import springboot.jewelry.api.commondata.GenericServiceImpl;
 import springboot.jewelry.api.customer.model.Customer;
 import springboot.jewelry.api.role.dto.RoleCreateDto;
 import springboot.jewelry.api.util.MapDtoToModel;
 
-import java.util.Optional;
+import java.util.*;
 
 @AllArgsConstructor
 @Service
-public class RoleServiceImpl extends GenericServiceImpl<Role, Long> implements RoleService {
+public class RoleServiceImpl implements RoleService {
 
     private RoleRepository roleRepository;
     private MapDtoToModel<Object, Role> mapper;
@@ -28,8 +29,13 @@ public class RoleServiceImpl extends GenericServiceImpl<Role, Long> implements R
     @Override
     public Role save(RoleCreateDto dto) {
         Role role = new Role();
-        role = mapper.map(dto, role);
+        //role = mapper.map(dto, role);
         return roleRepository.save(role);
+    }
+
+    @Override
+    public List<Role> findAll() {
+        return roleRepository.findAll();
     }
 
 //    @Override
@@ -39,15 +45,22 @@ public class RoleServiceImpl extends GenericServiceImpl<Role, Long> implements R
 //        return roleRepository.save(role);
 //    }
 
-    @Override
-    public Role changeRoleWithEmail(String email, Long roleId) {
-        Role role = roleRepository.getOne(roleId);
-        Optional<Customer> customer = customerRepository.findByEmail(email);
-
-        if (customer.isPresent()) {
-            role.getCustomers().add(customer.get());
-            customer.get().setRole(role);
-        }
-        return roleRepository.save(role);
-    }
+//    @Override
+//    public Role changeRoleWithEmail(String email) {
+//
+//        Optional<Customer> customer = customerRepository.findByEmail(email);
+//
+//        Set<RoleName> strRoles = new HashSet<>(EnumSet.allOf(RoleName.class));
+//        Set<Role> roles = new HashSet<>();
+//
+//        strRoles.forEach(role1 -> {
+//            Optional<Role> adminRole = roleRepository.findByRoleName(RoleName.ROLE_ADMIN);
+//            if (customer.isPresent()) {
+//                //role.getCustomers().add(customer.get());
+//                roles.add(adminRole.get());
+//            }
+//        });
+//
+//        return customerRepository.save(customer);
+//    }
 }

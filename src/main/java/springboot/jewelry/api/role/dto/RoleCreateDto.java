@@ -14,6 +14,4 @@ public class RoleCreateDto {
     @UniqueRoleName
     private String roleName;
 
-    @NotBlank(message = "{role.description.not-blank}")
-    private String description;
 }

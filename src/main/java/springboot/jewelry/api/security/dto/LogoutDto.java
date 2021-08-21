@@ -6,21 +6,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class LoginDto {
-    @NotBlank
-    private String email;
-
-    @NotBlank
-    private String password;
+@NoArgsConstructor
+public class LogoutDto {
 
     @Valid
     @NotNull(message = "Device info cannot be null")
-    private DeviceInfoDto deviceInfoDto;
+    private DeviceInfoDto deviceInfo;
+
+    @Valid
+    @NotNull(message = "Existing Token needs to be passed")
+    private String token;
 }

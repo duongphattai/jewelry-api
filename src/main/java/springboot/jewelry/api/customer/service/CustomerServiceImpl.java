@@ -10,11 +10,11 @@ import springboot.jewelry.api.customer.repository.CustomerRepository;
 import springboot.jewelry.api.commondata.GenericServiceImpl;
 import springboot.jewelry.api.customer.model.Customer;
 import springboot.jewelry.api.role.model.Role;
+import springboot.jewelry.api.role.model.RoleName;
 import springboot.jewelry.api.role.repository.RoleRepository;
 import springboot.jewelry.api.util.MapDtoToModel;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @AllArgsConstructor
@@ -32,15 +32,43 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
         newCustomer = mapper.map(dto, newCustomer);
         newCustomer.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-        // Set value = 1L để lấy Role mặc định là "USER"
-        Optional<Role> role = roleRepository.findById(1L);
-        newCustomer.setRole(role.get());
+        Set<RoleName> strRoles = new HashSet<>(EnumSet.allOf(RoleName.class));
+        Set<Role> roles = new HashSet<>();
+
+        strRoles.forEach(role -> {
+            Optional<Role> userRole = roleRepository.findByRoleName(RoleName.ROLE_USER);
+            roles.add(userRole.get());
+        });
+
+        newCustomer.setRoles(roles);
+        newCustomer.activate();
         return customerRepository.save(newCustomer);
     }
 
     @Override
     public List<CustomerProjection> findCustomerWithAllRoleName() {
         return customerRepository.findCustomerWithAllRoleName();
+    }
+
+    @Override
+    public Optional<Customer> findByEmail(String email) {
+        return customerRepository.findByEmail(email);
+    }
+
+    // WITH ROLE ADMIN
+    @Override
+    public Customer deactivateCustomerById(Long id) {
+       Customer customer = customerRepository.getOne(id);
+       customer.setActive(false);
+       return customerRepository.save(customer);
+    }
+
+    // WITH ROLE ADMIN
+    @Override
+    public Customer activateCustomerById(Long id) {
+        Customer customer = customerRepository.getOne(id);
+        customer.setActive(true);
+        return customerRepository.save(customer);
     }
 
     @Override

@@ -11,6 +11,7 @@ import springboot.jewelry.api.security.dto.UserDetailsDto;
 import springboot.jewelry.api.customer.model.Customer;
 import springboot.jewelry.api.customer.repository.CustomerRepository;
 
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -22,17 +23,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private CustomerRepository repository;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<Customer> customer = repository.findByEmail(email);
-        if (!customer.isPresent())
-            throw new UsernameNotFoundException("Email không hợp lệ!.");
+        Customer customer = repository.findByEmail(username)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User Not Found with -> username or email : " + username)
+                );
 
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        String roleName = customer.get().getRole().getRoleName();
-        authorities.add(new SimpleGrantedAuthority(roleName));
-
-        return new UserDetailsDto(customer.get().getEmail(), customer.get().getPassword(), authorities);
+        return CustomerPrincipal.build(customer);
     }
 
 }

@@ -4,11 +4,15 @@ import springboot.jewelry.api.role.model.Role;
 import springboot.jewelry.api.commondata.GenericService;
 import springboot.jewelry.api.role.dto.RoleCreateDto;
 
-public interface RoleService extends GenericService<Role, Long> {
+import java.util.List;
+
+public interface RoleService {
 
     boolean isTakenRoleName(String roleName);
 
     Role save(RoleCreateDto dto);
 
-    Role changeRoleWithEmail(String email, Long roleId);
+    List<Role> findAll();
+
+    //Role changeRoleWithEmail(String email);
 }

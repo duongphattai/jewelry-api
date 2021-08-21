@@ -1,7 +1,9 @@
 package springboot.jewelry.api.role.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import springboot.jewelry.api.commondata.model.AbstractEntity;
 import springboot.jewelry.api.customer.model.Customer;
@@ -17,18 +19,13 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "jewelry_role")
-public class Role extends AbstractEntity {
+public class Role {
 
-    @NotBlank(message = "{role.name.not-blank}")
-    @Size(min = 4, max = 50, message = "{role.name.size}")
-    @Column(unique = true, name = "role_name")
-    private String roleName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @NotBlank(message = "{role.description.not-blank}")
-    @Size(min = 1, max = 200, message = "{role.description.size}")
-    private String description;
+    @Enumerated(EnumType.STRING)
+    private RoleName roleName;
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
-    @JsonIgnore
-    private Set<Customer> customers = new HashSet<>();
 }
