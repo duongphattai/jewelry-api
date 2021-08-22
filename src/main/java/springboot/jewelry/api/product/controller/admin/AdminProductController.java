@@ -1,38 +1,52 @@
 package springboot.jewelry.api.product.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import springboot.jewelry.api.commondata.model.PagedResult;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
 import springboot.jewelry.api.product.dto.ProductCreateDto;
 import springboot.jewelry.api.product.model.Product;
-import springboot.jewelry.api.product.projection.ProductCreatedProjection;
+import springboot.jewelry.api.product.projection.ProductDetailProjection;
 import springboot.jewelry.api.product.projection.ProductProjection;
 import springboot.jewelry.api.product.service.itf.ProductService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/admin/product")
+@RequestMapping("/api/admin/products")
 public class AdminProductController {
 
     @Autowired
     private ProductService productService;
 
     @GetMapping("")
-    public ResponseEntity<Object> findAll(@RequestParam(name = "page", required = false,
-            defaultValue = "0") int pageIndex,
-                                          @RequestParam(name = "sort-by", required = false,
-                                                  defaultValue = "id") String sortBy) {
+    public ResponseEntity<Object> findAll(
+            @PageableDefault(size = 9, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(value = "search", required = false) String search) {
 
-        return ResponseHandler.getResponse("123", HttpStatus.OK);
+        PagedResult<ProductDetailProjection> productDetailProjection;
+        productDetailProjection = productService.findProductsByNameAndSku(pageable);
+//        if(search != null) {
+//            System.out.println("data search: " + search);
+//            PagedResult<ProductProjection> productDetailProjection1 = productService.findProductsByNameAndSku(search, pageable);
+//            return ResponseHandler.getResponse(productDetailProjection1, HttpStatus.OK);
+//            //productDetailProjection = productService.findProductsByNameAndSku(search, pageable);
+//        } else {
+//            System.out.println("hehe");
+//            productDetailProjection = productService.findProducts(pageable);
+//        }
+
+        return ResponseHandler.getResponse(productDetailProjection, HttpStatus.OK);
     }
 
     @GetMapping("/by-id")
@@ -56,13 +70,12 @@ public class AdminProductController {
         if (bindingResult.hasErrors()) {
             return ResponseHandler.getResponse(bindingResult, HttpStatus.BAD_REQUEST);
         }
-
         if(images != null) dto.setImages(images);
         if(avatar != null) dto.setAvatar(avatar);
+        //ProductDetailProjection newProduct;
+        productService.save(dto);
 
-        ProductCreatedProjection newProduct = productService.save(dto);
-
-        return ResponseHandler.getResponse(newProduct, HttpStatus.OK);
+        return ResponseHandler.getResponse("OK", HttpStatus.OK);
     }
 
     @PutMapping("/{product-id}")

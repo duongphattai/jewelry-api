@@ -1,6 +1,7 @@
 package springboot.jewelry.api.product.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.*;
 import org.springframework.data.projection.ProjectionFactory;
@@ -8,9 +9,12 @@ import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springboot.jewelry.api.commondata.GenericServiceImpl;
+import springboot.jewelry.api.commondata.GenericSpecificationImpl;
 import springboot.jewelry.api.commondata.model.PagedResult;
 
 import org.springframework.data.domain.Pageable;
+import springboot.jewelry.api.commondata.model.SearchCriteria;
+import springboot.jewelry.api.commondata.model.SearchOperation;
 import springboot.jewelry.api.gdrive.manager.itf.GDriveFileManager;
 import springboot.jewelry.api.gdrive.manager.itf.GDriveFolderManager;
 import springboot.jewelry.api.product.dto.ProductCreateDto;
@@ -19,7 +23,7 @@ import springboot.jewelry.api.product.model.Product;
 import springboot.jewelry.api.product.converter.ProductConverter;
 import springboot.jewelry.api.product.dto.ProductFilterDto;
 import springboot.jewelry.api.product.model.*;
-import springboot.jewelry.api.product.projection.ProductCreatedProjection;
+import springboot.jewelry.api.product.projection.ProductDetailProjection;
 import springboot.jewelry.api.product.projection.ProductProjection;
 import springboot.jewelry.api.product.repository.GoldTypeRepository;
 import springboot.jewelry.api.product.repository.ProductRepository;
@@ -53,7 +57,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
 
     @Override
     @Transactional
-    public ProductCreatedProjection save(ProductCreateDto dto) {
+    public void save(ProductCreateDto dto) {
         Product newProduct = new Product();
         newProduct = mapper.map(dto, newProduct);
 
@@ -63,24 +67,25 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
 
         newProduct.setGoldType(goldTypeRepository.findByPercentage(dto.getGoldType()).get());
 
-        String folderId = gDriveFolderManager
-                .create(env.getProperty("jewelry.gdrive.folder.product"), dto.getSku());
+//        String folderId = gDriveFolderManager
+//                .create(env.getProperty("jewelry.gdrive.folder.product"), dto.getSku());
 
-        if(dto.getImages() != null) {
-            List<String> imageIds = gDriveFileManager.uploadFile(folderId, dto.getImages());
-            for(String imageId : imageIds) {
-                newProduct.addImage(new Image(imageId));
-            }
-        }
+//        if(dto.getImages() != null) {
+//            List<String> imageIds = gDriveFileManager.uploadFile(folderId, dto.getImages());
+//            for(String imageId : imageIds) {
+//                newProduct.addImage(new Image(imageId));
+//            }
+//        }
+        //System.out.println("images: " + newProduct.getImages());
+//        if(dto.getAvatar() != null) {
+//            String avatar = gDriveFileManager.uploadFile(folderId, Collections.singletonList(dto.getAvatar())).get(0);
+//            newProduct.setAvatar(avatar);
+//        }
 
-        if(dto.getAvatar() != null) {
-            String avatar = gDriveFileManager.uploadFile(folderId, Collections.singletonList(dto.getAvatar())).get(0);
-            newProduct.setAvatar(avatar);
-        }
-
-        productRepository.save(newProduct);
-        ProjectionFactory pf = new SpelAwareProxyProjectionFactory();
-        return pf.createProjection(ProductCreatedProjection.class, newProduct);
+        Product a = productRepository.save(newProduct);
+        //return null;
+//        ProjectionFactory pf = new SpelAwareProxyProjectionFactory();
+//        return pf.createProjection(ProductDetailProjection.class, newProduct);
     }
 
     //    @Override
@@ -124,8 +129,31 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
     }
 
     @Override
-    public PagedResult<ProductProjection> findProducts(Pageable pageable) {
-        Page<ProductProjection> result = productRepository.findProducts(pageable);
+    public PagedResult<ProductDetailProjection> findProducts(Pageable pageable) {
+        Page<ProductDetailProjection> result = productRepository.findProductDetailBy(pageable);
+
+        return new PagedResult<>(
+                result.getContent(),
+                result.getTotalElements(),
+                result.getTotalPages(),
+                result.getNumber() + 1
+        );
+    }
+
+    @Override
+    public PagedResult<ProductDetailProjection> findProductsByNameAndSku(Pageable pageable) {
+//        GenericSpecificationImpl<Product> genericSpesification = new GenericSpecificationImpl<>();
+//        genericSpesification.add(new SearchCriteria("name", "huy", SearchOperation.MATCH));
+//        //Page<ProductProjection> result = productRepository.findAll(genericSpesification, ProductProjection.class, pageable);
+//
+//        return new PagedResult<>(
+//                result.getContent(),
+//                result.getTotalElements(),
+//                result.getTotalPages(),
+//                result.getNumber() + 1
+//        );
+        Page<ProductDetailProjection> result = productRepository.findProductDetail1By(pageable);
+
         return new PagedResult<>(
                 result.getContent(),
                 result.getTotalElements(),

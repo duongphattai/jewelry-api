@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import springboot.jewelry.api.commondata.model.PagedResult;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
 import springboot.jewelry.api.product.dto.ProductFilterDto;
+import springboot.jewelry.api.product.projection.ProductDetailProjection;
 import springboot.jewelry.api.product.projection.ProductProjection;
 import springboot.jewelry.api.product.service.itf.ProductService;
 
@@ -27,7 +28,7 @@ public class ProductController {
     public ResponseEntity<Object> findProducts(
             @PageableDefault(size = 9, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        PagedResult<ProductProjection> products = productService.findProducts(pageable);
+        PagedResult<ProductDetailProjection> products = productService.findProducts(pageable);
 
         if (products.getElements().isEmpty()) {
             return ResponseHandler.getResponse("Không có dữ liệu!", HttpStatus.OK);
