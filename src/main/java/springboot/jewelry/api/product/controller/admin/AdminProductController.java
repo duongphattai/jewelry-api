@@ -35,18 +35,18 @@ public class AdminProductController {
             @RequestParam(value = "search", required = false) String search) {
 
         PagedResult<ProductDetailProjection> productDetailProjection;
-        productDetailProjection = productService.findProductsByNameAndSku(pageable);
-//        if(search != null) {
-//            System.out.println("data search: " + search);
-//            PagedResult<ProductProjection> productDetailProjection1 = productService.findProductsByNameAndSku(search, pageable);
-//            return ResponseHandler.getResponse(productDetailProjection1, HttpStatus.OK);
-//            //productDetailProjection = productService.findProductsByNameAndSku(search, pageable);
-//        } else {
-//            System.out.println("hehe");
-//            productDetailProjection = productService.findProducts(pageable);
-//        }
 
-        return ResponseHandler.getResponse(productDetailProjection, HttpStatus.OK);
+        if(search != null) {
+            System.out.println("data search: " + search);
+            PagedResult<ProductProjection> a = productService.findProductsByNameAndSku(search, pageable);;
+            return ResponseHandler.getResponse(a, HttpStatus.OK);
+        } else {
+            System.out.println("hehe");
+            productDetailProjection = productService.findProducts(pageable);
+            return ResponseHandler.getResponse(productDetailProjection, HttpStatus.OK);
+        }
+
+
     }
 
     @GetMapping("/by-id")
@@ -72,10 +72,9 @@ public class AdminProductController {
         }
         if(images != null) dto.setImages(images);
         if(avatar != null) dto.setAvatar(avatar);
-        //ProductDetailProjection newProduct;
-        productService.save(dto);
 
-        return ResponseHandler.getResponse("OK", HttpStatus.OK);
+        ProductDetailProjection newProduct = productService.save(dto);
+        return ResponseHandler.getResponse(newProduct, HttpStatus.OK);
     }
 
     @PutMapping("/{product-id}")

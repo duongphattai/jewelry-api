@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 @Component
 public class MapDtoToModel <E, T>{
@@ -15,12 +17,19 @@ public class MapDtoToModel <E, T>{
 
         for(Method dtoMethod : dtoMethods) {
             if(!dtoMethod.getName().equals("getClass") && dtoMethod.getName().startsWith("get")) {
-                Class<?> propertyType = dtoMethod.getReturnType();
-                String setterMethodName = dtoMethod.getName().replaceFirst("get", "set");
+                Type propertyType = dtoMethod.getGenericReturnType();
+                Class<?> propertyClass;
+                if(propertyType instanceof ParameterizedType) {
+                    ParameterizedType pType = (ParameterizedType) propertyType;
+                    propertyClass = (Class<?>) pType.getActualTypeArguments()[0];
+                } else {
+                    propertyClass = (Class<?>) propertyType;
+                }
 
-                Method modelSetterMethod = ReflectionUtils.findMethod(model.getClass(), setterMethodName, propertyType);
+                String setterMethodName = dtoMethod.getName().replaceFirst("get", "set");
+                Method modelSetterMethod = ReflectionUtils.findMethod(model.getClass(), setterMethodName, propertyClass);
                 if(modelSetterMethod != null) {
-                    Object dtoValue = dtoMethod.invoke(dto); // getter method
+                    Object dtoValue = dtoMethod.invoke(dto);
                     modelSetterMethod.invoke(model, dtoValue);
                 }
             }

@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface ProductService extends GenericService<Product, Long> {
 
-    void save(ProductCreateDto dto);
+    ProductDetailProjection save(ProductCreateDto dto);
 
     Product updateProductInfo(ProductCreateDto dto, Long id);
 
@@ -21,5 +21,5 @@ public interface ProductService extends GenericService<Product, Long> {
                                                 Double minPrice, Double maxPrice);
 
     PagedResult<ProductDetailProjection> findProducts(Pageable pageable);
-    PagedResult<ProductDetailProjection> findProductsByNameAndSku(Pageable pageable);
+    PagedResult<ProductProjection> findProductsByNameAndSku(String searchValue, Pageable pageable);
 }
