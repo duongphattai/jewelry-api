@@ -1,7 +1,9 @@
 package springboot.jewelry.api.product.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Immutable;
 import springboot.jewelry.api.commondata.model.AbstractEntity;
 import springboot.jewelry.api.supplier.model.Supplier;
 
@@ -16,6 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Immutable
 @Table(name = "jewelry_product")
 public class Product extends AbstractEntity {
 
@@ -36,6 +39,7 @@ public class Product extends AbstractEntity {
     private Double price;
     private Integer quantity;
     private String avatar;
+    private String slug;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id")
