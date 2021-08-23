@@ -12,9 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springboot.jewelry.api.commondata.model.PagedResult;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
+import springboot.jewelry.api.commondata.model.SearchCriteria;
 import springboot.jewelry.api.product.dto.ProductCreateDto;
+import springboot.jewelry.api.product.dto.ProductDetailDto;
+import springboot.jewelry.api.product.dto.ProductFilterDto;
+import springboot.jewelry.api.product.dto.ProductSummaryDto;
 import springboot.jewelry.api.product.model.Product;
-import springboot.jewelry.api.product.projection.ProductDetailProjection;
+import springboot.jewelry.api.product.projection.ProductSummaryProjection;
 import springboot.jewelry.api.product.projection.ProductProjection;
 import springboot.jewelry.api.product.service.itf.ProductService;
 
@@ -31,22 +35,22 @@ public class AdminProductController {
 
     @GetMapping("")
     public ResponseEntity<Object> findAll(
+            @PageableDefault(size = 9, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+
+        PagedResult<ProductSummaryProjection> products = productService.findProductsSummary(pageable);
+        return ResponseHandler.getResponse(products, HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Object> findAllWithSearch(
             @PageableDefault(size = 9, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(value = "search", required = false) String search) {
+            @RequestParam(value = "searchCriteria[keys][]") List<String> keys,
+            @RequestParam(value = "searchCriteria[value]") String value) {
 
-        PagedResult<ProductDetailProjection> productDetailProjection;
-
-        if(search != null) {
-            System.out.println("data search: " + search);
-            PagedResult<ProductProjection> a = productService.findProductsByNameAndSku(search, pageable);;
-            return ResponseHandler.getResponse(a, HttpStatus.OK);
-        } else {
-            System.out.println("hehe");
-            productDetailProjection = productService.findProducts(pageable);
-            return ResponseHandler.getResponse(productDetailProjection, HttpStatus.OK);
-        }
-
-
+        SearchCriteria searchCriteria = new SearchCriteria(keys, value);
+        PagedResult<ProductSummaryDto> productsFiltered
+                = productService.findProductsSummaryWithSearch(searchCriteria, pageable);
+        return ResponseHandler.getResponse(productsFiltered, HttpStatus.OK);
     }
 
     @GetMapping("/by-id")
@@ -73,7 +77,7 @@ public class AdminProductController {
         if(images != null) dto.setImages(images);
         if(avatar != null) dto.setAvatar(avatar);
 
-        ProductDetailProjection newProduct = productService.save(dto);
+        ProductDetailDto newProduct = productService.save(dto);
         return ResponseHandler.getResponse(newProduct, HttpStatus.OK);
     }
 

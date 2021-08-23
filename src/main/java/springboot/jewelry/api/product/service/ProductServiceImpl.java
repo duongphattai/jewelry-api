@@ -1,7 +1,7 @@
 package springboot.jewelry.api.product.service;
 
+import com.github.slugify.Slugify;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.*;
 import org.springframework.data.projection.ProjectionFactory;
@@ -9,22 +9,23 @@ import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springboot.jewelry.api.commondata.GenericServiceImpl;
-import springboot.jewelry.api.commondata.GenericSpecificationImpl;
+import springboot.jewelry.api.commondata.SearchSpecification;
+import springboot.jewelry.api.commondata.Slug;
 import springboot.jewelry.api.commondata.model.PagedResult;
 
 import org.springframework.data.domain.Pageable;
 import springboot.jewelry.api.commondata.model.SearchCriteria;
-import springboot.jewelry.api.commondata.model.SearchOperation;
 import springboot.jewelry.api.gdrive.manager.itf.GDriveFileManager;
 import springboot.jewelry.api.gdrive.manager.itf.GDriveFolderManager;
 import springboot.jewelry.api.product.dto.ProductCreateDto;
+import springboot.jewelry.api.product.dto.ProductDetailDto;
+import springboot.jewelry.api.product.dto.ProductSummaryDto;
 import springboot.jewelry.api.product.model.Image;
 import springboot.jewelry.api.product.model.Product;
 import springboot.jewelry.api.product.converter.ProductConverter;
 import springboot.jewelry.api.product.dto.ProductFilterDto;
 import springboot.jewelry.api.product.model.*;
-import springboot.jewelry.api.product.projection.ProductDetailProjection;
-import springboot.jewelry.api.product.projection.ProductProjection;
+import springboot.jewelry.api.product.projection.ProductSummaryProjection;
 import springboot.jewelry.api.product.repository.GoldTypeRepository;
 import springboot.jewelry.api.product.repository.ProductRepository;
 import springboot.jewelry.api.product.repository.CategoryRepository;
@@ -39,6 +40,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -57,9 +59,12 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
 
     @Override
     @Transactional
-    public ProductDetailProjection save(ProductCreateDto dto) {
+    public ProductDetailDto save(ProductCreateDto dto) {
         Product newProduct = new Product();
+
         newProduct = mapper.map(dto, newProduct);
+
+        newProduct.setSlug(new Slug().slugify(newProduct.getName() + " " + newProduct.getSku()));
 
         newProduct.setSupplier(supplierRepository.findByCode(dto.getSupplierCode()).get());
 
@@ -84,8 +89,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
 
         productRepository.save(newProduct);
 
-        ProjectionFactory pf = new SpelAwareProxyProjectionFactory();
-        return pf.createProjection(ProductDetailProjection.class, newProduct);
+        return ProductConverter.toProductDetailDto(newProduct);
     }
 
     @Override
@@ -96,28 +100,28 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
     }
 
     @Override
-    public PagedResult<ProductDetailProjection> findProducts(Pageable pageable) {
-        Page<ProductDetailProjection> result = productRepository.findProductDetailBy(pageable);
+    public PagedResult<ProductSummaryProjection> findProductsSummary(Pageable pageable) {
+        Page<ProductSummaryProjection> productsSummaryPaged = productRepository.findProductDetailBy(pageable);
 
         return new PagedResult<>(
-                result.getContent(),
-                result.getTotalElements(),
-                result.getTotalPages(),
-                result.getNumber() + 1
+                productsSummaryPaged.getContent(),
+                productsSummaryPaged.getTotalElements(),
+                productsSummaryPaged.getTotalPages(),
+                productsSummaryPaged.getNumber() + 1
         );
     }
 
     @Override
-    public PagedResult<ProductProjection> findProductsByNameAndSku(String searchValue, Pageable pageable) {
-        GenericSpecificationImpl<ProductProjection> genericSpesification = new GenericSpecificationImpl<>();
-        genericSpesification.add(new SearchCriteria("name", "huy", SearchOperation.MATCH));
-        Page<ProductProjection> result = productRepository.findAll(genericSpesification, pageable);
-        System.out.println("type: " + result.getContent());
+    public PagedResult<ProductSummaryDto> findProductsSummaryWithSearch(SearchCriteria searchCriteria, Pageable pageable) {
+        SearchSpecification<Product> productSearchSpecification = new SearchSpecification<>(searchCriteria);
+
+        Page<Product> productsPaged = productRepository.findAll(productSearchSpecification, pageable);
+
         return new PagedResult<>(
-                result.getContent(),
-                result.getTotalElements(),
-                result.getTotalPages(),
-                result.getNumber() + 1
+                ProductConverter.toProductSummaryDto(productsPaged.getContent()),
+                productsPaged.getTotalElements(),
+                productsPaged.getTotalPages(),
+                productsPaged.getNumber() + 1
         );
     }
 
@@ -151,7 +155,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
             cq.where(predicate);
             TypedQuery<Product> query = entityManager.createQuery(cq);
 
-           return ProductConverter.convertToProductFilterDto(query.getResultList());
+           return ProductConverter.toProductFilterDto(query.getResultList());
 
         }
         finally {

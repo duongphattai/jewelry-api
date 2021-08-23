@@ -3,6 +3,7 @@ package springboot.jewelry.api.product.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import springboot.jewelry.api.commondata.GenericServiceImpl;
+import springboot.jewelry.api.commondata.Slug;
 import springboot.jewelry.api.product.dto.CategoryCreateDto;
 import springboot.jewelry.api.product.dto.CategoryUpdateDto;
 import springboot.jewelry.api.product.model.Category;
@@ -21,6 +22,7 @@ public class CategoryServiceImpl extends GenericServiceImpl<Category, Long> impl
     public Category save(CategoryCreateDto dto) {
         Category newCategory = new Category();
         newCategory = mapper.map(dto, newCategory);
+        newCategory.setSlug(new Slug().slugify(newCategory.getName()));
         return categoryRepository.save(newCategory);
     }
 

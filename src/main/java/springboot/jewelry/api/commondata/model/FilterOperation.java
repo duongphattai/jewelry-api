@@ -1,6 +1,6 @@
 package springboot.jewelry.api.commondata.model;
 
-public enum SearchOperation {
+public enum FilterOperation {
     GREATER_THAN,
     LESS_THAN,
     GREATER_THAN_EQUAL,

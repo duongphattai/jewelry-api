@@ -4,12 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @AllArgsConstructor
 @Getter
 @Setter
-public class SearchCriteria {
-    private List<String> keys;
+public class FilterCriteria {
+    private String key;
     private String value;
+    private FilterOperation operation;
 }

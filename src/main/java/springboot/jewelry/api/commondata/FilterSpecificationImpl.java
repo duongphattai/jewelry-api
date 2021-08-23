@@ -2,10 +2,8 @@ package springboot.jewelry.api.commondata;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
-import springboot.jewelry.api.commondata.model.AbstractEntity;
-import springboot.jewelry.api.commondata.model.SearchCriteria;
+import springboot.jewelry.api.commondata.model.FilterCriteria;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,15 +14,15 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-public class GenericSpecificationImpl<T> implements Specification<T> {
+public class FilterSpecificationImpl<T> implements Specification<T> {
 
-    private List<SearchCriteria> criteriaList;
+    private List<FilterCriteria> criteriaList;
 
-    public GenericSpecificationImpl() {
+    public FilterSpecificationImpl() {
         this.criteriaList = new ArrayList<>();
     }
 
-    public void add(SearchCriteria criteria) {
+    public void add(FilterCriteria criteria) {
         this.criteriaList.add(criteria);
     }
 
@@ -33,7 +31,7 @@ public class GenericSpecificationImpl<T> implements Specification<T> {
 
         List<Predicate> predicates = new ArrayList<>();
 
-        for(SearchCriteria criteria : criteriaList) {
+        for(FilterCriteria criteria : criteriaList) {
             switch (criteria.getOperation()) {
                 case GREATER_THAN:
                     predicates.add(cb.greaterThan(root.get(criteria.getKey()), criteria.getValue()));
@@ -61,6 +59,6 @@ public class GenericSpecificationImpl<T> implements Specification<T> {
             }
         }
 
-        return cb.or(predicates.toArray(new Predicate[0]));
+        return cb.and(predicates.toArray(new Predicate[0]));
     }
 }

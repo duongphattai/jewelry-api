@@ -3,6 +3,7 @@ package springboot.jewelry.api.product.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Immutable;
 import springboot.jewelry.api.commondata.model.AbstractEntity;
 
 import javax.persistence.*;
@@ -25,6 +26,8 @@ public class Category extends AbstractEntity {
     @NotBlank(message = "{product-category.name.not-blank}")
     @Size(min = 1, max = 30, message = "{product-category.name.size}")
     private String name;
+
+    private String slug;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private Set<Product> products = new HashSet<>();
