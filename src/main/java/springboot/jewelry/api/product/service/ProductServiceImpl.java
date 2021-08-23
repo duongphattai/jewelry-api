@@ -1,11 +1,8 @@
 package springboot.jewelry.api.product.service;
 
-import com.github.slugify.Slugify;
 import lombok.AllArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.*;
-import org.springframework.data.projection.ProjectionFactory;
-import org.springframework.data.projection.SpelAwareProxyProjectionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springboot.jewelry.api.commondata.GenericServiceImpl;

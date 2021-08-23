@@ -17,7 +17,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/product")
+@RequestMapping("/api/products")
 public class ProductController {
 
     @Autowired
@@ -28,10 +28,6 @@ public class ProductController {
             @PageableDefault(size = 9, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
         PagedResult<ProductSummaryProjection> productsSummary = productService.findProductsSummary(pageable);
-
-        if (productsSummary.getElements().isEmpty()) {
-            return ResponseHandler.getResponse("Không có dữ liệu!", HttpStatus.OK);
-        }
         return ResponseHandler.getResponse(productsSummary, HttpStatus.OK);
     }
 

@@ -1,6 +1,5 @@
 package springboot.jewelry.api.commondata;
 
-import com.github.slugify.Slugify;
 import com.ibm.icu.text.Transliterator;
 
 import java.io.InputStream;
