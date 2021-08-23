@@ -59,15 +59,23 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Object> authenticateUser(@Valid @RequestBody LoginDto loginDto) {
+
+        Authentication authentication;
+
             Customer customer = customerService.findByEmail(loginDto.getEmail())
-                    .orElseThrow(() -> new ResourceNotFoundException("Email hoặc mật khẩu không chính xác!"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Email không tồn tại!"));
             if (customer.getActive()) {
-                Authentication authentication = authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(
-                                loginDto.getEmail(),
-                                loginDto.getPassword()
-                        )
-                );
+                try {
+                    authentication = authenticationManager.authenticate(
+                            new UsernamePasswordAuthenticationToken(
+                                    loginDto.getEmail(),
+                                    loginDto.getPassword()
+                            )
+                    );
+                }catch(Exception e){
+                    return ResponseHandler.getResponse("Mật khẩu không chính xác!", HttpStatus.BAD_REQUEST);
+                }
+
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 String jwtToken = jwtProvider.generateJwtToken(authentication);
                 customerDeviceService.findByCustomerId(customer.getId())

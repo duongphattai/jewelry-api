@@ -18,8 +18,6 @@ public class CustomerPrincipalDto implements UserDetails {
 
     private Long id;
 
-    private String fullName;
-
     private String email;
 
     @JsonIgnore
@@ -29,10 +27,9 @@ public class CustomerPrincipalDto implements UserDetails {
 
     private Map<String, Object> attributes;
 
-    public CustomerPrincipalDto(Long id, String fullName, String email, String password,
+    public CustomerPrincipalDto(Long id, String email, String password,
                                 Collection<? extends GrantedAuthority> authorities){
         this.id = id;
-        this.fullName = fullName;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
@@ -45,7 +42,6 @@ public class CustomerPrincipalDto implements UserDetails {
 
         return new CustomerPrincipalDto(
                 customer.getId(),
-                customer.getFullName(),
                 customer.getEmail(),
                 customer.getPassword(),
                 authorities
@@ -53,10 +49,6 @@ public class CustomerPrincipalDto implements UserDetails {
     }
     public Long getId() {
         return id;
-    }
-
-    public String getFullName() {
-        return fullName;
     }
 
     public String getEmail() {

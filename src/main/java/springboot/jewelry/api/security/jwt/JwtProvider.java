@@ -46,7 +46,7 @@ public class JwtProvider {
         Date expiryDate = new Date(now.getTime() + jwtDuration);
 
         return Jwts.builder()
-                .setSubject((customerPrincipalDto.getUsername()))
+                .setSubject((customerPrincipalDto.getEmail()))
                 .setId(Long.toString(customerPrincipalDto.getId()))
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
