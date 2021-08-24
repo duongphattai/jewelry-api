@@ -32,7 +32,7 @@ import java.util.Arrays;
 //        jsr250Enabled = true,
 //        prePostEnabled = true
 )
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userDetailsService;
 
@@ -44,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthenticationEntryPoint jwtEntryPoint) {
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthenticationEntryPoint jwtEntryPoint) {
         this.userDetailsService = userDetailsService;
         this.jwtEntryPoint = jwtEntryPoint;
     }
@@ -107,7 +107,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js").permitAll()
                 .antMatchers("/api/customer/register").permitAll()
                 .antMatchers("/**/auth/login", "/**/auth/token/refresh").permitAll()
-                .antMatchers("/api/admin/**").hasRole("ADMIN")
+                //.antMatchers("/api/admin/**").hasRole("ADMIN")
+                .antMatchers("/api/admin/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
