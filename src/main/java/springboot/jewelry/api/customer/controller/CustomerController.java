@@ -1,10 +1,9 @@
 package springboot.jewelry.api.customer.controller;
 
-import jdk.nashorn.internal.runtime.options.Option;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
+
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
@@ -19,7 +18,7 @@ import springboot.jewelry.api.security.exception.ResourceNotFoundException;
 import springboot.jewelry.api.util.MessageUtils;
 
 import javax.validation.Valid;
-import java.util.Optional;
+
 
 @AllArgsConstructor
 @RestController

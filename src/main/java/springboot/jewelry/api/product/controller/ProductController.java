@@ -29,13 +29,4 @@ public class ProductController {
         PagedResult<ProductSummaryProjection> productsSummary = productService.findProductsSummary(pageable);
         return ResponseHandler.getResponse(productsSummary, HttpStatus.OK);
     }
-
-    @GetMapping("/filter")
-    public ResponseEntity<Object> findProductsByFilter(ProductPageDto productPageDto, ProductFilterCriteriaDto productFilterCriteriaDto){
-        Page<ProductFilterDto> products = productService.findProductsByFilters(productPageDto, productFilterCriteriaDto);
-        if(products.isEmpty()){
-            return ResponseHandler.getResponse("Không tìm thấy sản phẩm!", HttpStatus.OK);
-        }
-        return ResponseHandler.getResponse(products, HttpStatus.OK);
-    }
 }

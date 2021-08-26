@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import springboot.jewelry.api.customer.dto.CustomerChangePasswordDto;
 import springboot.jewelry.api.customer.dto.CustomerCreateDto;
 import springboot.jewelry.api.customer.dto.CustomerUpdateDto;
-import springboot.jewelry.api.customer.projection.CustomerProjection;
 import springboot.jewelry.api.customer.repository.CustomerRepository;
 import springboot.jewelry.api.commondata.GenericServiceImpl;
 import springboot.jewelry.api.customer.model.Customer;
