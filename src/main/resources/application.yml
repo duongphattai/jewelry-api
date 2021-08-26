@@ -2,7 +2,7 @@ server:
   port: 8089
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/jewelry
+    url: jdbc:postgresql://localhost:5432/jewelry_test
     username: postgres
     password: '0373829264'
   jpa:
@@ -31,7 +31,8 @@ logging:
 jewelry:
   app:
     jwt-secret: khongcochuoibimat
-    jwt-duration: 123456789
+    jwt-duration: 20000000
+    jwt-refresh-duration: 12000000
   gdrive:
     folder:
       product: 1fkgIXvbjQ4n20FArIiA5Nxb_3oukKcmk

@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface CustomerRepository extends GenericRepository<Customer, Long> {
 
-    @Query("SELECT c.email AS email, c.role.roleName AS roleName FROM Customer c")
+    @Query("SELECT c.email AS email, c.roles AS roleName FROM Customer c")
     List<CustomerProjection> findCustomerWithAllRoleName();
 
     int countByPhoneNumber(String phoneNumber);

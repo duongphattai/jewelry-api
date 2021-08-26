@@ -3,6 +3,7 @@ package springboot.jewelry.api.customer.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
+
 import springboot.jewelry.api.customer.util.CustomerGender;
 import springboot.jewelry.api.customer.validation.annotation.*;
 import springboot.jewelry.api.util.DateUtils;
@@ -40,7 +41,7 @@ public class CustomerCreateDto {
     private LocalDate birthday;
 
     @NotBlank(message = "{customer.phone-number.not-blank}")
-    @Pattern(regexp = "(^$|[0-9]{10})", message = "{customer.phone-number.pattern}")
+    @Pattern(regexp = "(^((?=(0))[0-9]{10})$)", message = "{customer.phone-number.pattern}")
     @UniquePhoneNumber
     private String phoneNumber;
 

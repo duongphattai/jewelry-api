@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import springboot.jewelry.api.customer.util.CustomerGender;
-import springboot.jewelry.api.customer.validation.annotation.ConfirmPassword;
 import springboot.jewelry.api.util.DateUtils;
 
 
@@ -15,14 +14,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@ConfirmPassword
 public class CustomerUpdateDto {
-    @NotBlank(message = "{Customer.username.NotBlank}")
-    @Size(min = 8, max = 30, message = "{Customer.username.Size}")
-    private String password;
-
-    @NotBlank
-    private String confirmPassword;
 
     @NotBlank(message = "{Customer.fullName.NotBlank}")
     @Size(min = 3, max = 50, message = "{Customer.fullName.Size}")

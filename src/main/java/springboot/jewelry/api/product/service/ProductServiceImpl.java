@@ -11,6 +11,9 @@ import springboot.jewelry.api.commondata.Slug;
 import springboot.jewelry.api.commondata.model.PagedResult;
 
 import org.springframework.data.domain.Pageable;
+
+
+
 import springboot.jewelry.api.commondata.model.SearchCriteria;
 import springboot.jewelry.api.gdrive.manager.itf.GDriveFileManager;
 import springboot.jewelry.api.gdrive.manager.itf.GDriveFolderManager;
@@ -26,16 +29,11 @@ import springboot.jewelry.api.product.projection.ProductSummaryProjection;
 import springboot.jewelry.api.product.repository.GoldTypeRepository;
 import springboot.jewelry.api.product.repository.ProductRepository;
 import springboot.jewelry.api.product.repository.CategoryRepository;
+
 import springboot.jewelry.api.product.service.itf.ProductService;
 import springboot.jewelry.api.supplier.repository.SupplierRepository;
 import springboot.jewelry.api.util.MapDtoToModel;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -43,6 +41,7 @@ import java.util.stream.Collectors;
 @Service
 public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implements ProductService {
 
+    private ProductCriteriaRepository productCriteriaRepository;
     private ProductRepository productRepository;
     private SupplierRepository supplierRepository;
     private CategoryRepository categoryRepository;
@@ -52,7 +51,6 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
     private GDriveFileManager gDriveFileManager;
     private Environment env;
     private MapDtoToModel<Object, Product> mapper;
-    private EntityManager entityManager;
 
     @Override
     @Transactional
@@ -159,6 +157,4 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
             entityManager.close();
         }
     }
-
-
 }
