@@ -6,21 +6,22 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @Builder
-public class ProductDetailDto {
+public class ProductDetailsDto {
     String sku;
     String name;
     String avatar;
+    String description;
     Double price;
     Double goldWeight;
-    Integer quantity;
+    Boolean inStock;
 
     String categoryName;
-    String supplierName;
     Double goldTypePercentage;
-    List<String> images;
+    Set<String> images;
 }

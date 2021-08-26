@@ -15,15 +15,16 @@ import org.springframework.data.domain.Pageable;
 import springboot.jewelry.api.commondata.model.SearchCriteria;
 import springboot.jewelry.api.gdrive.manager.itf.GDriveFileManager;
 import springboot.jewelry.api.gdrive.manager.itf.GDriveFolderManager;
-import springboot.jewelry.api.product.dto.ProductCreateDto;
-import springboot.jewelry.api.product.dto.ProductDetailDto;
-import springboot.jewelry.api.product.dto.ProductSummaryDto;
+import springboot.jewelry.api.product.dto.*;
 import springboot.jewelry.api.product.model.Image;
 import springboot.jewelry.api.product.model.Product;
 import springboot.jewelry.api.product.converter.ProductConverter;
-
+import springboot.jewelry.api.product.model.*;
+import springboot.jewelry.api.product.projection.ProductDetailsProjection;
 import springboot.jewelry.api.product.projection.ProductSummaryProjection;
+import springboot.jewelry.api.product.projection.ShortProductProjection;
 import springboot.jewelry.api.product.repository.GoldTypeRepository;
+import springboot.jewelry.api.product.repository.ImageRepository;
 import springboot.jewelry.api.product.repository.ProductRepository;
 import springboot.jewelry.api.product.repository.CategoryRepository;
 
@@ -33,7 +34,6 @@ import springboot.jewelry.api.util.MapDtoToModel;
 
 import java.util.*;
 
-
 @AllArgsConstructor
 @Service
 public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implements ProductService {
@@ -42,6 +42,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
     private SupplierRepository supplierRepository;
     private CategoryRepository categoryRepository;
     private GoldTypeRepository goldTypeRepository;
+    private ImageRepository imageRepository;
 
     private GDriveFolderManager gDriveFolderManager;
     private GDriveFileManager gDriveFileManager;
@@ -50,7 +51,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
 
     @Override
     @Transactional
-    public ProductDetailDto save(ProductCreateDto dto) {
+    public ProductDetailsDto save(ProductCreateDto dto) {
         Product newProduct = new Product();
 
         newProduct = mapper.map(dto, newProduct);
@@ -80,7 +81,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
 
         productRepository.save(newProduct);
 
-        return ProductConverter.toProductDetailDto(newProduct);
+        return ProductConverter.entityToProductDetailDto(newProduct);
     }
 
     @Override
@@ -92,7 +93,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
 
     @Override
     public PagedResult<ProductSummaryProjection> findProductsSummary(Pageable pageable) {
-        Page<ProductSummaryProjection> productsSummaryPaged = productRepository.findProductDetailBy(pageable);
+        Page<ProductSummaryProjection> productsSummaryPaged = productRepository.findProductsSummaryBy(pageable);
 
         return new PagedResult<>(
                 productsSummaryPaged.getContent(),
@@ -109,11 +110,71 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
         Page<Product> productsPaged = productRepository.findAll(productSearchSpecification, pageable);
 
         return new PagedResult<>(
-                ProductConverter.toProductSummaryDto(productsPaged.getContent()),
+                ProductConverter.entityToProductSummaryDto(productsPaged.getContent()),
                 productsPaged.getTotalElements(),
                 productsPaged.getTotalPages(),
                 productsPaged.getNumber() + 1
         );
+    }
+
+    @Override
+    public PagedResult<ShortProductDto> findShortProducts(Pageable pageable) {
+        Page<ShortProductProjection> shortProductsPaged = productRepository.findShortProductsBy(pageable);
+
+        return new PagedResult<>(
+                ProductConverter.projectionToShortProductDto(shortProductsPaged.getContent()),
+                shortProductsPaged.getTotalElements(),
+                shortProductsPaged.getTotalPages(),
+                shortProductsPaged.getNumber() + 1
+        );
+    }
+
+    @Override
+    public ProductDetailsDto findProductDetails(String slug) {
+        Optional<ProductDetailsProjection> productDetailsProjection = productRepository.findProductDetailsBySlug(slug);
+        if(productDetailsProjection.isPresent()) {
+            Set<String> images = imageRepository.findGDriveIdBySku(productDetailsProjection.get().getSku());
+            return ProductConverter.projectionToProductDetailDto(productDetailsProjection.get(), images);
+        }
+        return null;
+    }
+
+    @Override
+    public List<ProductFilterDto> findProductsByFilter(String name, String category, Double goldType,
+                                                       Double minPrice, Double maxPrice) {
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery cq = cb.createQuery(Product.class);
+            Root<Product> product = cq.from(Product.class);
+            Predicate predicate = cb.conjunction();
+
+            if (name != null) {
+                predicate = cb.and(predicate, cb.like(cb.lower(product.<String>get(Product_.NAME)), "%" + name.toLowerCase() + "%"));
+            }
+            if (category != null) {
+                predicate = cb.and(predicate, cb.equal(product.get(Product_.CATEGORY).get(Category_.CODE), category));
+            }
+            if (goldType != null) {
+                predicate = cb.and(predicate, cb.equal(product.get(Product_.GOLD_TYPE).get(GoldType_.PERCENTAGE), goldType));
+            }
+            if (minPrice == null) {
+                minPrice = productRepository.minPrice();
+            }
+            if (maxPrice == null) {
+                maxPrice = productRepository.maxPrice();
+            }
+            if (minPrice != null && maxPrice != null) {
+                predicate = cb.and(predicate, cb.between(product.get(Product_.PRICE), minPrice, maxPrice));
+            }
+            cq.where(predicate);
+            TypedQuery<Product> query = entityManager.createQuery(cq);
+
+           return ProductConverter.toProductFilterDto(query.getResultList());
+
+        }
+        finally {
+            entityManager.close();
+        }
     }
 
 }

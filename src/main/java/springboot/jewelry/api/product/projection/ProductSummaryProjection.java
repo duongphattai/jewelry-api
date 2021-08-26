@@ -1,14 +1,7 @@
 package springboot.jewelry.api.product.projection;
 
 
-
-import org.springframework.beans.factory.annotation.Value;
-import springboot.jewelry.api.product.model.GoldType;
-import springboot.jewelry.api.product.model.Image;
-
-import java.util.List;
-
-public interface ProductSummaryProjection extends ProductProjection{
+public interface ProductSummaryProjection extends BaseProductProjection {
 
     Double getGoldWeight();
     Integer getQuantity();
