@@ -11,8 +11,10 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 
 @Getter
@@ -57,7 +59,7 @@ public class Product extends AbstractEntity {
     private GoldType goldType;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private List<Image> images = new LinkedList<>();
+    private Set<Image> images = new HashSet<>();
 
     public void addImage(Image image) {
         this.images.add(image);

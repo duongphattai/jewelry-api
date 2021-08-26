@@ -9,11 +9,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springboot.jewelry.api.commondata.model.PagedResult;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
+import springboot.jewelry.api.product.dto.ProductDetailsDto;
 import springboot.jewelry.api.product.dto.ProductFilterDto;
+import springboot.jewelry.api.product.dto.ShortProductDto;
 import springboot.jewelry.api.product.projection.ProductSummaryProjection;
 import springboot.jewelry.api.product.service.itf.ProductService;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -27,8 +30,9 @@ public class ProductController {
     public ResponseEntity<Object> findProducts(
             @PageableDefault(size = 9, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        PagedResult<ProductSummaryProjection> productsSummary = productService.findProductsSummary(pageable);
-        return ResponseHandler.getResponse(productsSummary, HttpStatus.OK);
+        PagedResult<ShortProductDto> shortProducts = productService.findShortProducts(pageable);
+        // chưa kiểm tra khi không có dữ liệu
+        return ResponseHandler.getResponse(shortProducts, HttpStatus.OK);
     }
 
     @GetMapping("/filter")
@@ -43,5 +47,14 @@ public class ProductController {
             return ResponseHandler.getResponse("Không tìm thấy sản phẩm!", HttpStatus.OK);
         }
         return ResponseHandler.getResponse(products, HttpStatus.OK);
+    }
+
+    @GetMapping("/{slug}")
+    public ResponseEntity<Object> findProductDetails(@PathVariable(value = "slug") String slug) {
+        ProductDetailsDto productDetails = productService.findProductDetails(slug);
+        if(productDetails == null) {
+            return ResponseHandler.getResponse(HttpStatus.BAD_REQUEST);
+        }
+        return ResponseHandler.getResponse(productDetails, HttpStatus.OK);
     }
 }

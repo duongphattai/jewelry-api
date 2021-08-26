@@ -14,16 +14,16 @@ import org.springframework.data.domain.Pageable;
 import springboot.jewelry.api.commondata.model.SearchCriteria;
 import springboot.jewelry.api.gdrive.manager.itf.GDriveFileManager;
 import springboot.jewelry.api.gdrive.manager.itf.GDriveFolderManager;
-import springboot.jewelry.api.product.dto.ProductCreateDto;
-import springboot.jewelry.api.product.dto.ProductDetailDto;
-import springboot.jewelry.api.product.dto.ProductSummaryDto;
+import springboot.jewelry.api.product.dto.*;
 import springboot.jewelry.api.product.model.Image;
 import springboot.jewelry.api.product.model.Product;
 import springboot.jewelry.api.product.converter.ProductConverter;
-import springboot.jewelry.api.product.dto.ProductFilterDto;
 import springboot.jewelry.api.product.model.*;
+import springboot.jewelry.api.product.projection.ProductDetailsProjection;
 import springboot.jewelry.api.product.projection.ProductSummaryProjection;
+import springboot.jewelry.api.product.projection.ShortProductProjection;
 import springboot.jewelry.api.product.repository.GoldTypeRepository;
+import springboot.jewelry.api.product.repository.ImageRepository;
 import springboot.jewelry.api.product.repository.ProductRepository;
 import springboot.jewelry.api.product.repository.CategoryRepository;
 import springboot.jewelry.api.product.service.itf.ProductService;
@@ -37,7 +37,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -47,6 +46,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
     private SupplierRepository supplierRepository;
     private CategoryRepository categoryRepository;
     private GoldTypeRepository goldTypeRepository;
+    private ImageRepository imageRepository;
 
     private GDriveFolderManager gDriveFolderManager;
     private GDriveFileManager gDriveFileManager;
@@ -56,7 +56,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
 
     @Override
     @Transactional
-    public ProductDetailDto save(ProductCreateDto dto) {
+    public ProductDetailsDto save(ProductCreateDto dto) {
         Product newProduct = new Product();
 
         newProduct = mapper.map(dto, newProduct);
@@ -86,7 +86,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
 
         productRepository.save(newProduct);
 
-        return ProductConverter.toProductDetailDto(newProduct);
+        return ProductConverter.entityToProductDetailDto(newProduct);
     }
 
     @Override
@@ -98,7 +98,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
 
     @Override
     public PagedResult<ProductSummaryProjection> findProductsSummary(Pageable pageable) {
-        Page<ProductSummaryProjection> productsSummaryPaged = productRepository.findProductDetailBy(pageable);
+        Page<ProductSummaryProjection> productsSummaryPaged = productRepository.findProductsSummaryBy(pageable);
 
         return new PagedResult<>(
                 productsSummaryPaged.getContent(),
@@ -115,11 +115,33 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
         Page<Product> productsPaged = productRepository.findAll(productSearchSpecification, pageable);
 
         return new PagedResult<>(
-                ProductConverter.toProductSummaryDto(productsPaged.getContent()),
+                ProductConverter.entityToProductSummaryDto(productsPaged.getContent()),
                 productsPaged.getTotalElements(),
                 productsPaged.getTotalPages(),
                 productsPaged.getNumber() + 1
         );
+    }
+
+    @Override
+    public PagedResult<ShortProductDto> findShortProducts(Pageable pageable) {
+        Page<ShortProductProjection> shortProductsPaged = productRepository.findShortProductsBy(pageable);
+
+        return new PagedResult<>(
+                ProductConverter.projectionToShortProductDto(shortProductsPaged.getContent()),
+                shortProductsPaged.getTotalElements(),
+                shortProductsPaged.getTotalPages(),
+                shortProductsPaged.getNumber() + 1
+        );
+    }
+
+    @Override
+    public ProductDetailsDto findProductDetails(String slug) {
+        Optional<ProductDetailsProjection> productDetailsProjection = productRepository.findProductDetailsBySlug(slug);
+        if(productDetailsProjection.isPresent()) {
+            Set<String> images = imageRepository.findGDriveIdBySku(productDetailsProjection.get().getSku());
+            return ProductConverter.projectionToProductDetailDto(productDetailsProjection.get(), images);
+        }
+        return null;
     }
 
     @Override
@@ -159,6 +181,5 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
             entityManager.close();
         }
     }
-
 
 }

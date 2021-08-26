@@ -14,12 +14,10 @@ import springboot.jewelry.api.commondata.model.PagedResult;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
 import springboot.jewelry.api.commondata.model.SearchCriteria;
 import springboot.jewelry.api.product.dto.ProductCreateDto;
-import springboot.jewelry.api.product.dto.ProductDetailDto;
-import springboot.jewelry.api.product.dto.ProductFilterDto;
+import springboot.jewelry.api.product.dto.ProductDetailsDto;
 import springboot.jewelry.api.product.dto.ProductSummaryDto;
 import springboot.jewelry.api.product.model.Product;
 import springboot.jewelry.api.product.projection.ProductSummaryProjection;
-import springboot.jewelry.api.product.projection.ProductProjection;
 import springboot.jewelry.api.product.service.itf.ProductService;
 
 import javax.validation.Valid;
@@ -77,7 +75,7 @@ public class AdminProductController {
         if(images != null) dto.setImages(images);
         if(avatar != null) dto.setAvatar(avatar);
 
-        ProductDetailDto newProduct = productService.save(dto);
+        ProductDetailsDto newProduct = productService.save(dto);
         return ResponseHandler.getResponse(newProduct, HttpStatus.OK);
     }
 

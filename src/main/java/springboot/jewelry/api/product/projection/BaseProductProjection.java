@@ -1,7 +1,7 @@
 package springboot.jewelry.api.product.projection;
 
 
-public interface ProductProjection {
+public interface BaseProductProjection {
 
     String getSku();
     String getName();
