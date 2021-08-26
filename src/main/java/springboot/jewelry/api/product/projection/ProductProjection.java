@@ -6,5 +6,6 @@ public interface ProductProjection {
     String getSku();
     String getName();
     Double getPrice();
+    String getAvatar();
 
 }

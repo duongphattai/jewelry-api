@@ -2,6 +2,7 @@ package springboot.jewelry.api.gdrive.manager;
 
 import com.google.api.client.http.InputStreamContent;
 import com.google.api.services.drive.model.File;
+import com.google.api.services.drive.model.Permission;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +39,10 @@ public class GDriveFileManagerImpl implements GDriveFileManager {
                             )
                             .setFields("id")
                             .execute();
-
+                    Permission permission = new Permission();
+                    permission.setType("anyone");
+                    permission.setRole("reader");
+                    gDriveConfig.getInstance().permissions().create(uploadFile.getId(), permission).execute();;
                     idList.add(uploadFile.getId());
                 }
             }

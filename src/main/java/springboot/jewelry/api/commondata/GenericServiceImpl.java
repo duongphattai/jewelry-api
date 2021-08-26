@@ -1,6 +1,7 @@
 package springboot.jewelry.api.commondata;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import springboot.jewelry.api.commondata.model.AbstractEntity;
 
 import java.util.List;
@@ -37,7 +38,7 @@ public class GenericServiceImpl <T extends AbstractEntity, ID> implements Generi
     }
 
     @Override
-    public <C> List<C> findAllBy(Class<C> type) {
+    public <P> List<P> findAllBy(Class<P> type) {
         return genericRepository.findAllBy(type);
     }
 }

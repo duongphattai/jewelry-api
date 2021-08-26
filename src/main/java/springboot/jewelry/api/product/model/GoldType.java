@@ -1,7 +1,9 @@
 package springboot.jewelry.api.product.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Immutable;
 import springboot.jewelry.api.commondata.model.AbstractEntity;
 
 import javax.persistence.*;

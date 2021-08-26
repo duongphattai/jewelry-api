@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface GoldTypeRepository extends GenericRepository<GoldType, Long> {
 
-    Optional<GoldType> findByPercentage(Double goldType);
+    Optional<GoldType> findByPercentage(Double percentage);
 
     int countByPercentage(Double percentage);
 }
