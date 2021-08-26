@@ -139,42 +139,4 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
         return null;
     }
 
-    @Override
-    public List<ProductFilterDto> findProductsByFilter(String name, String category, Double goldType,
-                                                       Double minPrice, Double maxPrice) {
-        try {
-            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-            CriteriaQuery cq = cb.createQuery(Product.class);
-            Root<Product> product = cq.from(Product.class);
-            Predicate predicate = cb.conjunction();
-
-            if (name != null) {
-                predicate = cb.and(predicate, cb.like(cb.lower(product.<String>get(Product_.NAME)), "%" + name.toLowerCase() + "%"));
-            }
-            if (category != null) {
-                predicate = cb.and(predicate, cb.equal(product.get(Product_.CATEGORY).get(Category_.CODE), category));
-            }
-            if (goldType != null) {
-                predicate = cb.and(predicate, cb.equal(product.get(Product_.GOLD_TYPE).get(GoldType_.PERCENTAGE), goldType));
-            }
-            if (minPrice == null) {
-                minPrice = productRepository.minPrice();
-            }
-            if (maxPrice == null) {
-                maxPrice = productRepository.maxPrice();
-            }
-            if (minPrice != null && maxPrice != null) {
-                predicate = cb.and(predicate, cb.between(product.get(Product_.PRICE), minPrice, maxPrice));
-            }
-            cq.where(predicate);
-            TypedQuery<Product> query = entityManager.createQuery(cq);
-
-           return ProductConverter.toProductFilterDto(query.getResultList());
-
-        }
-        finally {
-            entityManager.close();
-        }
-    }
-
 }

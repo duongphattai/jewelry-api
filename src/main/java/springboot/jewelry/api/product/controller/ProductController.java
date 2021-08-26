@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import springboot.jewelry.api.commondata.model.PagedResult;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
 import springboot.jewelry.api.product.dto.ProductDetailsDto;
-import springboot.jewelry.api.product.dto.ProductFilterDto;
 import springboot.jewelry.api.product.dto.ShortProductDto;
 import springboot.jewelry.api.product.projection.ProductSummaryProjection;
 import springboot.jewelry.api.product.service.itf.ProductService;
@@ -36,20 +35,6 @@ public class ProductController {
         PagedResult<ShortProductDto> shortProducts = productService.findShortProducts(pageable);
         // chưa kiểm tra khi không có dữ liệu
         return ResponseHandler.getResponse(shortProducts, HttpStatus.OK);
-    }
-
-    @GetMapping("/filter")
-    public ResponseEntity<Object> findProductsByFilter(@RequestParam(required = false) String name,
-                                                       @RequestParam(required = false) String productType,
-                                                       @RequestParam(required = false) Double goldType,
-                                                       @RequestParam(required = false) Double minPrice,
-                                                       @RequestParam(required = false) Double maxPrice) {
-        List<ProductFilterDto> products = productService.findProductsByFilter(name, productType, goldType,
-                                                                                     minPrice, maxPrice);
-        if (products.isEmpty()) {
-            return ResponseHandler.getResponse("Không tìm thấy sản phẩm!", HttpStatus.OK);
-        }
-        return ResponseHandler.getResponse(products, HttpStatus.OK);
     }
 
     @GetMapping("/{slug}")

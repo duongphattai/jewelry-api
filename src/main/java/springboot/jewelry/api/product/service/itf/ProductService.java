@@ -6,7 +6,6 @@ import springboot.jewelry.api.commondata.model.PagedResult;
 import springboot.jewelry.api.commondata.model.SearchCriteria;
 import springboot.jewelry.api.product.dto.*;
 import springboot.jewelry.api.product.dto.ProductCreateDto;
-import springboot.jewelry.api.product.dto.ProductDetailDto;
 import springboot.jewelry.api.product.dto.ProductSummaryDto;
 import springboot.jewelry.api.product.model.Product;
 
