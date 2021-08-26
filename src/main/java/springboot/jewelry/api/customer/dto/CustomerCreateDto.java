@@ -41,7 +41,7 @@ public class CustomerCreateDto {
     private LocalDate birthday;
 
     @NotBlank(message = "{customer.phone-number.not-blank}")
-    @Pattern(regexp = "(^$|[0-9]{10})", message = "{customer.phone-number.pattern}")
+    @Pattern(regexp = "(^((?=(0))[0-9]{10})$)", message = "{customer.phone-number.pattern}")
     @UniquePhoneNumber
     private String phoneNumber;
 

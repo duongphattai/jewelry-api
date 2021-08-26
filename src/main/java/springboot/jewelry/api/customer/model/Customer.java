@@ -42,7 +42,7 @@ public class Customer extends AbstractEntity {
     private LocalDate birthday;
 
     @NotBlank(message = "{customer.phone-number.not-blank}")
-    @Pattern(regexp = "(^$|[0-9]{10})", message = "{customer.phone-number.pattern}")
+    @Pattern(regexp = "(^((?=(0))[0-9]{10})$)", message = "{customer.phone-number.pattern}")
     @Column(unique = true)
     private String phoneNumber;
 
@@ -63,10 +63,6 @@ public class Customer extends AbstractEntity {
 
     public void activate() {
         this.active = true;
-    }
-
-    public void deactivate() {
-        this.active = false;
     }
 
 }

@@ -3,6 +3,7 @@ package springboot.jewelry.api.customer.service;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import springboot.jewelry.api.customer.dto.CustomerChangePasswordDto;
 import springboot.jewelry.api.customer.dto.CustomerCreateDto;
 import springboot.jewelry.api.customer.dto.CustomerUpdateDto;
 import springboot.jewelry.api.customer.projection.CustomerProjection;
@@ -30,6 +31,7 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
     public Customer save(CustomerCreateDto dto) {
         Customer newCustomer = new Customer();
         newCustomer = mapper.map(dto, newCustomer);
+        newCustomer.setEmail(dto.getEmail().toLowerCase());
         newCustomer.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         Set<RoleName> strRoles = new HashSet<>(EnumSet.allOf(RoleName.class));
@@ -43,11 +45,6 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
         newCustomer.setRoles(roles);
         newCustomer.activate();
         return customerRepository.save(newCustomer);
-    }
-
-    @Override
-    public List<CustomerProjection> findCustomerWithAllRoleName() {
-        return customerRepository.findCustomerWithAllRoleName();
     }
 
     @Override
@@ -72,12 +69,16 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
     }
 
     @Override
+    public Customer updateCustomerPassword(CustomerChangePasswordDto dto, Long id) {
+        Customer customerUpdate = customerRepository.getOne(id);
+        customerUpdate.setPassword(passwordEncoder.encode(dto.getPassword()));
+        return customerRepository.save(customerUpdate);
+    }
+
+    @Override
     public Customer updateCustomerInfo(CustomerUpdateDto dto, Long id) {
         Customer customerUpdate = customerRepository.getOne(id);
         customerUpdate = mapper.map(dto, customerUpdate);
-        customerUpdate.setPassword(passwordEncoder.encode(dto.getPassword()));
-
         return customerRepository.save(customerUpdate);
-
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
+import springboot.jewelry.api.customer.dto.CustomerChangePasswordDto;
 import springboot.jewelry.api.customer.dto.CustomerCreateDto;
 import springboot.jewelry.api.customer.dto.CustomerUpdateDto;
 import springboot.jewelry.api.customer.model.Customer;
@@ -47,18 +48,31 @@ public class CustomerController {
         return ResponseHandler.getResponse(new MessageUtils("Đăng ký thành công!"), HttpStatus.OK);
     }
 
-
-    @PutMapping("/{customer-id}")
-    public ResponseEntity<Object> updateCustomer(@PathVariable("customer-id") Long id,
+    @PutMapping("/update")
+    public ResponseEntity<Object> updateInfo(@CurrentCustomer CustomerPrincipalDto currentCustomer,
                                                  @Valid @RequestBody CustomerUpdateDto dto,
                                                  BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseHandler.getResponse(HttpStatus.BAD_REQUEST);
         }
 
-        Customer customer = customerService.updateCustomerInfo(dto, id);
+        Customer customer = customerService.updateCustomerInfo(dto, currentCustomer.getId());
 
         return ResponseHandler.getResponse(customer, HttpStatus.OK);
+    }
+
+    @PutMapping("/update/change-password")
+    public ResponseEntity<Object> changePassword(@CurrentCustomer CustomerPrincipalDto currentCustomer,
+                                                 @Valid @RequestBody CustomerChangePasswordDto dto,
+                                                 BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseHandler.getResponse(HttpStatus.BAD_REQUEST);
+        }
+
+        Customer customer = customerService.updateCustomerPassword(dto, currentCustomer.getId());
+
+        return ResponseHandler.getResponse(customer, HttpStatus.OK);
+
     }
 
 }
