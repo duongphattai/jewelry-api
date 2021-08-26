@@ -3,18 +3,22 @@ package springboot.jewelry.api.customer.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
+import springboot.jewelry.api.customer.dto.CustomerChangePasswordDto;
 import springboot.jewelry.api.customer.dto.CustomerCreateDto;
 import springboot.jewelry.api.customer.dto.CustomerUpdateDto;
 import springboot.jewelry.api.customer.model.Customer;
-import springboot.jewelry.api.customer.projection.CustomerProjection;
 import springboot.jewelry.api.customer.service.CustomerService;
+import springboot.jewelry.api.customer.validation.annotation.CurrentCustomer;
+import springboot.jewelry.api.security.dto.CustomerPrincipalDto;
+import springboot.jewelry.api.security.exception.ResourceNotFoundException;
+import springboot.jewelry.api.util.MessageUtils;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Optional;
+
 
 @AllArgsConstructor
 @RestController
@@ -23,27 +27,15 @@ public class CustomerController {
 
     private CustomerService customerService;
 
-    @GetMapping("")
-    public ResponseEntity<Object> findAll() {
-        List<Customer> customers = customerService.findAll();
-        if (customers.isEmpty()) {
-            return ResponseHandler.getResponse("Danh sách trống!", HttpStatus.OK);
-        }
+    @GetMapping("/me")
+    public ResponseEntity<Object> getCurrentCustomer(@CurrentCustomer CustomerPrincipalDto dto){
+         Customer customer = customerService.findById(dto.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Tài khoản không tồn tại!"));
 
-        return ResponseHandler.getResponse(customers, HttpStatus.OK);
+         return ResponseHandler.getResponse(customer, HttpStatus.OK);
     }
 
-    @GetMapping("/all-role-name")
-    public ResponseEntity<Object> findWithAllRoleName() {
-        List<CustomerProjection> customers = customerService.findCustomerWithAllRoleName();
-        if (customers.isEmpty()) {
-            return ResponseHandler.getResponse("Danh sách trống!", HttpStatus.OK);
-        }
-
-        return ResponseHandler.getResponse(customers, HttpStatus.OK);
-    }
-
-    @PostMapping("")
+    @PostMapping("/register")
     public ResponseEntity<Object> addCustomer(@Valid @RequestBody CustomerCreateDto dto,
                                               BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -52,33 +44,34 @@ public class CustomerController {
 
         Customer customer = customerService.save(dto);
 
-        return ResponseHandler.getResponse(customer, HttpStatus.OK);
+        return ResponseHandler.getResponse(new MessageUtils("Đăng ký thành công!"), HttpStatus.OK);
     }
 
-    @PutMapping("/{customer-id}")
-    public ResponseEntity<Object> updateCustomer(@PathVariable("customer-id") Long id,
+    @PutMapping("/update")
+    public ResponseEntity<Object> updateInfo(@CurrentCustomer CustomerPrincipalDto currentCustomer,
                                                  @Valid @RequestBody CustomerUpdateDto dto,
                                                  BindingResult bindingResult) {
-
         if (bindingResult.hasErrors()) {
             return ResponseHandler.getResponse(HttpStatus.BAD_REQUEST);
         }
 
-        Customer customer = customerService.updateCustomerInfo(dto, id);
+        Customer customer = customerService.updateCustomerInfo(dto, currentCustomer.getId());
 
         return ResponseHandler.getResponse(customer, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{customer-id}")
-    public ResponseEntity<Object> deleteCustomer(@PathVariable("customer-id") Long id) {
-
-        Optional<Customer> customer = customerService.findById(id);
-        if (!customer.isPresent()) {
-            return ResponseHandler.getResponse("Không tìm thấy ID: " + id, HttpStatus.OK);
+    @PutMapping("/update/change-password")
+    public ResponseEntity<Object> changePassword(@CurrentCustomer CustomerPrincipalDto currentCustomer,
+                                                 @Valid @RequestBody CustomerChangePasswordDto dto,
+                                                 BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseHandler.getResponse(HttpStatus.BAD_REQUEST);
         }
 
-        customerService.deleteById(id);
+        Customer customer = customerService.updateCustomerPassword(dto, currentCustomer.getId());
 
-        return ResponseHandler.getResponse(HttpStatus.OK);
+        return ResponseHandler.getResponse(customer, HttpStatus.OK);
+
     }
+
 }

@@ -18,6 +18,9 @@ import springboot.jewelry.api.product.service.itf.ProductService;
 import java.util.List;
 import java.util.Optional;
 
+import springboot.jewelry.api.product.projection.ProductSummaryProjection;
+import springboot.jewelry.api.product.service.itf.ProductService;
+
 
 @RestController
 @RequestMapping("/api/products")

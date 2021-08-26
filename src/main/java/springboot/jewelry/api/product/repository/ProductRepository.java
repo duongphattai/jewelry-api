@@ -38,9 +38,4 @@ public interface ProductRepository extends GenericRepository<Product, Long>, Jpa
 //                "WHERE p.slug = :slug")
     Optional<ProductDetailsProjection> findProductDetailsBySlug(@Param("slug") String slug);
 
-    @Query(value = "SELECT min(price) FROM Product")
-    Double minPrice();
-
-    @Query(value = "SELECT max(price) FROM Product ")
-    Double maxPrice();
 }
