@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @RequiredArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "jewelry_product_image")
+@Table(name = "jewelry_product_images")
 public class Image extends AbstractEntity {
 
     @NonNull

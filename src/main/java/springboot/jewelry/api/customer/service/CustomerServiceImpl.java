@@ -12,6 +12,7 @@ import springboot.jewelry.api.customer.model.Customer;
 import springboot.jewelry.api.role.model.Role;
 import springboot.jewelry.api.role.model.RoleName;
 import springboot.jewelry.api.role.repository.RoleRepository;
+import springboot.jewelry.api.shopping.model.Cart;
 import springboot.jewelry.api.util.MapDtoToModel;
 
 import java.util.*;
@@ -43,6 +44,9 @@ public class CustomerServiceImpl extends GenericServiceImpl<Customer, Long> impl
 
         newCustomer.setRoles(roles);
         newCustomer.activate();
+
+        newCustomer.addCart(new Cart());
+
         return customerRepository.save(newCustomer);
     }
 

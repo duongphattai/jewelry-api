@@ -24,6 +24,8 @@ public interface ProductService extends GenericService<Product, Long> {
 
     PagedResult<ShortProductDto> findShortProducts(Pageable pageable);
 
+    PagedResult<ShortProductDto> findShortProductsByCategory(String categorySlug, Pageable pageable);
+
     ProductDetailsDto findProductDetails(String slug);
 
 }

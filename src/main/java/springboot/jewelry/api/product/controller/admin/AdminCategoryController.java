@@ -3,14 +3,13 @@ package springboot.jewelry.api.product.controller.admin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
 import springboot.jewelry.api.product.dto.CategoryCreateDto;
 import springboot.jewelry.api.product.dto.CategoryUpdateDto;
 import springboot.jewelry.api.product.model.Category;
-import springboot.jewelry.api.product.projection.CategoryProjection;
+import springboot.jewelry.api.product.projection.CategoryWithCodeProjection;
 import springboot.jewelry.api.product.service.itf.CategoryService;
 
 import javax.validation.Valid;
@@ -18,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/admin/products/categories")
+@RequestMapping("/api/admin/categories")
 public class AdminCategoryController {
 
     @Autowired
@@ -27,12 +26,12 @@ public class AdminCategoryController {
     @GetMapping("")
     public ResponseEntity<Object> findAll() {
 
-        List<CategoryProjection> categoryProjections = categoryService.findAllBy(CategoryProjection.class);
-        if (categoryProjections.isEmpty()) {
+        List<CategoryWithCodeProjection> categoryWithCodeProjections = categoryService.findAllBy(CategoryWithCodeProjection.class);
+        if (categoryWithCodeProjections.isEmpty()) {
             return ResponseHandler.getResponse("Danh sách trống!", HttpStatus.OK);
         }
 
-        return ResponseHandler.getResponse(categoryProjections, HttpStatus.OK);
+        return ResponseHandler.getResponse(categoryWithCodeProjections, HttpStatus.OK);
     }
 
     @PostMapping("")
