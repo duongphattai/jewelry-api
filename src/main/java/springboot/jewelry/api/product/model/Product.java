@@ -1,9 +1,12 @@
 package springboot.jewelry.api.product.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Immutable;
 import springboot.jewelry.api.commondata.model.AbstractEntity;
+import springboot.jewelry.api.shopping.model.CartItem;
 import springboot.jewelry.api.supplier.model.Supplier;
 
 import javax.persistence.*;
@@ -18,8 +21,8 @@ import java.util.Set;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
-@Immutable
 @Table(name = "jewelry_product")
 public class Product extends AbstractEntity {
 
@@ -59,6 +62,9 @@ public class Product extends AbstractEntity {
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<Image> images = new HashSet<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<CartItem> cartItems = new HashSet<>();
 
     public void addImage(Image image) {
         this.images.add(image);

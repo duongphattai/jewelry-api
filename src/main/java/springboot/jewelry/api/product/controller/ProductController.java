@@ -33,7 +33,14 @@ public class ProductController {
             @PageableDefault(size = 9, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 
         PagedResult<ShortProductDto> shortProducts = productService.findShortProducts(pageable);
-        // chưa kiểm tra khi không có dữ liệu
+        return ResponseHandler.getResponse(shortProducts, HttpStatus.OK);
+    }
+
+    @GetMapping("/categories/{categorySlug}")
+    public ResponseEntity<Object> findProductsByCategory(@PathVariable(value = "categorySlug") String categorySlug,
+                                                         @PageableDefault(size = 9, sort = "createdAt",
+                                                                 direction = Sort.Direction.DESC) Pageable pageable) {
+        PagedResult<ShortProductDto> shortProducts = productService.findShortProductsByCategory(categorySlug, pageable);
         return ResponseHandler.getResponse(shortProducts, HttpStatus.OK);
     }
 
@@ -45,4 +52,6 @@ public class ProductController {
         }
         return ResponseHandler.getResponse(productDetails, HttpStatus.OK);
     }
+
+
 }

@@ -19,7 +19,6 @@ import springboot.jewelry.api.product.dto.*;
 import springboot.jewelry.api.product.model.Image;
 import springboot.jewelry.api.product.model.Product;
 import springboot.jewelry.api.product.converter.ProductConverter;
-import springboot.jewelry.api.product.model.*;
 import springboot.jewelry.api.product.projection.ProductDetailsProjection;
 import springboot.jewelry.api.product.projection.ProductSummaryProjection;
 import springboot.jewelry.api.product.projection.ShortProductProjection;
@@ -73,7 +72,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
                 newProduct.addImage(new Image(imageId));
             }
         }
-        System.out.println("images: " + newProduct.getImages());
+
         if(dto.getAvatar() != null) {
             String avatar = gDriveFileManager.uploadFile(folderId, Collections.singletonList(dto.getAvatar())).get(0);
             newProduct.setAvatar(avatar);
@@ -130,10 +129,24 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
     }
 
     @Override
+    public PagedResult<ShortProductDto> findShortProductsByCategory(String categorySlug, Pageable pageable) {
+        Page<ShortProductProjection> shortProductsPaged
+                = productRepository.findShortProductsByCategorySlug(categorySlug, pageable);
+
+        return new PagedResult<>(
+                ProductConverter.projectionToShortProductDto(shortProductsPaged.getContent()),
+                shortProductsPaged.getTotalElements(),
+                shortProductsPaged.getTotalPages(),
+                shortProductsPaged.getNumber() + 1
+        );
+    }
+
+
+    @Override
     public ProductDetailsDto findProductDetails(String slug) {
         Optional<ProductDetailsProjection> productDetailsProjection = productRepository.findProductDetailsBySlug(slug);
         if(productDetailsProjection.isPresent()) {
-            Set<String> images = imageRepository.findGDriveIdBySku(productDetailsProjection.get().getSku());
+            Set<String> images = imageRepository.findGDriveIdByProductSku(productDetailsProjection.get().getSku());
             return ProductConverter.projectionToProductDetailDto(productDetailsProjection.get(), images);
         }
         return null;

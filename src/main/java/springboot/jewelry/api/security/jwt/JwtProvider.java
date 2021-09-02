@@ -41,13 +41,13 @@ public class JwtProvider {
 
         CustomerPrincipalDto customerPrincipalDto = (CustomerPrincipalDto) authentication.getPrincipal();
 
-
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtDuration);
-
+        System.out.println("fullName:" + customerPrincipalDto.getFullName());
         return Jwts.builder()
                 .setSubject((customerPrincipalDto.getEmail()))
                 .setId(Long.toString(customerPrincipalDto.getId()))
+                .claim("fullName", customerPrincipalDto.getFullName())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)

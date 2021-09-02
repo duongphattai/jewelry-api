@@ -23,15 +23,18 @@ public class CustomerPrincipalDto implements UserDetails {
     @JsonIgnore
     private String password;
 
+    private String fullName;
+
     private Collection<? extends GrantedAuthority> authorities;
 
     private Map<String, Object> attributes;
 
-    public CustomerPrincipalDto(Long id, String email, String password,
+    public CustomerPrincipalDto(Long id, String email, String password, String fullName,
                                 Collection<? extends GrantedAuthority> authorities){
         this.id = id;
         this.email = email;
         this.password = password;
+        this.fullName = fullName;
         this.authorities = authorities;
     }
 
@@ -44,6 +47,7 @@ public class CustomerPrincipalDto implements UserDetails {
                 customer.getId(),
                 customer.getEmail(),
                 customer.getPassword(),
+                customer.getFullName(),
                 authorities
         );
     }
@@ -54,6 +58,8 @@ public class CustomerPrincipalDto implements UserDetails {
     public String getEmail() {
         return email;
     }
+
+    public String getFullName() { return fullName; }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

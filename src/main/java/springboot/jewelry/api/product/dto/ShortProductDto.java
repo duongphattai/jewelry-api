@@ -10,11 +10,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class ShortProductDto {
-    String sku;
-    String name;
-    String avatar;
-    Double price;
-    String slug;
-    Boolean inStock;
-    String categorySlug;
+    private String sku;
+    private String name;
+    private String avatar;
+    private Double price;
+    private String slug;
+    private Boolean inStock;
+    private String categorySlug;
 }

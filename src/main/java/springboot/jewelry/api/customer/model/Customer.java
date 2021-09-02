@@ -7,6 +7,7 @@ import lombok.Setter;
 import springboot.jewelry.api.commondata.model.AbstractEntity;
 import springboot.jewelry.api.customer.util.CustomerGender;
 import springboot.jewelry.api.role.model.Role;
+import springboot.jewelry.api.shopping.model.Cart;
 import springboot.jewelry.api.util.DateUtils;
 
 import javax.persistence.*;
@@ -54,12 +55,21 @@ public class Customer extends AbstractEntity {
     @Column(nullable = false)
     private Boolean active;
 
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Cart cart;
+
     @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "jewelry_customer_roles",
             joinColumns = @JoinColumn(name = "customer_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    public void addCart(Cart cart) {
+        this.cart = cart;
+        cart.setCustomer(this);
+    }
 
     public void activate() {
         this.active = true;
