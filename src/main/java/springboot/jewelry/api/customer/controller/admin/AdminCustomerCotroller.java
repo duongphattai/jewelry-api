@@ -10,7 +10,6 @@ import springboot.jewelry.api.customer.service.CustomerService;
 import springboot.jewelry.api.util.MessageUtils;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/admin/customer")
@@ -29,7 +28,7 @@ public class AdminCustomerCotroller {
         return ResponseHandler.getResponse(customers, HttpStatus.OK);
     }
 
-    @PutMapping("by-id/{id}/activate")
+    @PutMapping("/activate/{id}")
     public ResponseEntity<Object> activateCustomerById(@PathVariable(value = "id") Long id){
         if(customerService.findById(id).isPresent()){
             customerService.activateCustomerById(id);
@@ -39,7 +38,7 @@ public class AdminCustomerCotroller {
                 new MessageUtils("Không tìm thấy tài khoản có ID: " + id), HttpStatus.BAD_REQUEST);
     }
 
-    @PutMapping("by-id/{id}/deactivate")
+    @PutMapping("/deactivate/{id}")
     public ResponseEntity<Object> deactivateCustomerById(@PathVariable(value = "id") Long id){
         if(customerService.findById(id).isPresent()){
             customerService.deactivateCustomerById(id);
@@ -47,18 +46,5 @@ public class AdminCustomerCotroller {
         }
         return ResponseHandler.getResponse(
                 new MessageUtils("Không tìm thấy tài khoản có ID: " + id), HttpStatus.BAD_REQUEST);
-    }
-
-    @DeleteMapping("/{customer-id}")
-    public ResponseEntity<Object> deleteCustomer(@PathVariable("customer-id") Long id) {
-
-        Optional<Customer> customer = customerService.findById(id);
-        if (!customer.isPresent()) {
-            return ResponseHandler.getResponse(new MessageUtils("Không tìm thấy tài khoản có ID: " + id), HttpStatus.OK);
-        }
-
-        customerService.deleteById(id);
-
-        return ResponseHandler.getResponse(HttpStatus.OK);
     }
 }

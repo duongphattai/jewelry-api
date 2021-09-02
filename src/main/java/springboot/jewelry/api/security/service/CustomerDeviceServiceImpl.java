@@ -40,11 +40,11 @@ public class CustomerDeviceServiceImpl implements CustomerDeviceService {
     public void verifyRefreshAvailability(RefreshToken refreshToken) {
         CustomerDevice customerDevice = findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new TokenRefreshException(refreshToken.getToken(),
-                        "Không tìm thấy thiết bị hợp lệ với mã thông báo. Vui lòng đăng nhập lại!"));
+                        "Mã đăng nhập không hợp lệ. Vui lòng đăng nhập lại !"));
 
         if (!customerDevice.getIsRefreshActive()) {
             throw new TokenRefreshException(refreshToken.getToken(),
-                    "Mã làm mới thông báo bị chặn cho thiết bị này. Vui lòng đăng nhập bằng thiết bị khác!");
+                    "Mã đăng nhập bị chặn trên thiết bị này. Vui lòng đăng nhập bằng thiết bị khác !");
         }
     }
 }

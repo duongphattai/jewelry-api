@@ -44,7 +44,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public void verifyExpiration(RefreshToken token) {
         if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
-            throw new TokenRefreshException(token.getToken(), "Mã làm mới thông báo đã hết hạn!");
+            throw new TokenRefreshException(token.getToken(), "Mã đăng nhập đã hết hạn !");
         }
     }
 

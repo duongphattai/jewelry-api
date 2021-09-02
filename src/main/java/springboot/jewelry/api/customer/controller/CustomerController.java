@@ -17,7 +17,9 @@ import springboot.jewelry.api.security.dto.CustomerPrincipalDto;
 import springboot.jewelry.api.security.exception.ResourceNotFoundException;
 import springboot.jewelry.api.util.MessageUtils;
 
+import javax.swing.text.html.Option;
 import javax.validation.Valid;
+import java.util.Optional;
 
 
 @AllArgsConstructor
@@ -29,10 +31,12 @@ public class CustomerController {
 
     @GetMapping("/me")
     public ResponseEntity<Object> getCurrentCustomer(@CurrentCustomer CustomerPrincipalDto dto){
-         Customer customer = customerService.findById(dto.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Tài khoản không tồn tại!"));
-
-         return ResponseHandler.getResponse(customer, HttpStatus.OK);
+        try {
+            Optional<Customer> customerOptional = customerService.findById(dto.getId());
+            return ResponseHandler.getResponse(customerOptional, HttpStatus.OK);
+        }catch (Exception e) {
+            return ResponseHandler.getResponse("Vui lòng đăng nhập !", HttpStatus.UNAUTHORIZED);
+        }
     }
 
     @PostMapping("/register")
@@ -49,15 +53,14 @@ public class CustomerController {
 
     @PutMapping("/update")
     public ResponseEntity<Object> updateInfo(@CurrentCustomer CustomerPrincipalDto currentCustomer,
-                                                 @Valid @RequestBody CustomerUpdateDto dto,
-                                                 BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseHandler.getResponse(HttpStatus.BAD_REQUEST);
+                                                 @Valid @RequestBody CustomerUpdateDto dto) {
+        try {
+            Customer customer = customerService.updateCustomerInfo(dto, currentCustomer.getId());
+             return ResponseHandler.getResponse(customer, HttpStatus.OK);
+        }catch (Exception e) {
+            return ResponseHandler.getResponse("Tài khoản đã hết hạn. Vui lòng đăng nhập lại !",
+                                                                            HttpStatus.UNAUTHORIZED);
         }
-
-        Customer customer = customerService.updateCustomerInfo(dto, currentCustomer.getId());
-
-        return ResponseHandler.getResponse(customer, HttpStatus.OK);
     }
 
     @PutMapping("/update/change-password")

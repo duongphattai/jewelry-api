@@ -94,7 +94,7 @@ public class AuthController {
                         jwtProvider.getJwtRefreshDuration()), HttpStatus.OK);
             }
 
-        return ResponseHandler.getResponse(new MessageUtils("Tài khoản đã bị khóa!"), HttpStatus.OK);
+        return ResponseHandler.getResponse(new MessageUtils("Tài khoản đã bị khóa!"), HttpStatus.UNAUTHORIZED);
     }
 
     @PostMapping("/token/refresh")

@@ -106,6 +106,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.css",
                         "/**/*.js").permitAll()
                 .antMatchers("/api/customer/register").permitAll()
+                .antMatchers("/**/api/products").permitAll()
                 .antMatchers("/**/auth/login", "/**/auth/token/refresh").permitAll()
                 //.antMatchers("/api/admin/**").hasRole("ADMIN")
                 .antMatchers("/api/admin/**").permitAll()
