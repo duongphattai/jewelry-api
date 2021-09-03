@@ -8,6 +8,7 @@ import lombok.*;
 @Builder
 public class ProductSummaryDto {
 
+    Long id;
     String sku;
     String name;
     String avatar;

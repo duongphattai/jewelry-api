@@ -1,12 +1,13 @@
 package springboot.jewelry.api.product.converter;
 
+import springboot.jewelry.api.product.dto.ProductDetailsAdminDto;
 import springboot.jewelry.api.product.dto.ProductDetailsDto;
 import springboot.jewelry.api.product.dto.ProductSummaryDto;
 import springboot.jewelry.api.product.dto.ShortProductDto;
 import springboot.jewelry.api.product.model.Image;
 import springboot.jewelry.api.product.model.Product;
+import springboot.jewelry.api.product.projection.ProductDetailsAdminProjection;
 import springboot.jewelry.api.product.projection.ProductDetailsProjection;
-import springboot.jewelry.api.product.projection.ProductSummaryProjection;
 import springboot.jewelry.api.product.projection.ShortProductProjection;
 
 import java.util.List;
@@ -70,4 +71,24 @@ public class ProductConverter {
                 .images(images)
                 .build();
     }
+
+    public static ProductDetailsAdminDto projectionToProductDetailsAdminDto(
+            ProductDetailsAdminProjection projection, Set<String> images) {
+        return ProductDetailsAdminDto.builder()
+                .categoryName(projection.getCategoryName())
+                .id(projection.getId())
+                .sku(projection.getSku())
+                .name(projection.getName())
+                .description(projection.getDescription())
+                .costPrice(projection.getCostPrice())
+                .price(projection.getPrice())
+                .goldWeight(projection.getGoldWeight())
+                .quantity(projection.getQuantity())
+                .supplierName(projection.getSupplierName())
+                .goldTypePercentage(projection.getGoldTypePercentage())
+                .avatar(projection.getAvatar())
+                .images(images)
+                .build();
+    }
+
 }

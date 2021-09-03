@@ -19,6 +19,9 @@ import springboot.jewelry.api.product.dto.*;
 import springboot.jewelry.api.product.model.Image;
 import springboot.jewelry.api.product.model.Product;
 import springboot.jewelry.api.product.converter.ProductConverter;
+
+import springboot.jewelry.api.product.projection.ProductDetailsAdminProjection;
+
 import springboot.jewelry.api.product.projection.ProductDetailsProjection;
 import springboot.jewelry.api.product.projection.ProductSummaryProjection;
 import springboot.jewelry.api.product.projection.ShortProductProjection;
@@ -148,6 +151,17 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
         if(productDetailsProjection.isPresent()) {
             Set<String> images = imageRepository.findGDriveIdByProductSku(productDetailsProjection.get().getSku());
             return ProductConverter.projectionToProductDetailDto(productDetailsProjection.get(), images);
+        }
+        return null;
+    }
+
+    @Override
+    public ProductDetailsAdminDto findProductById(Long id) {
+        Optional<ProductDetailsAdminProjection> productDetailsAdminProjection = productRepository
+                                                                .findProductDetailsAdminById(id);
+        if(productDetailsAdminProjection.isPresent()) {
+            Set<String> images = imageRepository.findGDriveIdByProductSku(productDetailsAdminProjection.get().getSku());
+            return ProductConverter.projectionToProductDetailsAdminDto(productDetailsAdminProjection.get(), images);
         }
         return null;
     }

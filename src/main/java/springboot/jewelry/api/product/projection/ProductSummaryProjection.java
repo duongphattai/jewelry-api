@@ -3,6 +3,7 @@ package springboot.jewelry.api.product.projection;
 
 public interface ProductSummaryProjection extends BaseProductProjection {
 
+
     Double getGoldWeight();
     Integer getQuantity();
 

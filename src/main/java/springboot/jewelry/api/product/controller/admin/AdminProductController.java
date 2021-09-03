@@ -14,12 +14,16 @@ import springboot.jewelry.api.commondata.model.PagedResult;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
 import springboot.jewelry.api.commondata.model.SearchCriteria;
 import springboot.jewelry.api.product.dto.ProductCreateDto;
+import springboot.jewelry.api.product.dto.ProductDetailsAdminDto;
 import springboot.jewelry.api.product.dto.ProductDetailsDto;
 import springboot.jewelry.api.product.dto.ProductSummaryDto;
 import springboot.jewelry.api.product.model.Product;
+import springboot.jewelry.api.product.projection.ProductDetailsAdminProjection;
 import springboot.jewelry.api.product.projection.ProductSummaryProjection;
 import springboot.jewelry.api.product.service.itf.ProductService;
+import springboot.jewelry.api.security.exception.ResourceNotFoundException;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -51,17 +55,16 @@ public class AdminProductController {
         return ResponseHandler.getResponse(productsFiltered, HttpStatus.OK);
     }
 
-    @GetMapping("/by-id")
-    public ResponseEntity<Object> findProductById(@RequestParam Long id) {
+    @GetMapping("/by-id/{id}")
+    public ResponseEntity<Object> findProductById(@PathVariable(value = "id") Long id) {
 
-        Optional<Product> product = productService.findById(id);
-
-        if (!product.isPresent()) {
-            return ResponseHandler.getResponse("Không tìm thấy sản phầm có ID: " + id, HttpStatus.OK);
+        ProductDetailsAdminDto product = productService.findProductById(id);
+        if(product == null) {
+            return ResponseHandler.getResponse("Không tìm thấy sản phẩm có ID: " + id, HttpStatus.OK);
         }
-
         return ResponseHandler.getResponse(product, HttpStatus.OK);
     }
+
 
     @PostMapping(value = "",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

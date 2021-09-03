@@ -9,8 +9,11 @@ import springboot.jewelry.api.product.dto.ProductCreateDto;
 import springboot.jewelry.api.product.dto.ProductSummaryDto;
 import springboot.jewelry.api.product.model.Product;
 
+import springboot.jewelry.api.product.projection.ProductDetailsAdminProjection;
 import springboot.jewelry.api.product.projection.ProductSummaryProjection;
 import springboot.jewelry.api.product.projection.ShortProductProjection;
+
+import java.util.Optional;
 
 public interface ProductService extends GenericService<Product, Long> {
 
@@ -28,4 +31,5 @@ public interface ProductService extends GenericService<Product, Long> {
 
     ProductDetailsDto findProductDetails(String slug);
 
+    ProductDetailsAdminDto findProductById(Long id);
 }
