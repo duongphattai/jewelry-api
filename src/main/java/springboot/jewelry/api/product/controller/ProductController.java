@@ -28,7 +28,7 @@ public class ProductController {
     @GetMapping("")
     public ResponseEntity<Object> findProducts(
             @PageableDefault(size = 9, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(value = "searchCriteria") String searchCriteriaStr,
+            @RequestParam(value = "searchCriteria", required = false) String searchCriteriaStr,
             @RequestParam(required = false) FilterCriteria filterCriteria) throws JsonProcessingException {
 
         PagedResult<ShortProductDto> shortProducts;
