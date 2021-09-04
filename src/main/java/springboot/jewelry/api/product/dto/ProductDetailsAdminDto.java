@@ -22,8 +22,8 @@ public class ProductDetailsAdminDto {
     Double price;
     Double goldWeight;
     Integer quantity;
-    String supplierName;
-    String categoryName;
+    String supplierCode;
+    String categoryCode;
     Double goldTypePercentage;
     Set<String> images;
 }

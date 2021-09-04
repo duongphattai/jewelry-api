@@ -13,17 +13,12 @@ import org.springframework.web.multipart.MultipartFile;
 import springboot.jewelry.api.commondata.model.PagedResult;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
 import springboot.jewelry.api.commondata.model.SearchCriteria;
-import springboot.jewelry.api.product.dto.ProductCreateDto;
-import springboot.jewelry.api.product.dto.ProductDetailsAdminDto;
-import springboot.jewelry.api.product.dto.ProductDetailsDto;
-import springboot.jewelry.api.product.dto.ProductSummaryDto;
+import springboot.jewelry.api.product.dto.*;
 import springboot.jewelry.api.product.model.Product;
-import springboot.jewelry.api.product.projection.ProductDetailsAdminProjection;
 import springboot.jewelry.api.product.projection.ProductSummaryProjection;
 import springboot.jewelry.api.product.service.itf.ProductService;
-import springboot.jewelry.api.security.exception.ResourceNotFoundException;
+import springboot.jewelry.api.util.MessageUtils;
 
-import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
@@ -82,18 +77,23 @@ public class AdminProductController {
         return ResponseHandler.getResponse(newProduct, HttpStatus.OK);
     }
 
-    @PutMapping("/{product-id}")
+    @PutMapping(value = "/{product-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Object> updateProduct(@PathVariable("product-id") Long id,
-                                                 @Valid @RequestBody ProductCreateDto dto,
-                                                 BindingResult bindingResult) {
+                                                @RequestPart("dto") @Valid ProductUpdateDto dto,
+                                                @RequestPart(value = "images[]", required = false) List<MultipartFile> images,
+                                                @RequestPart(value = "avatar", required = false) MultipartFile avatar,
+                                                BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return ResponseHandler.getResponse(HttpStatus.BAD_REQUEST);
         }
 
+        if(images != null) dto.setImages(images);
+        if(avatar != null) dto.setAvatar(avatar);
+
         Product productUpdate = productService.updateProductInfo(dto, id);
 
-        return ResponseHandler.getResponse(productUpdate, HttpStatus.OK);
+        return ResponseHandler.getResponse(new MessageUtils("Cập nhật thành công"), HttpStatus.OK);
     }
 
     @DeleteMapping("/{product-id}")

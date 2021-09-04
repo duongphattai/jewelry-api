@@ -40,8 +40,8 @@ public interface ProductRepository extends GenericRepository<Product, Long>, Jpa
                     "p.price AS price, " +
                     "p.goldWeight AS goldWeight, " +
                     "p.quantity AS quantity, " +
-                    "p.supplier.name AS supplierName, " +
-                    "p.category.name AS categoryName, " +
+                    "p.supplier.code AS supplierCode, " +
+                    "p.category.code AS categoryCode, " +
                     "p.goldType.percentage AS goldTypePercentage," +
                     "p.avatar AS avatar " +
                     "FROM Product p " +

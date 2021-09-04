@@ -5,6 +5,7 @@ import java.util.Set;
 public interface ProductDetailsAdminProjection extends ProductDetailsProjection{
 
     Double getCostPrice();
-    String getSupplierName();
+    String getSupplierCode();
+    String getCategoryCode();
     Set<String> getImagesGDriveId();
 }

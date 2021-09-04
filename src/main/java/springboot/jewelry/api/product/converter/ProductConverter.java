@@ -75,7 +75,7 @@ public class ProductConverter {
     public static ProductDetailsAdminDto projectionToProductDetailsAdminDto(
             ProductDetailsAdminProjection projection, Set<String> images) {
         return ProductDetailsAdminDto.builder()
-                .categoryName(projection.getCategoryName())
+                .categoryCode(projection.getCategoryCode())
                 .id(projection.getId())
                 .sku(projection.getSku())
                 .name(projection.getName())
@@ -84,7 +84,7 @@ public class ProductConverter {
                 .price(projection.getPrice())
                 .goldWeight(projection.getGoldWeight())
                 .quantity(projection.getQuantity())
-                .supplierName(projection.getSupplierName())
+                .supplierCode(projection.getSupplierCode())
                 .goldTypePercentage(projection.getGoldTypePercentage())
                 .avatar(projection.getAvatar())
                 .images(images)

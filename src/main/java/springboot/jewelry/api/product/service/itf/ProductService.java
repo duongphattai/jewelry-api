@@ -19,7 +19,7 @@ public interface ProductService extends GenericService<Product, Long> {
 
     ProductDetailsDto save(ProductCreateDto dto);
 
-    Product updateProductInfo(ProductCreateDto dto, Long id);
+    Product updateProductInfo(ProductUpdateDto dto, Long id);
 
     PagedResult<ProductSummaryProjection> findProductsSummary(Pageable pageable);
 

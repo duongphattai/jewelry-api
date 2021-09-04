@@ -58,7 +58,7 @@ public class Customer extends AbstractEntity {
     @JsonIgnore
     private Cart cart;
 
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "jewelry_customer_roles",
             joinColumns = @JoinColumn(name = "customer_id"),

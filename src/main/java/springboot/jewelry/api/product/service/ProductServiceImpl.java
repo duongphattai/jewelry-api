@@ -87,9 +87,34 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
     }
 
     @Override
-    public Product updateProductInfo(ProductCreateDto dto, Long id) {
+    @Transactional
+    public Product updateProductInfo(ProductUpdateDto dto, Long id) {
         Product productUpdate = productRepository.getOne(id);
         productUpdate = mapper.map(dto, productUpdate);
+        productUpdate.setSlug(new Slug().slugify(productUpdate.getName() + " " + productUpdate.getSku()));
+
+        productUpdate.setSupplier(supplierRepository.findByCode(dto.getSupplierCode()).get());
+
+        productUpdate.setCategory(categoryRepository.findByCode(dto.getCategoryCode()).get());
+
+        productUpdate.setGoldType(goldTypeRepository.findByPercentage(dto.getGoldType()).get());
+
+        String folderId = gDriveFolderManager
+                .create(env.getProperty("jewelry.gdrive.folder.product"), dto.getName());
+
+        if(dto.getImages() != null) {
+            List<String> imageIds = gDriveFileManager.uploadFile(folderId, dto.getImages());
+            for(String imageId : imageIds) {
+                productUpdate.addImage(new Image(imageId));
+            }
+        }
+
+        if(dto.getAvatar() != null) {
+            String avatar = gDriveFileManager.uploadFile(folderId, Collections.singletonList(dto.getAvatar())).get(0);
+            productUpdate.setAvatar(avatar);
+        }
+
+
         return productRepository.save(productUpdate);
     }
 
