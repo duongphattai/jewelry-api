@@ -63,7 +63,6 @@ public class Customer extends AbstractEntity {
     @JsonIgnore
     private Set<Order> orders = new HashSet<>();
 
-    @JsonIgnore
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "jewelry_customer_roles",
             joinColumns = @JoinColumn(name = "customer_id"),

@@ -11,17 +11,19 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @Builder
-public class ProductDetailsDto {
+public class ProductDetailsAdminDto {
 
+    Long id;
     String sku;
     String name;
     String avatar;
     String description;
+    Double costPrice;
     Double price;
     Double goldWeight;
-    Boolean inStock;
-
-    String categoryName;
+    Integer quantity;
+    String supplierCode;
+    String categoryCode;
     Double goldTypePercentage;
     Set<String> images;
 }

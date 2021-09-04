@@ -11,14 +11,8 @@ import springboot.jewelry.api.commondata.model.PagedResult;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
 import springboot.jewelry.api.product.dto.ProductDetailsDto;
 import springboot.jewelry.api.product.dto.ShortProductDto;
-import springboot.jewelry.api.product.projection.ProductSummaryProjection;
 import springboot.jewelry.api.product.service.itf.ProductService;
 
-import java.util.List;
-import java.util.Optional;
-
-import springboot.jewelry.api.product.projection.ProductSummaryProjection;
-import springboot.jewelry.api.product.service.itf.ProductService;
 
 
 @RestController
