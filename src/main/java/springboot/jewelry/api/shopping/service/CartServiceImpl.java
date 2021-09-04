@@ -18,6 +18,7 @@ import springboot.jewelry.api.shopping.service.itf.CartService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -33,20 +34,34 @@ public class CartServiceImpl extends GenericServiceImpl<Cart, Long> implements C
     }
 
     @Override
+    public Optional<CartItem> findItemInCart(Cart cart, String productSku) {
+        return cartItemRepository.findByCartIdAndProductSku(cart.getId(), productSku);
+    }
+
+    @Override
     public CartDetailsDto findCartDetails(String email) {
         CartWithTotalProjection cartWithTotalProjection
                 = cartRepository.findCartWithTotalProjectionByCustomerEmail(email);
         Optional<List<CartItemWithQuantityProjection>> cartItemWithQuantityProjections
                 = cartItemRepository.findCartItemsWithQuantityByCartId(cartWithTotalProjection.getId());
 
-        return cartItemWithQuantityProjections.map(item -> CartConverter.toCartDetailsDto(cartWithTotalProjection.getTotal(), item))
+        return cartItemWithQuantityProjections
+                .map(item -> CartConverter.toCartDetailsDto(cartWithTotalProjection.getTotal(), item))
                 .orElse(null);
 
     }
 
     @Override
-    public Optional<CartItem> findItemInCart(Cart cart, String productSku) {
-        return cartItemRepository.findByCartIdAndProductSku(cart.getId(), productSku);
+    public CartDetailsDto checkAndUpdateItemInStock(String email) {
+        Cart cart = cartRepository.findCartByCustomerEmail(email);
+        List <CartItem> items = cart.getItems().stream()
+                .filter(item -> item.getQuantity() > item.getProduct().getQuantity())
+                .collect(Collectors.toList());
+        for(CartItem item : items) {
+            cart.setTotal(cart.getTotal() - (item.getQuantity() * item.getProduct().getPrice()));
+            cart.removeItem(item);
+        }
+        return CartConverter.toCartDetailsDto(cartRepository.save(cart));
     }
 
     @Override

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import springboot.jewelry.api.commondata.model.AbstractEntity;
 import springboot.jewelry.api.customer.util.CustomerGender;
+import springboot.jewelry.api.order.model.Order;
 import springboot.jewelry.api.role.model.Role;
 import springboot.jewelry.api.shopping.model.Cart;
 import springboot.jewelry.api.util.DateUtils;
@@ -58,6 +59,10 @@ public class Customer extends AbstractEntity {
     @JsonIgnore
     private Cart cart;
 
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Order> orders = new HashSet<>();
+
     @JsonIgnore
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(name = "jewelry_customer_roles",
@@ -68,6 +73,11 @@ public class Customer extends AbstractEntity {
     public void addCart(Cart cart) {
         this.cart = cart;
         cart.setCustomer(this);
+    }
+
+    public void addOrder(Order order) {
+        this.orders.add(order);
+        order.setCustomer(this);
     }
 
     public void activate() {
