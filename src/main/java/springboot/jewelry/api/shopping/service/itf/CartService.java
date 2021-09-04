@@ -14,6 +14,8 @@ public interface CartService extends GenericService<Cart, Long> {
 
     CartDetailsDto findCartDetails(String email);
 
+    CartDetailsDto checkAndUpdateItemInStock(String email);
+
     Optional<CartItem> findItemInCart(Cart cart, String productSku);
 
     CartDetailsDto addOrUpdateItemInCart(CartItemCreateOrUpdateDto itemDto, String email);

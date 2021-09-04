@@ -108,10 +108,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/customer/register").permitAll()
                 .antMatchers("/**/api/products").permitAll()
                 .antMatchers("/**/auth/login", "/**/auth/token/refresh").permitAll()
-                //.antMatchers("/api/admin/**").hasRole("ADMIN")
-                .antMatchers("/api/admin/**").permitAll()
                 .antMatchers("/api/products/**").permitAll()
                 .antMatchers("/api/categories/**").permitAll()
+                //.antMatchers("/api/admin/**").hasRole("ADMIN")
+                .antMatchers("/api/admin/**").permitAll()
                 .anyRequest().authenticated();
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

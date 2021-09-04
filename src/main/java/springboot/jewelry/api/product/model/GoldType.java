@@ -4,10 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import springboot.jewelry.api.commondata.model.AbstractEntity;
+import springboot.jewelry.api.product.validation.annotation.FormatPercentageGold;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,8 +19,7 @@ public class GoldType extends AbstractEntity {
 
     @Column(unique = true)
     @NotNull
-    @Min(value = 61, message = "{product-gold-type.percentage.min}")
-    @Max(value = 99, message = "{product-gold-type.percentage.max}")
+    @FormatPercentageGold
     private Double percentage;
 
     @OneToMany(mappedBy = "goldType", cascade = CascadeType.ALL)

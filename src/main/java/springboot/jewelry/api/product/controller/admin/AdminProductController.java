@@ -14,12 +14,11 @@ import org.springframework.web.multipart.MultipartFile;
 import springboot.jewelry.api.commondata.model.PagedResult;
 import springboot.jewelry.api.commondata.model.ResponseHandler;
 import springboot.jewelry.api.commondata.model.SearchCriteria;
-import springboot.jewelry.api.product.dto.ProductCreateDto;
-import springboot.jewelry.api.product.dto.ProductDetailsDto;
-import springboot.jewelry.api.product.dto.ProductSummaryDto;
+import springboot.jewelry.api.product.dto.*;
 import springboot.jewelry.api.product.model.Product;
 import springboot.jewelry.api.product.projection.ProductSummaryProjection;
 import springboot.jewelry.api.product.service.itf.ProductService;
+import springboot.jewelry.api.util.MessageUtils;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -51,17 +50,16 @@ public class AdminProductController {
         return ResponseHandler.getResponse(productsFiltered, HttpStatus.OK);
     }
 
-    @GetMapping("/by-id")
-    public ResponseEntity<Object> findProductById(@RequestParam Long id) {
+    @GetMapping("/by-id/{id}")
+    public ResponseEntity<Object> findProductById(@PathVariable(value = "id") Long id) {
 
-        Optional<Product> product = productService.findById(id);
-
-        if (!product.isPresent()) {
-            return ResponseHandler.getResponse("Không tìm thấy sản phầm có ID: " + id, HttpStatus.OK);
+        ProductDetailsAdminDto product = productService.findProductById(id);
+        if(product == null) {
+            return ResponseHandler.getResponse("Không tìm thấy sản phẩm có ID: " + id, HttpStatus.OK);
         }
-
         return ResponseHandler.getResponse(product, HttpStatus.OK);
     }
+
 
     @PostMapping(value = "",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -79,18 +77,23 @@ public class AdminProductController {
         return ResponseHandler.getResponse(newProduct, HttpStatus.OK);
     }
 
-    @PutMapping("/{product-id}")
+    @PutMapping(value = "/{product-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Object> updateProduct(@PathVariable("product-id") Long id,
-                                                 @Valid @RequestBody ProductCreateDto dto,
-                                                 BindingResult bindingResult) {
+                                                @RequestPart("dto") @Valid ProductUpdateDto dto,
+                                                @RequestPart(value = "images[]", required = false) List<MultipartFile> images,
+                                                @RequestPart(value = "avatar", required = false) MultipartFile avatar,
+                                                BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return ResponseHandler.getResponse(HttpStatus.BAD_REQUEST);
         }
 
+        if(images != null) dto.setImages(images);
+        if(avatar != null) dto.setAvatar(avatar);
+
         Product productUpdate = productService.updateProductInfo(dto, id);
 
-        return ResponseHandler.getResponse(productUpdate, HttpStatus.OK);
+        return ResponseHandler.getResponse(new MessageUtils("Cập nhật thành công"), HttpStatus.OK);
     }
 
     @DeleteMapping("/{product-id}")
