@@ -117,6 +117,19 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
     }
 
     @Override
+    public PagedResult<ShortProductDto> findShortProductsWithSearch(SearchCriteria searchCriteria, Pageable pageable) {
+        SearchSpecification<Product> productSearchSpecification = new SearchSpecification<>(searchCriteria);
+        Page<Product> productsPaged = productRepository.findAll(productSearchSpecification, pageable);
+        return new PagedResult<>(
+                ProductConverter.entityToShortProductDto(productsPaged.getContent()),
+                productsPaged.getTotalElements(),
+                productsPaged.getTotalPages(),
+                productsPaged.getNumber() + 1
+        );
+    }
+
+
+    @Override
     public PagedResult<ShortProductDto> findShortProducts(Pageable pageable) {
         Page<ShortProductProjection> shortProductsPaged = productRepository.findShortProductsBy(pageable);
 
@@ -140,7 +153,6 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
                 shortProductsPaged.getNumber() + 1
         );
     }
-
 
     @Override
     public ProductDetailsDto findProductDetails(String slug) {

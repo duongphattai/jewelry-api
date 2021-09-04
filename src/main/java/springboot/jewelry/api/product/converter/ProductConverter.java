@@ -43,6 +43,19 @@ public class ProductConverter {
                         .build()).collect(Collectors.toList());
     }
 
+    public static List<ShortProductDto> entityToShortProductDto(List<Product> products) {
+        return products.stream().map(p ->
+                ShortProductDto.builder()
+                        .name(p.getName())
+                        .sku(p.getSku())
+                        .avatar(p.getAvatar())
+                        .price(p.getPrice())
+                        .slug(p.getSlug())
+                        .inStock(p.getQuantity() > 0)
+                        .categorySlug(p.getCategory().getSlug())
+                        .build()).collect(Collectors.toList());
+    }
+
     public static ProductDetailsDto entityToProductDetailDto(Product entity) {
         return ProductDetailsDto.builder()
                         .sku(entity.getSku())

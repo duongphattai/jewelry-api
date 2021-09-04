@@ -1,6 +1,7 @@
 package springboot.jewelry.api.product.controller.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -33,8 +34,7 @@ public class AdminProductController {
 
     @GetMapping("")
     public ResponseEntity<Object> findAll(
-            @PageableDefault(size = 9, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-
+            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         PagedResult<ProductSummaryProjection> products = productService.findProductsSummary(pageable);
         return ResponseHandler.getResponse(products, HttpStatus.OK);
     }
