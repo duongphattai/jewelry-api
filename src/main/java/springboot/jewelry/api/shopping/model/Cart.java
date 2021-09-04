@@ -19,10 +19,9 @@ public class Cart extends AbstractEntity {
     @OneToOne(fetch = FetchType.LAZY)
     private Customer customer;
 
-    @NonNull
     private Double total = 0.0;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CartItem> items = new HashSet<>();
 
     public void addItem(CartItem item) {
@@ -34,4 +33,6 @@ public class Cart extends AbstractEntity {
         this.items.remove(item);
         item.setCart(null);
     }
+
+
 }

@@ -27,9 +27,19 @@ public class CartController {
 
     private CartService cartService;
 
-    @GetMapping("/mine")
-    public ResponseEntity<Object> findCartDetails(@AuthenticationPrincipal CustomerPrincipalDto curUser) {
-        CartDetailsDto cartDetailsDto = cartService.findCartDetails(curUser.getEmail());
+//    @GetMapping("/mine")
+//    public ResponseEntity<Object> findCartDetails(@AuthenticationPrincipal CustomerPrincipalDto curUser) {
+//        CartDetailsDto cartDetailsDto = cartService.findCartDetails(curUser.getEmail());
+//        if(cartDetailsDto.getItems() == null) {
+//            return ResponseHandler.getResponse("Không có sản phẩm trong giỏ hàng", HttpStatus.OK);
+//        }
+//        return ResponseHandler.getResponse(cartDetailsDto, HttpStatus.OK);
+//    }
+
+    @PutMapping("/mine")
+    public ResponseEntity<Object> checkAndUpdateItemInStock(@AuthenticationPrincipal CustomerPrincipalDto curUser) {
+        System.out.println("email: " + curUser.getEmail());
+        CartDetailsDto cartDetailsDto = cartService.checkAndUpdateItemInStock(curUser.getEmail());
         if(cartDetailsDto.getItems() == null) {
             return ResponseHandler.getResponse("Không có sản phẩm trong giỏ hàng", HttpStatus.OK);
         }
@@ -40,6 +50,10 @@ public class CartController {
     public ResponseEntity<Object> addOrUpdateItemInCart(@Valid @RequestBody CartItemCreateOrUpdateDto itemDto,
                                                         @AuthenticationPrincipal CustomerPrincipalDto curUser,
                                                         BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseHandler.getResponse(bindingResult, HttpStatus.BAD_REQUEST);
+        }
+
         CartDetailsDto cartDetailsDto = cartService.addOrUpdateItemInCart(itemDto, curUser.getEmail());
         return ResponseHandler.getResponse(cartDetailsDto, HttpStatus.OK);
     }
