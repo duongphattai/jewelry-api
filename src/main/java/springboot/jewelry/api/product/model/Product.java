@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Immutable;
 import springboot.jewelry.api.commondata.model.AbstractEntity;
+import springboot.jewelry.api.order.model.OrderItem;
 import springboot.jewelry.api.shopping.model.CartItem;
 import springboot.jewelry.api.supplier.model.Supplier;
 
@@ -66,13 +67,16 @@ public class Product extends AbstractEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<CartItem> cartItems = new HashSet<>();
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private Set<OrderItem> orderItems = new HashSet<>();
+
     public void addImage(Image image) {
         this.images.add(image);
         image.setProduct(this);
     }
 
     public void removeImage(Image image) {
-        images.remove(image);
+        this.images.remove(image);
         image.setProduct(null);
     }
 
