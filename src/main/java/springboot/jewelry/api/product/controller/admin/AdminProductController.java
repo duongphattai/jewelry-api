@@ -106,7 +106,6 @@ public class AdminProductController {
             return ResponseHandler.getResponse("Không tìm thấy ID: " + id, HttpStatus.OK);
         }
         productService.deleteById(id);
-
         return ResponseHandler.getResponse(HttpStatus.OK);
     }
 

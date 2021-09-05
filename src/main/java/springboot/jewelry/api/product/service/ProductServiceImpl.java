@@ -171,7 +171,6 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
         );
     }
 
-
     @Override
     public PagedResult<ShortProductDto> findShortProducts(Pageable pageable) {
         Page<ShortProductProjection> shortProductsPaged = productRepository.findShortProductsBy(pageable);
@@ -218,4 +217,12 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
         return null;
     }
 
+    @Override
+    public void deleteById(Long id) {
+        Product product = productRepository.getOne(id);
+        String folderId = gDriveFolderManager
+                .findIdByName(env.getProperty("jewelry.gdrive.folder.product"), product.getSku());
+        gDriveFolderManager.deleteFolder(folderId);
+        super.deleteById(id);
+    }
 }

@@ -76,5 +76,14 @@ public class GDriveFolderManagerImpl implements GDriveFolderManager {
         return null;
     }
 
+    @Override
+    public void deleteFolder(String folderId) {
+        try {
+            gDriveUtils.getInstance().files().delete(folderId).execute();
+        } catch (IOException | GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

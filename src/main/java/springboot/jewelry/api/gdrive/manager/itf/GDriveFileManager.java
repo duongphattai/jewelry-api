@@ -10,5 +10,5 @@ public interface GDriveFileManager {
 
     List<String> uploadFile(String folderName, List<MultipartFile> fileData);
 
-    void deleteFile(List<String> gDriveId) throws GeneralSecurityException, IOException;
+    void deleteFile(List<String> gDriveId);
 }
