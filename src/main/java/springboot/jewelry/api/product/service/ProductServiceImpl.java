@@ -1,6 +1,7 @@
 package springboot.jewelry.api.product.service;
 
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,8 @@ import springboot.jewelry.api.product.service.itf.ProductService;
 import springboot.jewelry.api.supplier.repository.SupplierRepository;
 import springboot.jewelry.api.util.MapDtoToModel;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.*;
 
 @AllArgsConstructor
@@ -86,11 +89,14 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
         return ProductConverter.entityToProductDetailDto(newProduct);
     }
 
+    @SneakyThrows
     @Override
     @Transactional
     public Product updateProductInfo(ProductUpdateDto dto, Long id) {
         Product productUpdate = productRepository.getOne(id);
+
         productUpdate = mapper.map(dto, productUpdate);
+
         productUpdate.setSlug(new Slug().slugify(productUpdate.getName() + " " + productUpdate.getSku()));
 
         productUpdate.setSupplier(supplierRepository.findByCode(dto.getSupplierCode()).get());
@@ -99,21 +105,30 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
 
         productUpdate.setGoldType(goldTypeRepository.findByPercentage(dto.getGoldType()).get());
 
-        String folderId = gDriveFolderManager
-                .create(env.getProperty("jewelry.gdrive.folder.product"), dto.getName());
+        if(dto.getImagesRemoved() != null) {
+            gDriveFileManager.deleteFile(dto.getImagesRemoved());
+            Set<Image> images = imageRepository.findByGDriveIdIn(dto.getImagesRemoved());
+            for(Image image : images) {
+                productUpdate.removeImage(image);
+            }
+        }
 
-        if(dto.getImages() != null) {
-            List<String> imageIds = gDriveFileManager.uploadFile(folderId, dto.getImages());
+        if(dto.getNewImages() != null) {
+            String folderId = gDriveFolderManager
+                    .findIdByName(env.getProperty("jewelry.gdrive.folder.product"), dto.getSku());
+            List<String> imageIds = gDriveFileManager.uploadFile(folderId, dto.getNewImages());
             for(String imageId : imageIds) {
                 productUpdate.addImage(new Image(imageId));
             }
         }
 
         if(dto.getAvatar() != null) {
+            gDriveFileManager.deleteFile(Collections.singletonList(productUpdate.getAvatar()));
+            String folderId = gDriveFolderManager
+                    .findIdByName(env.getProperty("jewelry.gdrive.folder.product"), dto.getSku());
             String avatar = gDriveFileManager.uploadFile(folderId, Collections.singletonList(dto.getAvatar())).get(0);
             productUpdate.setAvatar(avatar);
         }
-
 
         return productRepository.save(productUpdate);
     }

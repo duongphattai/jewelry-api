@@ -13,13 +13,15 @@ import springboot.jewelry.api.product.projection.ProductDetailsAdminProjection;
 import springboot.jewelry.api.product.projection.ProductSummaryProjection;
 import springboot.jewelry.api.product.projection.ShortProductProjection;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.Optional;
 
 public interface ProductService extends GenericService<Product, Long> {
 
     ProductDetailsDto save(ProductCreateDto dto);
 
-    Product updateProductInfo(ProductUpdateDto dto, Long id);
+    Product updateProductInfo(ProductUpdateDto dto, Long id) throws GeneralSecurityException, IOException;
 
     PagedResult<ProductSummaryProjection> findProductsSummary(Pageable pageable);
 

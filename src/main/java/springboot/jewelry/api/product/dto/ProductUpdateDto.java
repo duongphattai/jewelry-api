@@ -15,6 +15,9 @@ import java.util.List;
 @Setter
 public class ProductUpdateDto {
 
+    //@ExistsSku
+    String sku;
+
     @NotBlank(message = "{product.name.not-blank}")
     @Size(min = 5, max = 100, message = "{product.name.size}")
     private String name;
@@ -38,6 +41,7 @@ public class ProductUpdateDto {
     @ExistsGoldType
     private Double goldType;
 
-    private List<MultipartFile> images;
+    private List<MultipartFile> newImages;
 
+    private List<String> imagesRemoved;
 }

@@ -1,11 +1,15 @@
 package springboot.jewelry.api.product.repository;
 
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import springboot.jewelry.api.commondata.GenericRepository;
 import springboot.jewelry.api.product.model.Image;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
+@Repository
 public interface ImageRepository extends GenericRepository<Image, Long> {
 
 //    @Query(value = "SELECT i.gDriveId " +
@@ -17,4 +21,7 @@ public interface ImageRepository extends GenericRepository<Image, Long> {
 //                    "WHERE p.sku = ?1")
     @Query(value = "SELECT i.gDriveId FROM Image i WHERE i.product.sku = ?1")
     Set<String> findGDriveIdByProductSku(String productSku);
+
+    @Query(value = "SELECT i FROM Image i WHERE i.gDriveId IN (?1)")
+    Set<Image> findByGDriveIdIn(List<String> gDriveId);
 }

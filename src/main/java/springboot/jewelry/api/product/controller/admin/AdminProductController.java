@@ -21,6 +21,8 @@ import springboot.jewelry.api.product.service.itf.ProductService;
 import springboot.jewelry.api.util.MessageUtils;
 
 import javax.validation.Valid;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,12 +52,12 @@ public class AdminProductController {
         return ResponseHandler.getResponse(productsFiltered, HttpStatus.OK);
     }
 
-    @GetMapping("/by-id/{id}")
-    public ResponseEntity<Object> findProductById(@PathVariable(value = "id") Long id) {
+    @GetMapping("/{productId}")
+    public ResponseEntity<Object> findProductById(@PathVariable(value = "productId") Long productId) {
 
-        ProductDetailsAdminDto product = productService.findProductById(id);
+        ProductDetailsAdminDto product = productService.findProductById(productId);
         if(product == null) {
-            return ResponseHandler.getResponse("Không tìm thấy sản phẩm có ID: " + id, HttpStatus.OK);
+            return ResponseHandler.getResponse("Không tìm thấy sản phẩm có ID: " + productId, HttpStatus.OK);
         }
         return ResponseHandler.getResponse(product, HttpStatus.OK);
     }
@@ -77,27 +79,27 @@ public class AdminProductController {
         return ResponseHandler.getResponse(newProduct, HttpStatus.OK);
     }
 
-    @PutMapping(value = "/{product-id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Object> updateProduct(@PathVariable("product-id") Long id,
+    @PutMapping(value = "/{productId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Object> updateProduct(@PathVariable("productId") Long id,
                                                 @RequestPart("dto") @Valid ProductUpdateDto dto,
                                                 @RequestPart(value = "images[]", required = false) List<MultipartFile> images,
                                                 @RequestPart(value = "avatar", required = false) MultipartFile avatar,
-                                                BindingResult bindingResult) {
+                                                BindingResult bindingResult) throws GeneralSecurityException, IOException {
 
         if (bindingResult.hasErrors()) {
             return ResponseHandler.getResponse(HttpStatus.BAD_REQUEST);
         }
 
-        if(images != null) dto.setImages(images);
+        if(images != null) dto.setNewImages(images);
         if(avatar != null) dto.setAvatar(avatar);
 
-        Product productUpdate = productService.updateProductInfo(dto, id);
+        Product productUpdated = productService.updateProductInfo(dto, id);
 
         return ResponseHandler.getResponse(new MessageUtils("Cập nhật thành công"), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{product-id}")
-    public ResponseEntity<Object> deleteProduct(@PathVariable("product-id") Long id) {
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Object> deleteProduct(@PathVariable("productId") Long id) {
 
         Optional<Product> product = productService.findById(id);
         if (!product.isPresent()) {

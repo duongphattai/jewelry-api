@@ -20,7 +20,7 @@ import java.util.List;
 @Service
 public class GDriveFileManagerImpl implements GDriveFileManager {
 
-    private GDriveUtils gDriveConfig;
+    private GDriveUtils gDriveUtils;
 
     @Override
     public List<String> uploadFile(String folderName, List<MultipartFile> fileDatas) {
@@ -31,7 +31,7 @@ public class GDriveFileManagerImpl implements GDriveFileManager {
                     File fileMetadata = new File();
                     fileMetadata.setParents(Collections.singletonList(folderName));
                     fileMetadata.setName(fileData.getOriginalFilename());
-                    File uploadFile = gDriveConfig.getInstance()
+                    File uploadFile = gDriveUtils.getInstance()
                             .files()
                             .create(fileMetadata,
                                     new InputStreamContent(fileData.getContentType(),
@@ -42,7 +42,7 @@ public class GDriveFileManagerImpl implements GDriveFileManager {
                     Permission permission = new Permission();
                     permission.setType("anyone");
                     permission.setRole("reader");
-                    gDriveConfig.getInstance().permissions().create(uploadFile.getId(), permission).execute();;
+                    gDriveUtils.getInstance().permissions().create(uploadFile.getId(), permission).execute();;
                     idList.add(uploadFile.getId());
                 }
             }
@@ -52,4 +52,17 @@ public class GDriveFileManagerImpl implements GDriveFileManager {
 
         return idList;
     }
+
+    @Override
+    public void deleteFile(List<String> gDriveIds){
+        for(String gDriveId : gDriveIds) {
+            try {
+                gDriveUtils.getInstance().files().delete(gDriveId).execute();
+            } catch (IOException | GeneralSecurityException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 }
