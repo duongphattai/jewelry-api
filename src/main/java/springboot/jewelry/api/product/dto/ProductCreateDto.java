@@ -25,7 +25,7 @@ public class ProductCreateDto {
     @Size(min = 5, max = 100, message = "{product.name.size}")
     private String name;
 
-    @Size(max = 500, message = "{product.description.size}")
+    @Size(max = 1000, message = "{product.description.size}")
     private String description;
 
     private Double goldWeight;

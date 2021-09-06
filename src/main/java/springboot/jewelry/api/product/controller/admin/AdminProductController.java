@@ -1,5 +1,7 @@
 package springboot.jewelry.api.product.controller.admin;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,21 +37,19 @@ public class AdminProductController {
 
     @GetMapping("")
     public ResponseEntity<Object> findAll(
-            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        PagedResult<ProductSummaryProjection> products = productService.findProductsSummary(pageable);
-        return ResponseHandler.getResponse(products, HttpStatus.OK);
-    }
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(value = "searchCriteria", required = false) String searchCriteriaStr) throws JsonProcessingException {
 
-    @GetMapping("/search")
-    public ResponseEntity<Object> findAllWithSearch(
-            @PageableDefault(size = 9, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(value = "searchCriteria[keys][]") List<String> keys,
-            @RequestParam(value = "searchCriteria[value]") String value) {
+        PagedResult<ProductSummaryDto> productSummaryDto;
 
-        SearchCriteria searchCriteria = new SearchCriteria(keys, value);
-        PagedResult<ProductSummaryDto> productsFiltered
-                = productService.findProductsSummaryWithSearch(searchCriteria, pageable);
-        return ResponseHandler.getResponse(productsFiltered, HttpStatus.OK);
+        if(searchCriteriaStr != null) {
+            SearchCriteria searchCriteria = new ObjectMapper().readValue(searchCriteriaStr, SearchCriteria.class);
+            productSummaryDto = productService.findProductsSummaryWithSearch(searchCriteria, pageable);
+        } else {
+            productSummaryDto = productService.findProductsSummary(pageable);
+        }
+
+        return ResponseHandler.getResponse(productSummaryDto, HttpStatus.OK);
     }
 
     @GetMapping("/{productId}")

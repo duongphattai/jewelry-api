@@ -134,14 +134,14 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
     }
 
     @Override
-    public PagedResult<ProductSummaryProjection> findProductsSummary(Pageable pageable) {
-        Page<ProductSummaryProjection> productsSummaryPaged = productRepository.findProductsSummaryBy(pageable);
+    public PagedResult<ProductSummaryDto> findProductsSummary(Pageable pageable) {
+        Page<ProductSummaryProjection> productsSummaryProjectionPaged = productRepository.findProductsSummaryBy(pageable);
 
         return new PagedResult<>(
-                productsSummaryPaged.getContent(),
-                productsSummaryPaged.getTotalElements(),
-                productsSummaryPaged.getTotalPages(),
-                productsSummaryPaged.getNumber() + 1
+                ProductConverter.projectionToProductSummaryDto(productsSummaryProjectionPaged.getContent()),
+                productsSummaryProjectionPaged.getTotalElements(),
+                productsSummaryProjectionPaged.getTotalPages(),
+                productsSummaryProjectionPaged.getNumber() + 1
         );
     }
 
@@ -218,6 +218,7 @@ public class ProductServiceImpl extends GenericServiceImpl<Product, Long> implem
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         Product product = productRepository.getOne(id);
         String folderId = gDriveFolderManager

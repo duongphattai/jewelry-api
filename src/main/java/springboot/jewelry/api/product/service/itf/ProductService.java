@@ -23,7 +23,7 @@ public interface ProductService extends GenericService<Product, Long> {
 
     Product updateProductInfo(ProductUpdateDto dto, Long id) throws GeneralSecurityException, IOException;
 
-    PagedResult<ProductSummaryProjection> findProductsSummary(Pageable pageable);
+    PagedResult<ProductSummaryDto> findProductsSummary(Pageable pageable);
 
     PagedResult<ProductSummaryDto> findProductsSummaryWithSearch(SearchCriteria searchCriteria, Pageable pageable);
 

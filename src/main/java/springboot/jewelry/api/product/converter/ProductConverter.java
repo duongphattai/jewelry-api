@@ -8,6 +8,7 @@ import springboot.jewelry.api.product.model.Image;
 import springboot.jewelry.api.product.model.Product;
 import springboot.jewelry.api.product.projection.ProductDetailsAdminProjection;
 import springboot.jewelry.api.product.projection.ProductDetailsProjection;
+import springboot.jewelry.api.product.projection.ProductSummaryProjection;
 import springboot.jewelry.api.product.projection.ShortProductProjection;
 
 import java.util.List;
@@ -17,8 +18,9 @@ import java.util.stream.Collectors;
 public class ProductConverter {
 
     public static List<ProductSummaryDto> entityToProductSummaryDto(List<Product> products) {
-        return products.stream().map(p ->
-                ProductSummaryDto.builder()
+        return products.stream()
+                .map(p -> ProductSummaryDto.builder()
+                        .id(p.getId())
                         .name(p.getName())
                         .sku(p.getSku())
                         .avatar(p.getAvatar())
@@ -28,12 +30,30 @@ public class ProductConverter {
                         .categoryName(p.getCategory().getName())
                         .supplierName(p.getSupplier().getName())
                         .goldTypePercentage(p.getGoldType().getPercentage())
-                        .build()).collect(Collectors.toList());
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public static List<ProductSummaryDto> projectionToProductSummaryDto(List<ProductSummaryProjection> products) {
+        return products.stream()
+                .map(p -> ProductSummaryDto.builder()
+                        .id(p.getId())
+                        .name(p.getName())
+                        .sku(p.getSku())
+                        .avatar(p.getAvatar())
+                        .price(p.getPrice())
+                        .goldWeight(p.getGoldWeight())
+                        .quantity(p.getQuantity())
+                        .categoryName(p.getCategoryName())
+                        .supplierName(p.getSupplierName())
+                        .goldTypePercentage(p.getGoldTypePercentage())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     public static List<ShortProductDto> projectionToShortProductDto(List<ShortProductProjection> projections) {
-        return projections.stream().map(p ->
-                ShortProductDto.builder()
+        return projections.stream()
+                .map(p -> ShortProductDto.builder()
                         .name(p.getName())
                         .sku(p.getSku())
                         .avatar(p.getAvatar())
@@ -41,12 +61,13 @@ public class ProductConverter {
                         .slug(p.getSlug())
                         .inStock(p.getQuantity() > 0)
                         .categorySlug(p.getCategorySlug())
-                        .build()).collect(Collectors.toList());
+                        .build())
+                .collect(Collectors.toList());
     }
 
     public static List<ShortProductDto> entityToShortProductDto(List<Product> products) {
-        return products.stream().map(p ->
-                ShortProductDto.builder()
+        return products.stream()
+                .map(p -> ShortProductDto.builder()
                         .name(p.getName())
                         .sku(p.getSku())
                         .avatar(p.getAvatar())
