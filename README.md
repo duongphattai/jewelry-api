@@ -1,2 +1,2 @@
 # jewelry
-Jewelry Sales Management
+
